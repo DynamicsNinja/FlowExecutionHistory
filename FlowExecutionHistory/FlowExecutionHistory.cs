@@ -337,7 +337,7 @@ namespace Fic.XTB.FlowExecutionHistory
             cbProfile.Items.Clear();
             cbProfile.Items.AddRange(selectedBrowser.Profiles.ToArray());
 
-            var profileIndex = selectedBrowser.Profiles.FindIndex(bp => bp.Path.Equals(_settings.BrowserProfile.Path));
+            var profileIndex = selectedBrowser.Profiles.FindIndex(bp => bp.Path.Equals(_settings.BrowserProfile?.Path));
 
             cbProfile.SelectedIndex = profileIndex == -1 ? 0 : profileIndex;
 
