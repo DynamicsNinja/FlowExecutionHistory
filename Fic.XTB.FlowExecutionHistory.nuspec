@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Fic.XTB.FlowExecutionHistory</id>
+    <version>1.2021.7.1</version>
+    <title>Flow Execution History for XrmToolBox</title>
+    <authors>Ivan Ficko</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/DynamicsNinja/FlowExecutionHistory</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/DynamicsNinja/FlowExecutionHistory/main/docs/img/feh-300.png</iconUrl>
+    <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
+    <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
+    <releaseNotes>1.2023.9.1
+- Initial version of the tool released</releaseNotes>
+    <copyright>Copyright 2023 Ivan Ficko</copyright>
+    <tags>XrmToolBox Plugins FlowExecutionHistory</tags>
+    <dependencies>
+      <dependency id="XrmToolBox" version="1.2018.6.25" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="FlowExecutionHistory\bin\Release\Fic.XTB.FlowExecutionHistory.dll" target="lib\net472\Plugins\Fic.XTB.FlowExecutionHistory.dll" />
+  </files>
+</package>
