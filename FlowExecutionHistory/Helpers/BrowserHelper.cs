@@ -73,12 +73,7 @@ namespace Fic.XTB.FlowExecutionHistory.Helpers
 
                         foreach (var folder in folderPaths)
                         {
-                            var profileName = !Directory.Exists($@"{folder}\Managed Extension Settings")
-                                ? folder.EndsWith("Profile 1")
-                                    ? "Personal"
-                                    : GetChromeProfileName(folder)
-                                : "Work Profile";
-
+                            var profileName = GetChromeProfileName(folder);
                             browserProfiles.Add(new BrowserProfile { Name = profileName, Path = Path.GetFileName(folder) });
                         }
 
