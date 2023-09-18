@@ -44,6 +44,8 @@ namespace Fic.XTB.FlowExecutionHistory
                 _settings = new Settings();
 
                 LogWarning("Settings not found => a new settings file has been created!");
+
+                cbBrowser.SelectedIndex = 0;
             }
             else
             {
