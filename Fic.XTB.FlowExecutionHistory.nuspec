@@ -12,7 +12,9 @@
     <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
     <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
     <releaseNotes>1.2023.9.1
-- Initial version of the tool released</releaseNotes>
+- Initial version of the tool released
+1.2023.9.6
+- Added flow run error details on click of Failed status</releaseNotes>
     <copyright>Copyright 2023 Ivan Ficko</copyright>
     <tags>XrmToolBox Plugins FlowExecutionHistory</tags>
     <dependencies>

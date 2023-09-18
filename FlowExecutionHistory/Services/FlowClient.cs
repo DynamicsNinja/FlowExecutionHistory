@@ -26,6 +26,17 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             _envId = envId;
         }
 
+        public FlowRunRemediationResponse GetFlowRunErrorDetails(FlowRun flowRun)
+        {
+            var url =
+                $"{baseUrl}/providers/Microsoft.ProcessSimple/environments/{_envId}/flows/{flowRun.Flow.Id}/runs/{flowRun.Id}/remediation?api-version=2016-11-01";
+
+            var responseJson = _client.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
+            var flowRunRemediation = JsonConvert.DeserializeObject<FlowRunRemediationResponse>(responseJson);
+
+            return flowRunRemediation;
+        }
+
         public List<FlowRun> GetFlowRuns(Flow flow, string status, DateTime dateFrom, DateTime dateTo)
         {
             var flowRuns = new List<FlowRun>();

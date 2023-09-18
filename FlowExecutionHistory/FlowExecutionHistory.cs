@@ -5,8 +5,10 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Fic.XTB.FlowExecutionHistory.Extensions;
+using Fic.XTB.FlowExecutionHistory.Forms;
 using Fic.XTB.FlowExecutionHistory.Helpers;
 using Fic.XTB.FlowExecutionHistory.Models;
+using Fic.XTB.FlowExecutionHistory.Models.DTOs;
 using Fic.XTB.FlowExecutionHistory.Services;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
@@ -185,11 +187,6 @@ namespace Fic.XTB.FlowExecutionHistory
             });
         }
 
-        private void MyPluginControl_OnCloseTool(object sender, EventArgs e)
-        {
-            // Before leaving, save the settings
-        }
-
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail,
             string actionName, object parameter)
         {
@@ -250,40 +247,94 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void dgvFlowRuns_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (!(dgvFlowRuns.Columns[e.ColumnIndex] is DataGridViewImageColumn) || e.RowIndex < 0)
-            {
-                return;
-            }
+            if (e.RowIndex < 0) { return; }
 
             var flowRun = (FlowRun)dgvFlowRuns.Rows[e.RowIndex].DataBoundItem;
 
-            var process = new Process();
-            process.StartInfo = new ProcessStartInfo(_settings.Browser.Executable)
+            switch (dgvFlowRuns.Columns[e.ColumnIndex].Name)
             {
-                Arguments = flowRun.Url
-            };
+                case "FlowRunUrl":
+                    var process = new Process();
+                    process.StartInfo = new ProcessStartInfo(_settings.Browser.Executable)
+                    {
+                        Arguments = flowRun.Url
+                    };
 
-            switch (_settings.Browser.Type)
-            {
-                case BrowserEnum.Chrome:
-                case BrowserEnum.Edge:
-                    process.StartInfo.Arguments += $" --profile-directory=\"{_settings.BrowserProfile.Path}\"";
+                    switch (_settings.Browser.Type)
+                    {
+                        case BrowserEnum.Chrome:
+                        case BrowserEnum.Edge:
+                            process.StartInfo.Arguments += $" --profile-directory=\"{_settings.BrowserProfile.Path}\"";
+                            break;
+                        case BrowserEnum.Firefox:
+                            process.StartInfo.Arguments += $" -P \"{_settings.BrowserProfile.Path}\"";
+                            break;
+                    }
+
+                    process.Start();
                     break;
-                case BrowserEnum.Firefox:
-                    process.StartInfo.Arguments += $" -P \"{_settings.BrowserProfile.Path}\"";
+                case "FlowRunStatus":
+                    GetFlowRunErrorDetails(flowRun);
                     break;
             }
+        }
 
-            process.Start();
+        private void GetFlowRunErrorDetails(FlowRun flowRun)
+        {
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Getting error details",
+                Work = (worker, args) =>
+                {
+                    _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken();
+
+                    var flowClient = new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
+                    var errorDetails = flowClient.GetFlowRunErrorDetails(flowRun);
+
+                    args.Result = errorDetails;
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    if (!(args.Result is FlowRunRemediationResponse errorDetails))
+                    {
+                        return;
+                    }
+
+                    var errorForm = new FlowRunErrorForm(errorDetails);
+                    errorForm.ShowDialog();
+                }
+            });
         }
 
         private void dgvFlowRuns_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
-            dgvFlowRuns.Cursor = e.ColumnIndex < 0
-                ? Cursors.Default
-                : (dgvFlowRuns.Columns[e.ColumnIndex].Name == "FlowRunUrl")
-                    ? Cursors.Hand
-                    : Cursors.Default;
+            if (e.ColumnIndex < 0 || e.RowIndex < 0)
+            {
+                dgvFlowRuns.Cursor = Cursors.Default;
+                return;
+            }
+
+            var columnName = dgvFlowRuns.Columns[e.ColumnIndex].Name;
+
+            switch (columnName)
+            {
+                case "FlowRunUrl":
+                    dgvFlowRuns.Cursor = Cursors.Hand;
+                    break;
+                case "FlowRunStatus":
+                    var flowRun = (FlowRun)dgvFlowRuns.Rows[e.RowIndex].DataBoundItem;
+
+                    dgvFlowRuns.Cursor = flowRun.Status == "Failed" ? Cursors.Hand : Cursors.Default;
+                    break;
+                default:
+                    dgvFlowRuns.Cursor = Cursors.Default;
+                    break;
+            }
         }
 
         private void clbFlows_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -314,9 +365,7 @@ namespace Fic.XTB.FlowExecutionHistory
                         break;
                     }
                 case "FlowRunFlow":
-                    {
-                        break;
-                    }
+                    break;
             }
         }
 

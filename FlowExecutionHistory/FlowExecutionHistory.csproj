@@ -250,11 +250,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ConnectionDetailExtensions.cs" />
+    <Compile Include="Forms\FlowRunErrorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FlowRunErrorForm.Designer.cs">
+      <DependentUpon>FlowRunErrorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\BrowserHelper.cs" />
     <Compile Include="Helpers\SortableBindingList.cs" />
     <Compile Include="Models\AccessTokenResponse.cs" />
     <Compile Include="Models\Browser.cs" />
     <Compile Include="Models\BrowserProfile.cs" />
+    <Compile Include="Models\DTOs\FlowRunRemediationResponse.cs" />
     <Compile Include="Models\DTOs\FlowRunsResponseFlowRunsDto.cs" />
     <Compile Include="Models\Flow.cs" />
     <Compile Include="Models\FlowRun.cs" />
@@ -281,6 +288,9 @@
   <ItemGroup>
     <EmbeddedResource Include="FlowExecutionHistory.resx">
       <DependentUpon>FlowExecutionHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FlowRunErrorForm.resx">
+      <DependentUpon>FlowRunErrorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
