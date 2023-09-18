@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowExecutionHistory));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -56,6 +56,8 @@
             this.gbFlow = new System.Windows.Forms.GroupBox();
             this.clbFlows = new System.Windows.Forms.CheckedListBox();
             this.gbFlowRuns = new System.Windows.Forms.GroupBox();
+            this.tbDurationThreshold = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.dtpDateTo = new System.Windows.Forms.DateTimePicker();
             this.lblDateTo = new System.Windows.Forms.Label();
             this.dtpDateFrom = new System.Windows.Forms.DateTimePicker();
@@ -82,7 +84,7 @@
             this.cbProfile});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(1408, 34);
+            this.toolStripMenu.Size = new System.Drawing.Size(1694, 34);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -165,7 +167,7 @@
             this.dgvFlowRuns.ReadOnly = true;
             this.dgvFlowRuns.RowHeadersWidth = 62;
             this.dgvFlowRuns.RowTemplate.Height = 28;
-            this.dgvFlowRuns.Size = new System.Drawing.Size(822, 688);
+            this.dgvFlowRuns.Size = new System.Drawing.Size(1108, 688);
             this.dgvFlowRuns.TabIndex = 6;
             this.dgvFlowRuns.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFlowRuns_CellClick);
             this.dgvFlowRuns.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvFlowRuns_CellFormatting);
@@ -202,10 +204,10 @@
             // FlowRunStartDate
             // 
             this.FlowRunStartDate.DataPropertyName = "StartDate";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "dd.MM.yyyy HH:mm:ss";
-            dataGridViewCellStyle1.NullValue = null;
-            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "dd.MM.yyyy HH:mm:ss";
+            dataGridViewCellStyle5.NullValue = null;
+            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle5;
             this.FlowRunStartDate.FillWeight = 115.1515F;
             this.FlowRunStartDate.HeaderText = "Start Date";
             this.FlowRunStartDate.MinimumWidth = 8;
@@ -215,8 +217,8 @@
             // FlowRunDurationInSeconds
             // 
             this.FlowRunDurationInSeconds.DataPropertyName = "DurationInSeconds";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle6;
             this.FlowRunDurationInSeconds.FillWeight = 115.1515F;
             this.FlowRunDurationInSeconds.HeaderText = "Duration (s)";
             this.FlowRunDurationInSeconds.MinimumWidth = 8;
@@ -248,7 +250,7 @@
             "Failed"});
             this.cbxStatus.Location = new System.Drawing.Point(68, 35);
             this.cbxStatus.Name = "cbxStatus";
-            this.cbxStatus.Size = new System.Drawing.Size(160, 28);
+            this.cbxStatus.Size = new System.Drawing.Size(194, 28);
             this.cbxStatus.TabIndex = 7;
             this.cbxStatus.SelectedIndexChanged += new System.EventHandler(this.cbxStatus_SelectedIndexChanged);
             // 
@@ -311,6 +313,8 @@
             this.gbFlowRuns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbFlowRuns.Controls.Add(this.tbDurationThreshold);
+            this.gbFlowRuns.Controls.Add(this.label1);
             this.gbFlowRuns.Controls.Add(this.dtpDateTo);
             this.gbFlowRuns.Controls.Add(this.lblDateTo);
             this.gbFlowRuns.Controls.Add(this.dtpDateFrom);
@@ -321,17 +325,38 @@
             this.gbFlowRuns.Enabled = false;
             this.gbFlowRuns.Location = new System.Drawing.Point(577, 49);
             this.gbFlowRuns.Name = "gbFlowRuns";
-            this.gbFlowRuns.Size = new System.Drawing.Size(828, 767);
+            this.gbFlowRuns.Size = new System.Drawing.Size(1114, 767);
             this.gbFlowRuns.TabIndex = 13;
             this.gbFlowRuns.TabStop = false;
             this.gbFlowRuns.Text = "Flow Runs";
+            // 
+            // tbDurationThreshold
+            // 
+            this.tbDurationThreshold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDurationThreshold.Location = new System.Drawing.Point(414, 35);
+            this.tbDurationThreshold.Name = "tbDurationThreshold";
+            this.tbDurationThreshold.Size = new System.Drawing.Size(100, 26);
+            this.tbDurationThreshold.TabIndex = 14;
+            this.tbDurationThreshold.Text = "0";
+            this.tbDurationThreshold.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbDurationThreshold.Leave += new System.EventHandler(this.tbDurationThreshold_Leave);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(268, 39);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(140, 20);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Duration threshold";
             // 
             // dtpDateTo
             // 
             this.dtpDateTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpDateTo.CustomFormat = "dd.MM.yyyy HH:mm tt";
             this.dtpDateTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpDateTo.Location = new System.Drawing.Point(622, 36);
+            this.dtpDateTo.Location = new System.Drawing.Point(908, 36);
             this.dtpDateTo.Name = "dtpDateTo";
             this.dtpDateTo.Size = new System.Drawing.Size(200, 26);
             this.dtpDateTo.TabIndex = 12;
@@ -341,7 +366,7 @@
             // 
             this.lblDateTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDateTo.AutoSize = true;
-            this.lblDateTo.Location = new System.Drawing.Point(531, 41);
+            this.lblDateTo.Location = new System.Drawing.Point(817, 41);
             this.lblDateTo.Name = "lblDateTo";
             this.lblDateTo.Size = new System.Drawing.Size(66, 20);
             this.lblDateTo.TabIndex = 11;
@@ -352,7 +377,7 @@
             this.dtpDateFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpDateFrom.CustomFormat = "dd.MM.yyyy HH:mm tt";
             this.dtpDateFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpDateFrom.Location = new System.Drawing.Point(325, 37);
+            this.dtpDateFrom.Location = new System.Drawing.Point(611, 37);
             this.dtpDateFrom.Name = "dtpDateFrom";
             this.dtpDateFrom.Size = new System.Drawing.Size(200, 26);
             this.dtpDateFrom.TabIndex = 10;
@@ -362,7 +387,7 @@
             // 
             this.lblDateFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDateFrom.AutoSize = true;
-            this.lblDateFrom.Location = new System.Drawing.Point(234, 39);
+            this.lblDateFrom.Location = new System.Drawing.Point(520, 39);
             this.lblDateFrom.Name = "lblDateFrom";
             this.lblDateFrom.Size = new System.Drawing.Size(85, 20);
             this.lblDateFrom.TabIndex = 9;
@@ -377,7 +402,7 @@
             this.Controls.Add(this.toolStripMenu);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FlowExecutionHistory";
-            this.Size = new System.Drawing.Size(1408, 819);
+            this.Size = new System.Drawing.Size(1694, 819);
             this.OnCloseTool += new System.EventHandler(this.FlowExecutionHistory_OnCloseTool);
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.FlowExecutionHistory_ConnectionUpdated);
             this.Load += new System.EventHandler(this.FlowExecutionHistory_Load);
@@ -424,5 +449,7 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.ToolStripComboBox cbProfile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.TextBox tbDurationThreshold;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -133,6 +133,9 @@ namespace Fic.XTB.FlowExecutionHistory
             var dateFrom = dtpDateFrom.Value;
             var dateTo = dtpDateTo.Value;
             var status = cbxStatus.Text;
+            var durationThreshold = string.IsNullOrWhiteSpace(tbDurationThreshold.Text)
+                ? 0
+                : int.Parse(tbDurationThreshold.Text);
 
             if (!selectedFlows.Any())
             {
@@ -162,6 +165,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     Parallel.ForEach(selectedFlows, options, f =>
                     {
                         var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo);
+                        fr = fr.Where(r => r.DurationInSeconds > durationThreshold).ToList();
                         flowRuns.AddRange(fr);
                     });
 
@@ -454,6 +458,11 @@ namespace Fic.XTB.FlowExecutionHistory
 
             var browsers = BrowserLoader.GetBrowsers();
             cbBrowser.Items.AddRange(browsers.ToArray());
+        }
+
+        private void tbDurationThreshold_Leave(object sender, EventArgs e)
+        {
+            GetFlowRuns();
         }
     }
 }

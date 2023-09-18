@@ -9,8 +9,8 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
         {
             InitializeComponent();
 
-            tbDetails.Text = remediation.errorDescription;
-            tbError.Text = remediation.errorSubject;
+            tbDetails.Text = remediation?.errorDescription;
+            tbError.Text = remediation?.errorSubject;
         }
     }
 }
