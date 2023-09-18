@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Fic.XTB.FlowExecutionHistory.Extensions;
 using Fic.XTB.FlowExecutionHistory.Forms;
@@ -153,11 +154,16 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     var flowRuns = new List<FlowRun>();
 
-                    foreach (var f in selectedFlows)
+                    var options = new ParallelOptions
+                    {
+                        MaxDegreeOfParallelism = 8
+                    };
+
+                    Parallel.ForEach(selectedFlows, options, f =>
                     {
                         var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo);
                         flowRuns.AddRange(fr);
-                    }
+                    });
 
                     args.Result = flowRuns;
                 },
