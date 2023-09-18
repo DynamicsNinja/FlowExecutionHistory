@@ -424,7 +424,7 @@ namespace Fic.XTB.FlowExecutionHistory
             if (string.IsNullOrWhiteSpace(ConnectionDetail.S2SClientSecret))
             {
                 MessageBox.Show(
-                    "This tool is using server to server connection to get Power Automate flow runs. Please use connecitons that is authenticated with client ID and client secret.",
+                    "This tool is using server to server connection to get Power Automate flow runs. Please use connection that is authenticated with client ID and client secret.",
                     "Warning",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
