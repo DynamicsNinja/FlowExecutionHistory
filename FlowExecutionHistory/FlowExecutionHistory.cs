@@ -280,6 +280,8 @@ namespace Fic.XTB.FlowExecutionHistory
                     process.Start();
                     break;
                 case "FlowRunStatus":
+                    if (flowRun.Status != Enums.FlowRunStatus.Failed) { return; }
+
                     GetFlowRunErrorDetails(flowRun);
                     break;
             }
@@ -335,7 +337,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 case "FlowRunStatus":
                     var flowRun = (FlowRun)dgvFlowRuns.Rows[e.RowIndex].DataBoundItem;
 
-                    dgvFlowRuns.Cursor = flowRun.Status == "Failed" ? Cursors.Hand : Cursors.Default;
+                    dgvFlowRuns.Cursor = flowRun.Status == Enums.FlowRunStatus.Failed ? Cursors.Hand : Cursors.Default;
                     break;
                 default:
                     dgvFlowRuns.Cursor = Cursors.Default;
@@ -366,7 +368,7 @@ namespace Fic.XTB.FlowExecutionHistory
                             return;
                         }
 
-                        e.CellStyle.BackColor = flowRun.Status == "Succeeded" ? Color.Green : Color.Red;
+                        e.CellStyle.BackColor = flowRun.Status == Enums.FlowRunStatus.Succeeded ? Color.Green : Color.Red;
                         e.CellStyle.ForeColor = Color.White;
                         break;
                     }

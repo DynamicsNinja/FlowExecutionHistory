@@ -249,6 +249,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\FlowRunStatus.cs" />
     <Compile Include="Extensions\ConnectionDetailExtensions.cs" />
     <Compile Include="Forms\FlowRunErrorForm.cs">
       <SubType>Form</SubType>
