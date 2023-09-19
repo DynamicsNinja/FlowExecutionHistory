@@ -11,7 +11,9 @@
     <iconUrl>https://raw.githubusercontent.com/DynamicsNinja/FlowExecutionHistory/main/docs/img/feh-300.png</iconUrl>
     <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
     <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
-    <releaseNotes>1.2023.9.11
+    <releaseNotes>1.2023.9.13
+- Added manual connect to Power Automate API
+1.2023.9.11
 - Added duration threshold filter
 - Fetching flow runs in parallel
 1.2023.9.6
