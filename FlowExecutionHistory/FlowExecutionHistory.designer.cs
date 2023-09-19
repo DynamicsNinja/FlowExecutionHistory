@@ -30,12 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowExecutionHistory));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbRefresh = new System.Windows.Forms.ToolStripButton();
+            this.tsbConnectFlowApi = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.cbBrowser = new System.Windows.Forms.ToolStripComboBox();
@@ -77,6 +78,7 @@
             this.tsbClose,
             this.tssSeparator1,
             this.tsbRefresh,
+            this.tsbConnectFlowApi,
             this.toolStripSeparator1,
             this.toolStripLabel1,
             this.cbBrowser,
@@ -100,26 +102,35 @@
             // tssSeparator1
             // 
             this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 34);
+            this.tssSeparator1.Size = new System.Drawing.Size(6, 38);
             // 
             // tsbRefresh
             // 
             this.tsbRefresh.Image = ((System.Drawing.Image)(resources.GetObject("tsbRefresh.Image")));
             this.tsbRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRefresh.Name = "tsbRefresh";
-            this.tsbRefresh.Size = new System.Drawing.Size(98, 29);
+            this.tsbRefresh.Size = new System.Drawing.Size(98, 33);
             this.tsbRefresh.Text = "Refresh";
             this.tsbRefresh.Click += new System.EventHandler(this.tsbRefresh_Click);
+            // 
+            // tsbConnectFlowApi
+            // 
+            this.tsbConnectFlowApi.Image = ((System.Drawing.Image)(resources.GetObject("tsbConnectFlowApi.Image")));
+            this.tsbConnectFlowApi.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbConnectFlowApi.Name = "tsbConnectFlowApi";
+            this.tsbConnectFlowApi.Size = new System.Drawing.Size(296, 33);
+            this.tsbConnectFlowApi.Text = "Connect to Power Automate API";
+            this.tsbConnectFlowApi.Click += new System.EventHandler(this.tsbConnectPowerAutomateApi_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 34);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(75, 29);
+            this.toolStripLabel1.Size = new System.Drawing.Size(75, 33);
             this.toolStripLabel1.Text = "Browser";
             this.toolStripLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -127,13 +138,13 @@
             // 
             this.cbBrowser.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbBrowser.Name = "cbBrowser";
-            this.cbBrowser.Size = new System.Drawing.Size(121, 34);
+            this.cbBrowser.Size = new System.Drawing.Size(121, 38);
             this.cbBrowser.SelectedIndexChanged += new System.EventHandler(this.cbBrowser_SelectedIndexChanged);
             // 
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(130, 29);
+            this.toolStripLabel2.Size = new System.Drawing.Size(130, 33);
             this.toolStripLabel2.Text = "Browser Profile";
             // 
             // cbProfile
@@ -141,7 +152,7 @@
             this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProfile.DropDownWidth = 150;
             this.cbProfile.Name = "cbProfile";
-            this.cbProfile.Size = new System.Drawing.Size(200, 34);
+            this.cbProfile.Size = new System.Drawing.Size(200, 38);
             this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
             // 
             // dgvFlowRuns
@@ -204,10 +215,10 @@
             // FlowRunStartDate
             // 
             this.FlowRunStartDate.DataPropertyName = "StartDate";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "dd.MM.yyyy HH:mm:ss";
-            dataGridViewCellStyle5.NullValue = null;
-            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "dd.MM.yyyy HH:mm:ss";
+            dataGridViewCellStyle3.NullValue = null;
+            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle3;
             this.FlowRunStartDate.FillWeight = 115.1515F;
             this.FlowRunStartDate.HeaderText = "Start Date";
             this.FlowRunStartDate.MinimumWidth = 8;
@@ -217,8 +228,8 @@
             // FlowRunDurationInSeconds
             // 
             this.FlowRunDurationInSeconds.DataPropertyName = "DurationInSeconds";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle4;
             this.FlowRunDurationInSeconds.FillWeight = 115.1515F;
             this.FlowRunDurationInSeconds.HeaderText = "Duration (s)";
             this.FlowRunDurationInSeconds.MinimumWidth = 8;
@@ -451,5 +462,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.TextBox tbDurationThreshold;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripButton tsbConnectFlowApi;
     }
 }

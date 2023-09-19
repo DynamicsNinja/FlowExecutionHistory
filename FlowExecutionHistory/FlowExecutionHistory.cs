@@ -12,6 +12,7 @@ using Fic.XTB.FlowExecutionHistory.Models;
 using Fic.XTB.FlowExecutionHistory.Models.DTOs;
 using Fic.XTB.FlowExecutionHistory.Services;
 using McTools.Xrm.Connection;
+using Microsoft.Identity.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using XrmToolBox.Extensibility;
@@ -71,6 +72,14 @@ namespace Fic.XTB.FlowExecutionHistory
                 {
                     cbBrowser.SelectedIndex = 0;
                 }
+            }
+
+            if (string.IsNullOrWhiteSpace(ConnectionDetail.S2SClientSecret))
+            {
+                ShowInfoNotification(
+                    "Enhance your experience by switching to client and secret authorization, eliminating the connect to Power Automate API step",
+                    new Uri("https://learn.microsoft.com/en-us/power-platform/admin/manage-application-users#create-an-application-user")
+                    );
             }
         }
 
@@ -203,7 +212,6 @@ namespace Fic.XTB.FlowExecutionHistory
             base.UpdateConnection(newService, detail, actionName, parameter);
 
             ExecuteMethod(GetFlows);
-
 
             if (_settings == null || detail == null)
             {
@@ -433,19 +441,9 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void FlowExecutionHistory_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ConnectionDetail.S2SClientSecret))
-            {
-                MessageBox.Show(
-                    "This tool is using server to server connection to get Power Automate flow runs. Please use connection that is authenticated with client ID and client secret.",
-                    "Warning",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            gbFlowRuns.Enabled = true;
-            gbFlow.Enabled = true;
+            gbFlowRuns.Enabled = !string.IsNullOrWhiteSpace(ConnectionDetail.S2SClientSecret);
+            gbFlow.Enabled = !string.IsNullOrWhiteSpace(ConnectionDetail.S2SClientSecret);
+            tsbConnectFlowApi.Visible = string.IsNullOrWhiteSpace(ConnectionDetail.S2SClientSecret);
 
             cbxStatus.SelectedIndex = 0;
 
@@ -463,6 +461,56 @@ namespace Fic.XTB.FlowExecutionHistory
         private void tbDurationThreshold_Leave(object sender, EventArgs e)
         {
             GetFlowRuns();
+        }
+
+        private async void tsbConnectPowerAutomateApi_Click(object sender, EventArgs e)
+        {
+            var clientId = "51f81489-12ee-4a9e-aaae-a2591f45987d";
+            var redirectUri = "app://58145B91-0C36-4500-8554-080854F2AC97";
+            var scopes = new[] { "https://service.flow.microsoft.com/.default" };
+
+            var app = PublicClientApplicationBuilder.Create(clientId).WithRedirectUri(redirectUri).Build();
+
+            AuthenticationResult authResult;
+
+            try
+            {
+                var accounts = await app.GetAccountsAsync();
+                authResult = await app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
+
+                _flowAccessToken = new AccessTokenResponse
+                {
+                    access_token = authResult.AccessToken,
+                    token_type = authResult.TokenType,
+                };
+
+                gbFlowRuns.Enabled = true;
+                gbFlow.Enabled = true;
+            }
+            catch (MsalUiRequiredException)
+            {
+                try
+                {
+                    authResult = await app.AcquireTokenInteractive(scopes).ExecuteAsync();
+
+                    _flowAccessToken = new AccessTokenResponse
+                    {
+                        access_token = authResult.AccessToken,
+                        token_type = authResult.TokenType,
+                    };
+
+                    gbFlowRuns.Enabled = true;
+                    gbFlow.Enabled = true;
+
+                }
+                catch (MsalClientException ex)
+                {
+                    if (ex.ErrorCode == "authentication_canceled")
+                    {
+                        return;
+                    }
+                }
+            }
         }
     }
 }
