@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Fic.XTB.FlowExecutionHistory.Extensions;
@@ -13,6 +17,7 @@ using Fic.XTB.FlowExecutionHistory.Models.DTOs;
 using Fic.XTB.FlowExecutionHistory.Services;
 using McTools.Xrm.Connection;
 using Microsoft.Identity.Client;
+using Microsoft.Office.Interop.Excel;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using XrmToolBox.Extensibility;
@@ -200,6 +205,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     dgvFlowRuns.Columns["FlowRunFLow"].Visible = selectedFlows.Count > 1;
                     dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(_flowRuns);
+                    dgvFlowRuns.Sort(dgvFlowRuns.Columns["FlowRunStartDate"], ListSortDirection.Descending);
 
                     gbFlowRuns.Text = $@"Flow Runs ({_flowRuns.Count})";
                 }
@@ -225,7 +231,6 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             GetFlowRuns();
         }
-
 
         private void tbSearch_TextChanged(object sender, EventArgs e)
         {
@@ -511,6 +516,156 @@ namespace Fic.XTB.FlowExecutionHistory
                     }
                 }
             }
+        }
+
+        private void tsbCsv_Click(object sender, EventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+            saveFileDialog.Title = "Export to CSV";
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName == "") { return; }
+
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Exporting CSV",
+                Work = (worker, args) =>
+                {
+                    var sw = new StreamWriter(saveFileDialog.FileName, false, Encoding.UTF8);
+
+                    sw.WriteLine("Id;Flow Name;Status;Start Date;Duration In Seconds;Url");
+
+                    foreach (var flowRun in _flowRuns)
+                    {
+                        sw.WriteLine($"{flowRun.Id};{flowRun.Flow.Name};{flowRun.Status};{flowRun.StartDate};{flowRun.DurationInSeconds};{flowRun.Url}");
+                    }
+
+                    sw.Close();
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    var result = MessageBox.Show(
+                        "Do you you want to open exported CSV file?",
+                        "Export Completed",
+                        MessageBoxButtons.YesNo);
+
+                    if (result == DialogResult.No) { return; }
+
+                    Process.Start(saveFileDialog.FileName);
+                }
+            });
+        }
+
+        private void tsbExcel_Click(object sender, EventArgs e)
+        {
+            ExportToExcel();
+        }
+
+        public void ExportToExcel()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            var filter = "Excel file (*.xlsx)|*.xlsx| All Files (*.*)|*.*";
+            saveFileDialog.Filter = filter;
+            saveFileDialog.Title = @"Export as Excel file";
+
+            if (saveFileDialog.ShowDialog() != DialogResult.OK) { return; }
+
+            WorkAsync(new WorkAsyncInfo("Creating Excel file...",
+               (eventargs) =>
+               {
+                   var excel = new Microsoft.Office.Interop.Excel.Application();
+                   var wb = excel.Workbooks.Add();
+                   var sh = (Worksheet)wb.Sheets.Add();
+                   sh.Name = "Flow Runs";
+
+                   sh.Cells[1, 1] = "Id";
+                   sh.Cells[1, 2] = "Flow Name";
+                   sh.Cells[1, 3] = "Status";
+                   sh.Cells[1, 4] = "Start Date";
+                   sh.Cells[1, 5] = "Duration in seconds";
+                   sh.Cells[1, 6] = "Url";
+
+                   for (var index = 0; index < _flowRuns.Count; index++)
+                   {
+                       var row = (FlowRun)_flowRuns[index];
+
+                       sh.Cells[index + 2, "A"] = row.Id;
+                       sh.Cells[index + 2, "B"] = row.Flow.Name;
+                       sh.Cells[index + 2, "C"] = row.Status;
+                       sh.Cells[index + 2, "D"] = row.StartDate;
+                       sh.Cells[index + 2, "E"] = (int)row.DurationInSeconds;
+
+                       // Add hyperlink to the cell containing the URL
+                       var cell = (Range)sh.Cells[index + 2, "F"];
+                       sh.Hyperlinks.Add(cell, row.Url);
+                   }
+
+                   var statusColumn = sh.Range["C2:C" + (_flowRuns.Count + 1)];
+                   var successCondition = (FormatCondition)statusColumn.FormatConditions.Add(
+                       XlFormatConditionType.xlExpression,
+                       XlFormatConditionOperator.xlEqual,
+                       $"=$C2=\"{Enums.FlowRunStatus.Succeeded}\""
+                   );
+
+                   successCondition.Interior.Color = ColorTranslator.ToOle(Color.Green);
+                   successCondition.Font.Bold = true;
+
+                   var failureCondition = (FormatCondition)statusColumn.FormatConditions.Add(
+                       XlFormatConditionType.xlExpression,
+                       XlFormatConditionOperator.xlEqual,
+                       $"=$C2=\"{Enums.FlowRunStatus.Failed}\""
+                   );
+
+                   failureCondition.Interior.Color = ColorTranslator.ToOle(Color.Red);
+                   failureCondition.Font.Bold = true;
+
+                   var range = sh.Range["A1", $"F{_flowRuns.Count + 1}"];
+                   FormatAsTable(range, "Table1", "TableStyleMedium15");
+
+                   range.Columns.AutoFit();
+
+                   excel.DisplayAlerts = false;
+                   wb.SaveAs(saveFileDialog.FileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                   wb.Close(true);
+                   excel.Quit();
+               })
+            {
+                PostWorkCallBack = (completedargs) =>
+                {
+                    if (completedargs.Error != null)
+                    {
+                        MessageBox.Show(completedargs.Error.Message);
+                    }
+
+                    var result = MessageBox.Show(
+                        "Do you you want to open exported Excel file?",
+                        "Export Completed",
+                        MessageBoxButtons.YesNo);
+
+                    if (result == DialogResult.No) { return; }
+
+                    Process.Start(saveFileDialog.FileName);
+                }
+            });
+        }
+        public void FormatAsTable(Range sourceRange, string tableName, string tableStyleName)
+        {
+            sourceRange.Worksheet.ListObjects.Add(XlListObjectSourceType.xlSrcRange,
+                    sourceRange, Type.Missing, XlYesNoGuess.xlYes, Type.Missing).Name =
+                tableName;
+            sourceRange.Select();
+            sourceRange.Worksheet.ListObjects[tableName].TableStyle = tableStyleName;
+        }
+
+        private void tsbExport_ButtonClick(object sender, EventArgs e)
+        {
+            tsbExport.ShowDropDown();
         }
     }
 }

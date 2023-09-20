@@ -14,7 +14,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
         private readonly HttpClient _client;
         private readonly string _envId;
 
-        private string baseUrl = "https://api.flow.microsoft.com";
+        private const string BaseUrl = "https://api.flow.microsoft.com";
 
         public FlowClient(string envId, string accessToken)
         {
@@ -28,10 +28,13 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 
         public FlowRunRemediationResponse GetFlowRunErrorDetails(FlowRun flowRun)
         {
-            var url =
-                $"{baseUrl}/providers/Microsoft.ProcessSimple/environments/{_envId}/flows/{flowRun.Flow.Id}/runs/{flowRun.Id}/remediation?api-version=2016-11-01";
+            var urlBuilder = new UriBuilder(BaseUrl)
+            {
+                Path = $"/providers/Microsoft.ProcessSimple/environments/{_envId}/flows/{flowRun.Flow.Id}/runs/{flowRun.Id}/remediation",
+                Query = "api-version=2016-11-01"
+            };
 
-            var responseJson = _client.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
+            var responseJson = _client.GetAsync(urlBuilder.Uri).Result.Content.ReadAsStringAsync().Result;
             var flowRunRemediation = JsonConvert.DeserializeObject<FlowRunRemediationResponse>(responseJson);
 
             return flowRunRemediation;
@@ -48,9 +51,14 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             var filterQuery = statusFilter == string.Empty
                 ? $"$filter={dateFilter}"
                 : $"$filter={statusFilter} and {dateFilter}";
-            var url =
-                $"{baseUrl}/providers/Microsoft.ProcessSimple/environments/{_envId}/flows/{flow.Id}/runs/?api-version=2016-11-01&$top=250&{filterQuery}";
 
+            var urlBuilder = new UriBuilder(BaseUrl)
+            {
+                Path = $"/providers/Microsoft.ProcessSimple/environments/{_envId}/flows/{flow.Id}/runs/",
+                Query = $"api-version=2016-11-01&$top=250&{filterQuery}"
+            };
+
+            var url = urlBuilder.Uri.ToString();
 
             while (!string.IsNullOrWhiteSpace(url))
             {
@@ -81,6 +89,5 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 
             return flowRuns;
         }
-
     }
 }

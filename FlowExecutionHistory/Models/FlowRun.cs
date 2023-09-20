@@ -10,7 +10,5 @@ namespace Fic.XTB.FlowExecutionHistory.Models
         public double DurationInSeconds { get; set; }
         public string Url { get; set; }
         public Flow Flow { get; set; }
-
-
     }
 }
