@@ -4,6 +4,14 @@
 
 XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.
 
+# Donations
+
+If you find this tool useful and would like to support its development, you can buy me a coffee!
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/dynamicsninja)
+
+Your support is greatly appreciated!
+
 ## Preview
 
 ![ianb-1](docs/img/feh.png)
