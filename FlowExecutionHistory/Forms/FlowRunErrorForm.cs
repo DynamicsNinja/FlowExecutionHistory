@@ -1,16 +1,16 @@
 ﻿using System.Windows.Forms;
-using Fic.XTB.FlowExecutionHistory.Models.DTOs;
+using Fic.XTB.FlowExecutionHistory.Models;
 
 namespace Fic.XTB.FlowExecutionHistory.Forms
 {
     public partial class FlowRunErrorForm : Form
     {
-        public FlowRunErrorForm(FlowRunRemediationResponse remediation)
+        public FlowRunErrorForm(FlowRunError flowRunError)
         {
             InitializeComponent();
 
-            tbDetails.Text = remediation?.errorDescription;
-            tbError.Text = remediation?.errorSubject;
+            tbError.Text = flowRunError?.Message;
+            tbDetails.Text = flowRunError?.Details;
         }
     }
 }

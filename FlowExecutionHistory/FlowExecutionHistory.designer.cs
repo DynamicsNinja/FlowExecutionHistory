@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowExecutionHistory));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -247,10 +247,10 @@
             // FlowRunStartDate
             // 
             this.FlowRunStartDate.DataPropertyName = "StartDate";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "dd.MM.yyyy HH:mm:ss";
-            dataGridViewCellStyle1.NullValue = null;
-            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "dd.MM.yyyy HH:mm:ss";
+            dataGridViewCellStyle5.NullValue = null;
+            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle5;
             this.FlowRunStartDate.FillWeight = 21.98335F;
             this.FlowRunStartDate.HeaderText = "Start Date";
             this.FlowRunStartDate.MinimumWidth = 8;
@@ -261,8 +261,8 @@
             // 
             this.FlowRunDurationInSeconds.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.FlowRunDurationInSeconds.DataPropertyName = "DurationInSeconds";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle6;
             this.FlowRunDurationInSeconds.FillWeight = 164.8751F;
             this.FlowRunDurationInSeconds.HeaderText = "Duration (s)";
             this.FlowRunDurationInSeconds.MinimumWidth = 8;

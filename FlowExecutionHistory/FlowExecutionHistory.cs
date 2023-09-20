@@ -299,7 +299,16 @@ namespace Fic.XTB.FlowExecutionHistory
                 case "FlowRunStatus":
                     if (flowRun.Status != Enums.FlowRunStatus.Failed) { return; }
 
-                    GetFlowRunErrorDetails(flowRun);
+                    if (flowRun.Error == null)
+                    {
+                        GetFlowRunErrorDetails(flowRun);
+                    }
+                    else
+                    {
+                        var errorForm = new FlowRunErrorForm(flowRun.Error);
+                        errorForm.ShowDialog();
+                    }
+
                     break;
             }
         }
@@ -316,7 +325,13 @@ namespace Fic.XTB.FlowExecutionHistory
                     var flowClient = new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
                     var errorDetails = flowClient.GetFlowRunErrorDetails(flowRun);
 
-                    args.Result = errorDetails;
+                    flowRun.Error = new FlowRunError
+                    {
+                        Message = errorDetails.errorSubject,
+                        Details = errorDetails.errorDescription
+                    };
+
+                    args.Result = flowRun.Error;
                 },
                 PostWorkCallBack = (args) =>
                 {
@@ -325,7 +340,7 @@ namespace Fic.XTB.FlowExecutionHistory
                         MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (!(args.Result is FlowRunRemediationResponse errorDetails))
+                    if (!(args.Result is FlowRunError errorDetails))
                     {
                         return;
                     }
