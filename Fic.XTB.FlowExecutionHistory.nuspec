@@ -11,7 +11,10 @@
     <iconUrl>https://raw.githubusercontent.com/DynamicsNinja/FlowExecutionHistory/main/docs/img/feh-300.png</iconUrl>
     <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
     <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
-    <releaseNotes>1.2023.9.17
+    <releaseNotes>1.2023.9.20
+- Added correlation ID
+- Added coloring on flow for better visibility
+1.2023.9.17
 - Added export to Excel and CSV files
 - Removed unnecesery refetching flow run error details
 1.2023.9.13
