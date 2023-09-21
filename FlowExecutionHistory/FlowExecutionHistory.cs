@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,7 +12,6 @@ using Fic.XTB.FlowExecutionHistory.Extensions;
 using Fic.XTB.FlowExecutionHistory.Forms;
 using Fic.XTB.FlowExecutionHistory.Helpers;
 using Fic.XTB.FlowExecutionHistory.Models;
-using Fic.XTB.FlowExecutionHistory.Models.DTOs;
 using Fic.XTB.FlowExecutionHistory.Services;
 using McTools.Xrm.Connection;
 using Microsoft.Identity.Client;
@@ -39,6 +37,8 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private List<FlowRun> _flowRuns = new List<FlowRun>();
         private List<Flow> _flows = new List<Flow>();
+
+        private List<Color> _colors = new List<Color>();
 
         public FlowExecutionHistory()
         {
@@ -179,7 +179,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     Parallel.ForEach(selectedFlows, options, f =>
                     {
                         var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo);
-                        fr = fr.Where(r => r.DurationInSeconds > durationThreshold).ToList();
+                        fr = fr.Where(r => r.DurationInSeconds >= durationThreshold).ToList();
                         flowRuns.AddRange(fr);
                     });
 
@@ -217,6 +217,7 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             base.UpdateConnection(newService, detail, actionName, parameter);
 
+            _colors = ColorHelper.GetAllColors();
             ExecuteMethod(GetFlows);
 
             if (_settings == null || detail == null)
@@ -270,7 +271,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void dgvFlowRuns_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) { return; }
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) { return; }
 
             var flowRun = (FlowRun)dgvFlowRuns.Rows[e.RowIndex].DataBoundItem;
 
@@ -309,6 +310,23 @@ namespace Fic.XTB.FlowExecutionHistory
                         errorForm.ShowDialog();
                     }
 
+                    break;
+                case "FlowRunCorrelationId":
+                    foreach (DataGridViewRow row in dgvFlowRuns.Rows)
+                    {
+                        var cell = row.Cells[e.ColumnIndex];
+
+                        if (flowRun.CorrelationId == cell.Value.ToString())
+                        {
+                            cell.Style.BackColor = Color.Red;
+                            cell.Style.ForeColor = Color.White;
+                        }
+                        else
+                        {
+                            cell.Style.BackColor = Color.White; // Reset cell color if condition is not met
+                            cell.Style.ForeColor = Color.Black; // Reset cell text color if condition is not met
+                        }
+                    }
                     break;
             }
         }
@@ -382,6 +400,18 @@ namespace Fic.XTB.FlowExecutionHistory
             var selectedFlow = (Flow)clbFlows.SelectedItem;
             var checkedValue = e.NewValue == CheckState.Checked ? true : false;
 
+            Color? poppedColor = null;
+            if (checkedValue)
+            {
+                poppedColor = _colors[_colors.Count - 1];
+                _colors.RemoveAt(_colors.Count - 1);
+            }
+            else
+            {
+                if (selectedFlow.Color != null) { _colors.Add((Color)selectedFlow.Color); }
+            }
+
+            selectedFlow.Color = poppedColor;
             selectedFlow.IsSelected = checkedValue;
 
             GetFlowRuns();
@@ -389,11 +419,12 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void dgvFlowRuns_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
+            var flowRun = (FlowRun)dgvFlowRuns.Rows[e.RowIndex].DataBoundItem;
+
             switch (dgvFlowRuns.Columns[e.ColumnIndex].Name)
             {
                 case "FlowRunStatus":
                     {
-                        var flowRun = (FlowRun)dgvFlowRuns.Rows[e.RowIndex].DataBoundItem;
 
                         if (flowRun == null)
                         {
@@ -405,6 +436,13 @@ namespace Fic.XTB.FlowExecutionHistory
                         break;
                     }
                 case "FlowRunFlow":
+                    if (flowRun.Flow.Color == null)
+                    {
+                        return;
+                    }
+
+                    e.CellStyle.BackColor = (Color)flowRun.Flow.Color;
+                    e.CellStyle.ForeColor = Color.Black;
                     break;
             }
         }

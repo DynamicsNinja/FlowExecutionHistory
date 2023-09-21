@@ -45,7 +45,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             var flowRuns = new List<FlowRun>();
             var flowRunDtos = new List<FlowRunDto>();
 
-            var dateFilter = $"StartTime gt {dateFrom:s}Z";
+            var dateFilter = $"StartTime gt {dateFrom.ToLocalTime():s}Z";
             var statusFilter = status != "All" ? $"Status eq '{status}'" : string.Empty;
 
             var filterQuery = statusFilter == string.Empty
@@ -83,7 +83,8 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                     StartDate = fr.properties.startTime,
                     DurationInSeconds = (int)duration,
                     Url = runUrl,
-                    Flow = flow
+                    Flow = flow,
+                    CorrelationId = fr.properties.correlation.clientTrackingId,
                 });
             }
 

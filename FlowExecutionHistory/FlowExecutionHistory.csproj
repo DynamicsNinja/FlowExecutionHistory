@@ -320,6 +320,7 @@
       <DependentUpon>FlowRunErrorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BrowserHelper.cs" />
+    <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\SortableBindingList.cs" />
     <Compile Include="Models\AccessTokenResponse.cs" />
     <Compile Include="Models\Browser.cs" />
