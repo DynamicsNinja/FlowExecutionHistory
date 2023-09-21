@@ -40,12 +40,12 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             return flowRunRemediation;
         }
 
-        public List<FlowRun> GetFlowRuns(Flow flow, string status, DateTime dateFrom, DateTime dateTo)
+        public List<FlowRun> GetFlowRuns(Flow flow, string status, DateTimeOffset dateFrom, DateTimeOffset dateTo)
         {
             var flowRuns = new List<FlowRun>();
             var flowRunDtos = new List<FlowRunDto>();
 
-            var dateFilter = $"StartTime gt {dateFrom.ToLocalTime():s}Z";
+            var dateFilter = $"StartTime gt {dateFrom.ToUniversalTime():s}Z";
             var statusFilter = status != "All" ? $"Status eq '{status}'" : string.Empty;
 
             var filterQuery = statusFilter == string.Empty
@@ -69,7 +69,9 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                 url = response?.nextLink;
             }
 
-            flowRunDtos = flowRunDtos.Where(fr => fr.properties.startTime <= dateTo).ToList();
+            flowRunDtos = flowRunDtos
+                .Where(fr => fr.properties.startTime <= dateTo)
+                .ToList();
 
             foreach (var fr in flowRunDtos)
             {
@@ -80,7 +82,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                 {
                     Id = fr.name,
                     Status = fr.properties.status,
-                    StartDate = fr.properties.startTime,
+                    StartDate = fr.properties.startTime.ToLocalTime(),
                     DurationInSeconds = (int)duration,
                     Url = runUrl,
                     Flow = flow,

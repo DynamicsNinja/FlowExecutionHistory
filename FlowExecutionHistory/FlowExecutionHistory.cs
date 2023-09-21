@@ -31,26 +31,29 @@ namespace Fic.XTB.FlowExecutionHistory
         public string DonationDescription => "Thanks for supporting Flow Execution History tool";
         public string EmailAccount => "ivan.ficko@outlook.com";
 
-        private Settings _settings;
+        public Settings Settings;
 
         private AccessTokenResponse _flowAccessToken;
 
         private List<FlowRun> _flowRuns = new List<FlowRun>();
         private List<Flow> _flows = new List<Flow>();
-
         private List<Color> _colors = new List<Color>();
+
+        public DataGridView FlowRunsGrid;
 
         public FlowExecutionHistory()
         {
             InitializeComponent();
+
+            FlowRunsGrid = dgvFlowRuns;
         }
 
         private void FlowExecutionHistory_Load(object sender, EventArgs e)
         {
             // Loads or creates the settings for the plugin
-            if (!SettingsManager.Instance.TryLoad(GetType(), out _settings))
+            if (!SettingsManager.Instance.TryLoad(GetType(), out Settings))
             {
-                _settings = new Settings();
+                Settings = new Settings();
 
                 LogWarning("Settings not found => a new settings file has been created!");
 
@@ -60,13 +63,13 @@ namespace Fic.XTB.FlowExecutionHistory
             {
                 LogInfo("Settings found and loaded");
 
-                if (_settings.Browser != null && _settings.BrowserProfile != null)
+                if (Settings.Browser != null && Settings.BrowserProfile != null)
                 {
                     for (var i = 0; i < cbBrowser.Items.Count; i++)
                     {
                         var browser = (Browser)cbBrowser.Items[i];
 
-                        if (browser.Type != _settings.Browser.Type) { continue; }
+                        if (browser.Type != Settings.Browser.Type) { continue; }
 
                         cbBrowser.SelectedIndex = i;
 
@@ -144,8 +147,9 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             var selectedFlows = _flows.Where(f => f.IsSelected).ToList();
 
-            var dateFrom = dtpDateFrom.Value;
-            var dateTo = dtpDateTo.Value;
+            var dateFrom = (DateTimeOffset)dtpDateFrom.Value;
+            var dateTo = (DateTimeOffset)dtpDateTo.Value;
+            
             var status = cbxStatus.Text;
             var durationThreshold = string.IsNullOrWhiteSpace(tbDurationThreshold.Text)
                 ? 0
@@ -220,7 +224,7 @@ namespace Fic.XTB.FlowExecutionHistory
             _colors = ColorHelper.GetAllColors();
             ExecuteMethod(GetFlows);
 
-            if (_settings == null || detail == null)
+            if (Settings == null || detail == null)
             {
                 return;
             }
@@ -279,19 +283,19 @@ namespace Fic.XTB.FlowExecutionHistory
             {
                 case "FlowRunUrl":
                     var process = new Process();
-                    process.StartInfo = new ProcessStartInfo(_settings.Browser.Executable)
+                    process.StartInfo = new ProcessStartInfo(Settings.Browser.Executable)
                     {
                         Arguments = flowRun.Url
                     };
 
-                    switch (_settings.Browser.Type)
+                    switch (Settings.Browser.Type)
                     {
                         case BrowserEnum.Chrome:
                         case BrowserEnum.Edge:
-                            process.StartInfo.Arguments += $" --profile-directory=\"{_settings.BrowserProfile.Path}\"";
+                            process.StartInfo.Arguments += $" --profile-directory=\"{Settings.BrowserProfile.Path}\"";
                             break;
                         case BrowserEnum.Firefox:
-                            process.StartInfo.Arguments += $" -P \"{_settings.BrowserProfile.Path}\"";
+                            process.StartInfo.Arguments += $" -P \"{Settings.BrowserProfile.Path}\"";
                             break;
                     }
 
@@ -436,10 +440,8 @@ namespace Fic.XTB.FlowExecutionHistory
                         break;
                     }
                 case "FlowRunFlow":
-                    if (flowRun.Flow.Color == null)
-                    {
-                        return;
-                    }
+                    if (!Settings.UseFlowColors) { return; }
+                    if (flowRun.Flow.Color == null) { return; }
 
                     e.CellStyle.BackColor = (Color)flowRun.Flow.Color;
                     e.CellStyle.ForeColor = Color.Black;
@@ -461,12 +463,12 @@ namespace Fic.XTB.FlowExecutionHistory
                 return;
             }
 
-            _settings.Browser = selectedBrowser;
+            Settings.Browser = selectedBrowser;
 
             cbProfile.Items.Clear();
             cbProfile.Items.AddRange(selectedBrowser.Profiles.ToArray());
 
-            var profileIndex = selectedBrowser.Profiles.FindIndex(bp => bp.Path.Equals(_settings.BrowserProfile?.Path));
+            var profileIndex = selectedBrowser.Profiles.FindIndex(bp => bp.Path.Equals(Settings.BrowserProfile?.Path));
 
             cbProfile.SelectedIndex = profileIndex == -1 ? 0 : profileIndex;
 
@@ -482,7 +484,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 return;
             }
 
-            _settings.BrowserProfile = selectedBrowserProfile;
+            Settings.BrowserProfile = selectedBrowserProfile;
 
             SaveSettings();
         }
@@ -492,9 +494,9 @@ namespace Fic.XTB.FlowExecutionHistory
             SaveSettings();
         }
 
-        private void SaveSettings()
+        public void SaveSettings()
         {
-            SettingsManager.Instance.Save(GetType(), _settings);
+            SettingsManager.Instance.Save(GetType(), Settings);
         }
 
         private void FlowExecutionHistory_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
@@ -719,6 +721,12 @@ namespace Fic.XTB.FlowExecutionHistory
         private void tsbExport_ButtonClick(object sender, EventArgs e)
         {
             tsbExport.ShowDropDown();
+        }
+
+        private void tsbSettings_Click(object sender, EventArgs e)
+        {
+            var settingsForm = new SettingsForm(this);
+            settingsForm.ShowDialog();
         }
     }
 }

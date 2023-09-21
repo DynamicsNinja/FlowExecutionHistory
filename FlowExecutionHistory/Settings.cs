@@ -6,5 +6,6 @@ namespace Fic.XTB.FlowExecutionHistory
     {
         public Browser Browser { get; set; }
         public BrowserProfile BrowserProfile { get; set; }
+        public bool UseFlowColors { get; set; }
     }
 }

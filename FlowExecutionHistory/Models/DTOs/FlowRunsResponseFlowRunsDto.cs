@@ -20,8 +20,8 @@ namespace Fic.XTB.FlowExecutionHistory.Models.DTOs
 
     public class FlowRunPropertiesDto
     {
-        public DateTime startTime { get; set; }
-        public DateTime endTime { get; set; }
+        public DateTimeOffset startTime { get; set; }
+        public DateTimeOffset endTime { get; set; }
         public string status { get; set; }
         public string code { get; set; }
         public FlowRunErrorDto error { get; set; }
@@ -45,8 +45,8 @@ namespace Fic.XTB.FlowExecutionHistory.Models.DTOs
         public string name { get; set; }
         public InputslinkDto inputsLink { get; set; }
         public OutputslinkDto outputsLink { get; set; }
-        public DateTime startTime { get; set; }
-        public DateTime endTime { get; set; }
+        public DateTimeOffset startTime { get; set; }
+        public DateTimeOffset endTime { get; set; }
         public string originHistoryName { get; set; }
         public Correlation1Dto correlation { get; set; }
         public string status { get; set; }
