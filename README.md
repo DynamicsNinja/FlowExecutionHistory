@@ -22,10 +22,18 @@ Your support is greatly appreciated!
 
 You are able to filter flow runs against multiple flows at the same time, so you can see everything in one place.
 
-## Time filters
+### Time filters
 
-FIlter out flow runs for a period of time instead of constantly loading next page like we are used to in run history on Power Automate portal.
+Filter out flow runs for a period of time instead of constantly loading the next page like we are used to in run history on the Power Automate portal.
 
-## Browser and profiles
+### Flow Correlation
 
-Select browser and browser profile that will be used when opening run details link.
+Find out the correlation between different flows. You can easily identify which flows triggered other flows and find out their runs. Clicking on the correlation ID cell will highlight all related flows in the list.
+
+### Export
+
+Export flow runs history to the Excel or CSV file.
+
+### Browser and profiles
+
+Select the browser and browser profile that will be used when opening the run details link.
