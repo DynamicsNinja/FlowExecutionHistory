@@ -358,7 +358,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 {
                     if (args.Error != null)
                     {
-                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ShowErrorDialog(args.Error);
                     }
 
                     if (!(args.Result is FlowRunError errorDetails))
@@ -601,7 +601,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 {
                     if (args.Error != null)
                     {
-                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ShowErrorDialog(args.Error);
                     }
 
                     var result = MessageBox.Show(
