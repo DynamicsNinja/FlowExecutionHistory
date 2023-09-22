@@ -528,6 +528,17 @@ namespace Fic.XTB.FlowExecutionHistory
             var redirectUri = "app://58145B91-0C36-4500-8554-080854F2AC97";
             var scopes = new[] { "https://service.flow.microsoft.com/.default" };
 
+            if (ConnectionDetail.TenantId == Guid.Empty)
+            {
+                MessageBox.Show(
+                    "You are using the deprecated connection method. Please use OAuth/MFA or Client ID/Secret method.",
+                    "Deprecated Connection",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
             var tenantId = ConnectionDetail.TenantId.ToString("D");
 
             var app = PublicClientApplicationBuilder.Create(clientId).WithRedirectUri(redirectUri).Build();
@@ -538,7 +549,7 @@ namespace Fic.XTB.FlowExecutionHistory
             {
                 var accounts = await app.GetAccountsAsync();
                 var account = accounts.FirstOrDefault();
-                
+
                 authResult = await app
                     .AcquireTokenSilent(scopes, account)
                     .WithTenantId(tenantId)
