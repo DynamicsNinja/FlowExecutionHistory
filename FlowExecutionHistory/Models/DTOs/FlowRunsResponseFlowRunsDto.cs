@@ -7,7 +7,7 @@ namespace Fic.XTB.FlowExecutionHistory.Models.DTOs
     {
         public List<FlowRunDto> value { get; set; }
         public string nextLink { get; set; }
-
+        public Error error { get; set; }
     }
 
     public class FlowRunDto
@@ -84,5 +84,7 @@ namespace Fic.XTB.FlowExecutionHistory.Models.DTOs
     {
         public string clientTrackingId { get; set; }
     }
+
+
 
 }

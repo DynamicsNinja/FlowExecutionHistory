@@ -62,11 +62,18 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 
             while (!string.IsNullOrWhiteSpace(url))
             {
-                var responseJson = _client.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
-                var response = JsonConvert.DeserializeObject<FlowRunsResponseDto>(responseJson);
-                flowRunDtos.AddRange(response?.value);
+                var response = _client.GetAsync(url).Result;
+                var responseJson = response.Content.ReadAsStringAsync().Result;
+                var flowRunsResponse = JsonConvert.DeserializeObject<FlowRunsResponseDto>(responseJson);
 
-                url = response?.nextLink;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"{flowRunsResponse?.error.code}: {flowRunsResponse?.error.message}");
+                }
+
+                if (flowRunsResponse?.value != null) { flowRunDtos.AddRange(flowRunsResponse.value); }
+
+                url = flowRunsResponse?.nextLink;
             }
 
             flowRunDtos = flowRunDtos

@@ -149,7 +149,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
             var dateFrom = (DateTimeOffset)dtpDateFrom.Value;
             var dateTo = (DateTimeOffset)dtpDateTo.Value;
-            
+
             var status = cbxStatus.Text;
             var durationThreshold = string.IsNullOrWhiteSpace(tbDurationThreshold.Text)
                 ? 0
@@ -196,22 +196,20 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     if (args.Error != null)
                     {
-                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(args.Error.InnerException?.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-
-                    if (!(args.Result is List<FlowRun> runs))
+                    else
                     {
-                        return;
+                        if (!(args.Result is List<FlowRun> runs)) { return; }
+
+                        _flowRuns = runs;
+
+                        dgvFlowRuns.Columns["FlowRunFLow"].Visible = selectedFlows.Count > 1;
+                        dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(_flowRuns);
+                        dgvFlowRuns.Sort(dgvFlowRuns.Columns["FlowRunStartDate"], ListSortDirection.Descending);
+
+                        gbFlowRuns.Text = $@"Flow Runs ({_flowRuns.Count})";
                     }
-
-
-                    _flowRuns = runs;
-
-                    dgvFlowRuns.Columns["FlowRunFLow"].Visible = selectedFlows.Count > 1;
-                    dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(_flowRuns);
-                    dgvFlowRuns.Sort(dgvFlowRuns.Columns["FlowRunStartDate"], ListSortDirection.Descending);
-
-                    gbFlowRuns.Text = $@"Flow Runs ({_flowRuns.Count})";
                 }
             });
         }
