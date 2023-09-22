@@ -51,7 +51,7 @@ namespace Fic.XTB.FlowExecutionHistory
         private void FlowExecutionHistory_Load(object sender, EventArgs e)
         {
             // Loads or creates the settings for the plugin
-            if (!SettingsManager.Instance.TryLoad(GetType(), out Settings))
+            if (!SettingsManager.Instance.TryLoad(GetType(), out Settings, ConnectionDetail.ConnectionId.ToString()))
             {
                 Settings = new Settings();
 
@@ -495,7 +495,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
         public void SaveSettings()
         {
-            SettingsManager.Instance.Save(GetType(), Settings);
+            SettingsManager.Instance.Save(GetType(), Settings, ConnectionDetail.ConnectionId.ToString());
         }
 
         private void FlowExecutionHistory_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
