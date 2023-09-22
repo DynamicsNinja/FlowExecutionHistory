@@ -126,19 +126,20 @@ namespace Fic.XTB.FlowExecutionHistory
                 {
                     if (args.Error != null)
                     {
-                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ShowErrorDialog(args.Error);
                     }
-
-                    if (!(args.Result is List<Flow> flows))
+                    else
                     {
-                        return;
+
+                        if (!(args.Result is List<Flow> flows)) { return; }
+
+                        _flows = flows;
+
+                        clbFlows.Items.AddRange(_flows.ToArray());
+
+                        gbFlow.Text = $"Flows ({_flows.Count})";
                     }
 
-                    _flows = flows;
-
-                    clbFlows.Items.AddRange(_flows.ToArray());
-
-                    gbFlow.Text = $"Flows ({_flows.Count})";
                 }
             });
         }
@@ -196,7 +197,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     if (args.Error != null)
                     {
-                        MessageBox.Show(args.Error.InnerException?.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ShowErrorDialog(args.Error.InnerException);
                     }
                     else
                     {
