@@ -528,6 +528,8 @@ namespace Fic.XTB.FlowExecutionHistory
             var redirectUri = "app://58145B91-0C36-4500-8554-080854F2AC97";
             var scopes = new[] { "https://service.flow.microsoft.com/.default" };
 
+            var tenantId = ConnectionDetail.TenantId.ToString("D");
+
             var app = PublicClientApplicationBuilder.Create(clientId).WithRedirectUri(redirectUri).Build();
 
             AuthenticationResult authResult;
@@ -535,7 +537,12 @@ namespace Fic.XTB.FlowExecutionHistory
             try
             {
                 var accounts = await app.GetAccountsAsync();
-                authResult = await app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
+                var account = accounts.FirstOrDefault();
+                
+                authResult = await app
+                    .AcquireTokenSilent(scopes, account)
+                    .WithTenantId(tenantId)
+                    .ExecuteAsync();
 
                 _flowAccessToken = new AccessTokenResponse
                 {
@@ -550,7 +557,10 @@ namespace Fic.XTB.FlowExecutionHistory
             {
                 try
                 {
-                    authResult = await app.AcquireTokenInteractive(scopes).ExecuteAsync();
+                    authResult = await app
+                        .AcquireTokenInteractive(scopes)
+                        .WithTenantId(tenantId)
+                        .ExecuteAsync();
 
                     _flowAccessToken = new AccessTokenResponse
                     {

@@ -29,7 +29,7 @@ namespace Fic.XTB.FlowExecutionHistory.Extensions
 
             var secret = Decrypt(connection.S2SClientSecret);
 
-            var url = $"https://login.microsoftonline.com/common/oauth2/v2.0/token";
+            var url = $"https://login.microsoftonline.com/{connection.TenantId}/oauth2/v2.0/token";
             var data = new Dictionary<string, string>
             {
                 ["client_id"] = connection.AzureAdAppId.ToString(),
