@@ -55,9 +55,41 @@ namespace Fic.XTB.FlowExecutionHistory
             {
                 Settings = new Settings();
 
-                LogWarning("Settings not found => a new settings file has been created!");
+                if (ConnectionDetail.BrowserName != BrowserEnum.None)
+                {
+                    for (var i = 0; i < cbBrowser.Items.Count; i++)
+                    {
+                        var browser = (Browser)cbBrowser.Items[i];
 
-                cbBrowser.SelectedIndex = 0;
+                        if (browser.Type != ConnectionDetail.BrowserName) { continue; }
+
+                        cbBrowser.SelectedIndex = i;
+
+                        break;
+                    }
+                }
+                else
+                {
+                    cbBrowser.SelectedIndex = 0;
+                }
+
+                if (ConnectionDetail.BrowserProfile != null)
+                {
+                    for (var i = 0; i < cbProfile.Items.Count; i++)
+                    {
+                        var browserProfile = (BrowserProfile)cbProfile.Items[i];
+
+                        if (browserProfile.Name != ConnectionDetail.BrowserProfile) { continue; }
+
+                        cbProfile.SelectedIndex = i;
+
+                        break;
+                    }
+                }
+                else
+                {
+                    cbProfile.SelectedIndex = 0;
+                }
             }
             else
             {
