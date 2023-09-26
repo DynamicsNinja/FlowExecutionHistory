@@ -11,7 +11,10 @@
     <iconUrl>https://raw.githubusercontent.com/DynamicsNinja/FlowExecutionHistory/main/docs/img/feh-300.png</iconUrl>
     <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
     <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
-    <releaseNotes>1.2023.9.30
+    <releaseNotes>1.2023.9.32
+- Added trigger otuputs for each flow run
+- Fixed error details when flow fails with custom error
+1.2023.9.30
 - Added setting default browser and profile from connection settings
 1.2023.9.26
 - Changed manual login to use tenant ID
