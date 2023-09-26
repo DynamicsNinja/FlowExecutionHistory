@@ -12,6 +12,7 @@ using Fic.XTB.FlowExecutionHistory.Extensions;
 using Fic.XTB.FlowExecutionHistory.Forms;
 using Fic.XTB.FlowExecutionHistory.Helpers;
 using Fic.XTB.FlowExecutionHistory.Models;
+using Fic.XTB.FlowExecutionHistory.Models.DTOs;
 using Fic.XTB.FlowExecutionHistory.Services;
 using McTools.Xrm.Connection;
 using Microsoft.Identity.Client;
@@ -332,6 +333,21 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     process.Start();
                     break;
+                case "FlowRunTriggerOutputs":
+                    if (flowRun.TriggerOutputsUrl == null)
+                    {
+                        MessageBox.Show(
+                            "There are no trigger outputs to show.",
+                            "Information",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information
+                            );
+
+                        return;
+                    }
+
+                    GetTriggerOutputs(flowRun);
+                    break;
                 case "FlowRunStatus":
                     if (flowRun.Status != Enums.FlowRunStatus.Failed) { return; }
 
@@ -366,6 +382,36 @@ namespace Fic.XTB.FlowExecutionHistory
             }
         }
 
+        private void GetTriggerOutputs(FlowRun flowRun)
+        {
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Getting trigger outputs",
+                Work = (worker, args) =>
+                {
+
+                    var triggerOutputs = flowRun.GetTriggerOutputs();
+
+                    args.Result = triggerOutputs;
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        ShowErrorDialog(args.Error);
+                    }
+
+                    if (!(args.Result is TriggerOutputsResponseDto triggerOutputs))
+                    {
+                        return;
+                    }
+
+                    var triggerOutputsForm = new TriggerOutputsForm(triggerOutputs);
+                    triggerOutputsForm.ShowDialog();
+                }
+            });
+        }
+
         private void GetFlowRunErrorDetails(FlowRun flowRun)
         {
             WorkAsync(new WorkAsyncInfo
@@ -382,6 +428,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     {
                         Message = errorDetails.errorSubject,
                         Details = errorDetails.errorDescription
+                                  ?? errorDetails?.operationOutputs?.body?.ToString()
                     };
 
                     args.Result = flowRun.Error;

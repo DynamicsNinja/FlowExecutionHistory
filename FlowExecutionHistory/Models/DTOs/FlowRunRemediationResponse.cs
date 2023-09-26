@@ -14,6 +14,7 @@
     public class Operationoutputs
     {
         public Error error { get; set; }
+        public object body { get; set; }
     }
 
     public class Error

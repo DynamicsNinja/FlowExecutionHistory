@@ -35,9 +35,9 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             };
 
             var responseJson = _client.GetAsync(urlBuilder.Uri).Result.Content.ReadAsStringAsync().Result;
-            var flowRunRemediation = JsonConvert.DeserializeObject<FlowRunRemediationResponse>(responseJson);
+            var flowRunRemediationResponse = JsonConvert.DeserializeObject<FlowRunRemediationResponse>(responseJson);
 
-            return flowRunRemediation;
+            return flowRunRemediationResponse;
         }
 
         public List<FlowRun> GetFlowRuns(Flow flow, string status, DateTimeOffset dateFrom, DateTimeOffset dateTo)
@@ -85,7 +85,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                 var duration = (fr.properties.endTime - fr.properties.startTime).TotalSeconds;
                 var runUrl = $"https://make.powerautomate.com/environments/{_envId}/flows/{flow.Id}/runs/{fr.name}";
 
-                flowRuns.Add(new FlowRun
+                var flowRun = new FlowRun
                 {
                     Id = fr.name,
                     Status = fr.properties.status,
@@ -94,7 +94,10 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                     Url = runUrl,
                     Flow = flow,
                     CorrelationId = fr.properties.correlation.clientTrackingId,
-                });
+                    TriggerOutputsUrl = fr.properties.trigger.outputsLink?.uri
+                };
+
+                flowRuns.Add(flowRun);
             }
 
             return flowRuns;
