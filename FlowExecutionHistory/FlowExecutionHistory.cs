@@ -211,7 +211,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     var options = new ParallelOptions
                     {
-                        MaxDegreeOfParallelism = 8
+                        MaxDegreeOfParallelism = Environment.ProcessorCount * 2
                     };
 
                     Parallel.ForEach(selectedFlows, options, f =>
@@ -225,9 +225,6 @@ namespace Fic.XTB.FlowExecutionHistory
                 },
                 PostWorkCallBack = (args) =>
                 {
-                    gbFlow.Enabled = true;
-                    gbFlowRuns.Enabled = true;
-
                     if (args.Error != null)
                     {
                         ShowErrorDialog(args.Error.InnerException);
@@ -244,6 +241,9 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         gbFlowRuns.Text = $@"Flow Runs ({_flowRuns.Count})";
                     }
+
+                    gbFlow.Enabled = true;
+                    gbFlowRuns.Enabled = true;
                 }
             });
         }
@@ -479,9 +479,16 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void clbFlows_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            var selectedFlow = (Flow)clbFlows.SelectedItem;
-            var checkedValue = e.NewValue == CheckState.Checked ? true : false;
+            var selectedFlow = (Flow)clbFlows.Items[e.Index];
+            var checkedValue = e.NewValue == CheckState.Checked;
 
+            SetCheckedFlow(selectedFlow, checkedValue);
+
+            GetFlowRuns();
+        }
+
+        private void SetCheckedFlow(Flow flow, bool checkedValue)
+        {
             Color? poppedColor = null;
             if (checkedValue)
             {
@@ -490,13 +497,11 @@ namespace Fic.XTB.FlowExecutionHistory
             }
             else
             {
-                if (selectedFlow.Color != null) { _colors.Add((Color)selectedFlow.Color); }
+                if (flow.Color != null) { _colors.Add((Color)flow.Color); }
             }
 
-            selectedFlow.Color = poppedColor;
-            selectedFlow.IsSelected = checkedValue;
-
-            GetFlowRuns();
+            flow.Color = poppedColor;
+            flow.IsSelected = checkedValue;
         }
 
         private void dgvFlowRuns_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -826,6 +831,25 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             var settingsForm = new SettingsForm(this);
             settingsForm.ShowDialog();
+        }
+
+        private void cbSelectAllFlows_CheckedChanged(object sender, EventArgs e)
+        {
+            var isChecked = cbSelectAllFlows.Checked;
+
+            clbFlows.ItemCheck -= clbFlows_ItemCheck;
+
+            for (var i = 0; i < clbFlows.Items.Count; i++)
+            {
+                var flow = (Flow)clbFlows.Items[i];
+
+                clbFlows.SetItemChecked(i, isChecked);
+                SetCheckedFlow(flow, isChecked);
+            }
+
+            clbFlows.ItemCheck += clbFlows_ItemCheck;
+
+            GetFlowRuns();
         }
     }
 }
