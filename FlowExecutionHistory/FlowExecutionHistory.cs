@@ -253,7 +253,7 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             base.UpdateConnection(newService, detail, actionName, parameter);
 
-            _colors = ColorHelper.GetAllColors();
+            _colors = ColorHelper.GetAllColors(1000);
             ExecuteMethod(GetFlows);
 
             if (Settings == null || detail == null)
