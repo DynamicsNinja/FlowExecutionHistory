@@ -12,6 +12,8 @@ namespace Fic.XTB.FlowExecutionHistory.Models
         public string CorrelationId { get; set; }
         public string Status { get; set; }
         public DateTimeOffset StartDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
+
         public double DurationInSeconds { get; set; }
         public string Url { get; set; }
         public Flow Flow { get; set; }

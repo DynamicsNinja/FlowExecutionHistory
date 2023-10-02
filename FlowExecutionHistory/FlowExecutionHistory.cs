@@ -141,6 +141,7 @@ namespace Fic.XTB.FlowExecutionHistory
 	                    <entity name='workflow'>
 		                     <attribute name='workflowid' />
 		                     <attribute name='workflowidunique' />
+                             <attribute name='clientdata' />
 		                     <attribute name='name' />
                              <filter type='and'>
 			                    <condition attribute='category' operator='eq' value='5' />
@@ -153,7 +154,8 @@ namespace Fic.XTB.FlowExecutionHistory
                     args.Result = entities.Select(f => new Flow
                     {
                         Id = ((Guid)f["workflowidunique"]).ToString("D"),
-                        Name = (string)f["name"]
+                        Name = (string)f["name"],
+                        ClientDataJson = (string)f["clientdata"]
                     }).OrderBy(f => f.Name).ToList();
                 },
                 PostWorkCallBack = (args) =>

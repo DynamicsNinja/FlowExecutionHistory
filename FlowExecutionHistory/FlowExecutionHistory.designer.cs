@@ -30,10 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowExecutionHistory));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -49,14 +50,6 @@
             this.cbProfile = new System.Windows.Forms.ToolStripComboBox();
             this.tsbSettings = new System.Windows.Forms.ToolStripButton();
             this.dgvFlowRuns = new System.Windows.Forms.DataGridView();
-            this.FlowRunId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FlowRunCorrelationId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FlowRunFlow = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FlowRunStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FlowRunStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FlowRunDurationInSeconds = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FlowRunUrl = new System.Windows.Forms.DataGridViewImageColumn();
-            this.FlowRunTriggerOutputs = new System.Windows.Forms.DataGridViewImageColumn();
             this.bsFlowRuns = new System.Windows.Forms.BindingSource(this.components);
             this.cbxStatus = new System.Windows.Forms.ComboBox();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -73,6 +66,15 @@
             this.dtpDateFrom = new System.Windows.Forms.DateTimePicker();
             this.lblDateFrom = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.FlowRunId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FlowRunCorrelationId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FlowRunFlow = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FlowRunStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FlowRunStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FlowRunEndDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FlowRunDurationInSeconds = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FlowRunUrl = new System.Windows.Forms.DataGridViewImageColumn();
+            this.FlowRunTriggerOutputs = new System.Windows.Forms.DataGridViewImageColumn();
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFlowRuns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlowRuns)).BeginInit();
@@ -176,7 +178,6 @@
             // cbBrowser
             // 
             this.cbBrowser.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbBrowser.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cbBrowser.Name = "cbBrowser";
             this.cbBrowser.Size = new System.Drawing.Size(121, 34);
             this.cbBrowser.SelectedIndexChanged += new System.EventHandler(this.cbBrowser_SelectedIndexChanged);
@@ -191,7 +192,6 @@
             // 
             this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProfile.DropDownWidth = 150;
-            this.cbProfile.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cbProfile.Name = "cbProfile";
             this.cbProfile.Size = new System.Drawing.Size(200, 34);
             this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
@@ -222,19 +222,20 @@
             this.FlowRunFlow,
             this.FlowRunStatus,
             this.FlowRunStartDate,
+            this.FlowRunEndDate,
             this.FlowRunDurationInSeconds,
             this.FlowRunUrl,
             this.FlowRunTriggerOutputs});
             this.dgvFlowRuns.DataSource = this.bsFlowRuns;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFlowRuns.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFlowRuns.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgvFlowRuns.Location = new System.Drawing.Point(6, 73);
             this.dgvFlowRuns.Name = "dgvFlowRuns";
             this.dgvFlowRuns.ReadOnly = true;
@@ -246,97 +247,6 @@
             this.dgvFlowRuns.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFlowRuns_CellClick);
             this.dgvFlowRuns.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvFlowRuns_CellFormatting);
             this.dgvFlowRuns.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFlowRuns_CellMouseEnter);
-            // 
-            // FlowRunId
-            // 
-            this.FlowRunId.DataPropertyName = "Id";
-            this.FlowRunId.HeaderText = "Id";
-            this.FlowRunId.MinimumWidth = 8;
-            this.FlowRunId.Name = "FlowRunId";
-            this.FlowRunId.ReadOnly = true;
-            this.FlowRunId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlowRunId.Visible = false;
-            // 
-            // FlowRunCorrelationId
-            // 
-            this.FlowRunCorrelationId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.FlowRunCorrelationId.DataPropertyName = "CorrelationId";
-            this.FlowRunCorrelationId.HeaderText = "Correlation Id";
-            this.FlowRunCorrelationId.MinimumWidth = 8;
-            this.FlowRunCorrelationId.Name = "FlowRunCorrelationId";
-            this.FlowRunCorrelationId.ReadOnly = true;
-            // 
-            // FlowRunFlow
-            // 
-            this.FlowRunFlow.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.FlowRunFlow.DataPropertyName = "Flow";
-            this.FlowRunFlow.HeaderText = "Flow";
-            this.FlowRunFlow.MinimumWidth = 8;
-            this.FlowRunFlow.Name = "FlowRunFlow";
-            this.FlowRunFlow.ReadOnly = true;
-            this.FlowRunFlow.Visible = false;
-            // 
-            // FlowRunStatus
-            // 
-            this.FlowRunStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.FlowRunStatus.DataPropertyName = "Status";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.FlowRunStatus.DefaultCellStyle = dataGridViewCellStyle1;
-            this.FlowRunStatus.HeaderText = "Status";
-            this.FlowRunStatus.MinimumWidth = 8;
-            this.FlowRunStatus.Name = "FlowRunStatus";
-            this.FlowRunStatus.ReadOnly = true;
-            this.FlowRunStatus.Width = 102;
-            // 
-            // FlowRunStartDate
-            // 
-            this.FlowRunStartDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.FlowRunStartDate.DataPropertyName = "StartDate";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "dd.MM.yyyy HH:mm:ss";
-            dataGridViewCellStyle2.NullValue = null;
-            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle2;
-            this.FlowRunStartDate.HeaderText = "Start Date";
-            this.FlowRunStartDate.MinimumWidth = 8;
-            this.FlowRunStartDate.Name = "FlowRunStartDate";
-            this.FlowRunStartDate.ReadOnly = true;
-            this.FlowRunStartDate.Width = 120;
-            // 
-            // FlowRunDurationInSeconds
-            // 
-            this.FlowRunDurationInSeconds.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.FlowRunDurationInSeconds.DataPropertyName = "DurationInSeconds";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle3;
-            this.FlowRunDurationInSeconds.HeaderText = "Duration (s)";
-            this.FlowRunDurationInSeconds.MinimumWidth = 8;
-            this.FlowRunDurationInSeconds.Name = "FlowRunDurationInSeconds";
-            this.FlowRunDurationInSeconds.ReadOnly = true;
-            this.FlowRunDurationInSeconds.Width = 128;
-            // 
-            // FlowRunUrl
-            // 
-            this.FlowRunUrl.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.FlowRunUrl.HeaderText = "Details";
-            this.FlowRunUrl.Image = ((System.Drawing.Image)(resources.GetObject("FlowRunUrl.Image")));
-            this.FlowRunUrl.MinimumWidth = 24;
-            this.FlowRunUrl.Name = "FlowRunUrl";
-            this.FlowRunUrl.ReadOnly = true;
-            this.FlowRunUrl.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlowRunUrl.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FlowRunUrl.Width = 104;
-            // 
-            // FlowRunTriggerOutputs
-            // 
-            this.FlowRunTriggerOutputs.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.FlowRunTriggerOutputs.HeaderText = "Trigger Outputs";
-            this.FlowRunTriggerOutputs.Image = ((System.Drawing.Image)(resources.GetObject("FlowRunTriggerOutputs.Image")));
-            this.FlowRunTriggerOutputs.MinimumWidth = 24;
-            this.FlowRunTriggerOutputs.Name = "FlowRunTriggerOutputs";
-            this.FlowRunTriggerOutputs.ReadOnly = true;
-            this.FlowRunTriggerOutputs.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlowRunTriggerOutputs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.FlowRunTriggerOutputs.Width = 153;
             // 
             // cbxStatus
             // 
@@ -506,6 +416,110 @@
             this.lblDateFrom.TabIndex = 9;
             this.lblDateFrom.Text = "Date From";
             // 
+            // FlowRunId
+            // 
+            this.FlowRunId.DataPropertyName = "Id";
+            this.FlowRunId.HeaderText = "Id";
+            this.FlowRunId.MinimumWidth = 8;
+            this.FlowRunId.Name = "FlowRunId";
+            this.FlowRunId.ReadOnly = true;
+            this.FlowRunId.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlowRunId.Visible = false;
+            // 
+            // FlowRunCorrelationId
+            // 
+            this.FlowRunCorrelationId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FlowRunCorrelationId.DataPropertyName = "CorrelationId";
+            this.FlowRunCorrelationId.HeaderText = "Correlation Id";
+            this.FlowRunCorrelationId.MinimumWidth = 8;
+            this.FlowRunCorrelationId.Name = "FlowRunCorrelationId";
+            this.FlowRunCorrelationId.ReadOnly = true;
+            // 
+            // FlowRunFlow
+            // 
+            this.FlowRunFlow.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FlowRunFlow.DataPropertyName = "Flow";
+            this.FlowRunFlow.HeaderText = "Flow";
+            this.FlowRunFlow.MinimumWidth = 8;
+            this.FlowRunFlow.Name = "FlowRunFlow";
+            this.FlowRunFlow.ReadOnly = true;
+            this.FlowRunFlow.Visible = false;
+            // 
+            // FlowRunStatus
+            // 
+            this.FlowRunStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FlowRunStatus.DataPropertyName = "Status";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.FlowRunStatus.DefaultCellStyle = dataGridViewCellStyle1;
+            this.FlowRunStatus.HeaderText = "Status";
+            this.FlowRunStatus.MinimumWidth = 8;
+            this.FlowRunStatus.Name = "FlowRunStatus";
+            this.FlowRunStatus.ReadOnly = true;
+            this.FlowRunStatus.Width = 102;
+            // 
+            // FlowRunStartDate
+            // 
+            this.FlowRunStartDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FlowRunStartDate.DataPropertyName = "StartDate";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "dd.MM.yyyy HH:mm:ss";
+            dataGridViewCellStyle2.NullValue = null;
+            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle2;
+            this.FlowRunStartDate.HeaderText = "Start Date";
+            this.FlowRunStartDate.MinimumWidth = 8;
+            this.FlowRunStartDate.Name = "FlowRunStartDate";
+            this.FlowRunStartDate.ReadOnly = true;
+            this.FlowRunStartDate.Width = 129;
+            // 
+            // FlowRunEndDate
+            // 
+            this.FlowRunEndDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FlowRunEndDate.DataPropertyName = "EndDate";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "dd.MM.yyyy HH:mm:ss";
+            this.FlowRunEndDate.DefaultCellStyle = dataGridViewCellStyle3;
+            this.FlowRunEndDate.HeaderText = "End Date";
+            this.FlowRunEndDate.MinimumWidth = 8;
+            this.FlowRunEndDate.Name = "FlowRunEndDate";
+            this.FlowRunEndDate.ReadOnly = true;
+            this.FlowRunEndDate.Width = 123;
+            // 
+            // FlowRunDurationInSeconds
+            // 
+            this.FlowRunDurationInSeconds.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FlowRunDurationInSeconds.DataPropertyName = "DurationInSeconds";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle4;
+            this.FlowRunDurationInSeconds.HeaderText = "Duration (s)";
+            this.FlowRunDurationInSeconds.MinimumWidth = 8;
+            this.FlowRunDurationInSeconds.Name = "FlowRunDurationInSeconds";
+            this.FlowRunDurationInSeconds.ReadOnly = true;
+            this.FlowRunDurationInSeconds.Width = 138;
+            // 
+            // FlowRunUrl
+            // 
+            this.FlowRunUrl.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FlowRunUrl.HeaderText = "Details";
+            this.FlowRunUrl.Image = ((System.Drawing.Image)(resources.GetObject("FlowRunUrl.Image")));
+            this.FlowRunUrl.MinimumWidth = 24;
+            this.FlowRunUrl.Name = "FlowRunUrl";
+            this.FlowRunUrl.ReadOnly = true;
+            this.FlowRunUrl.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlowRunUrl.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.FlowRunUrl.Width = 104;
+            // 
+            // FlowRunTriggerOutputs
+            // 
+            this.FlowRunTriggerOutputs.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.FlowRunTriggerOutputs.HeaderText = "Trigger Outputs";
+            this.FlowRunTriggerOutputs.Image = ((System.Drawing.Image)(resources.GetObject("FlowRunTriggerOutputs.Image")));
+            this.FlowRunTriggerOutputs.MinimumWidth = 24;
+            this.FlowRunTriggerOutputs.Name = "FlowRunTriggerOutputs";
+            this.FlowRunTriggerOutputs.ReadOnly = true;
+            this.FlowRunTriggerOutputs.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlowRunTriggerOutputs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.FlowRunTriggerOutputs.Width = 165;
+            // 
             // FlowExecutionHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -563,14 +577,15 @@
         private System.Windows.Forms.ToolStripMenuItem tsbExcel;
         private System.Windows.Forms.ToolStripMenuItem tsbCsv;
         private System.Windows.Forms.ToolStripButton tsbSettings;
+        private System.Windows.Forms.CheckBox cbSelectAllFlows;
         private System.Windows.Forms.DataGridViewTextBoxColumn FlowRunId;
         private System.Windows.Forms.DataGridViewTextBoxColumn FlowRunCorrelationId;
         private System.Windows.Forms.DataGridViewTextBoxColumn FlowRunFlow;
         private System.Windows.Forms.DataGridViewTextBoxColumn FlowRunStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn FlowRunStartDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FlowRunEndDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn FlowRunDurationInSeconds;
         private System.Windows.Forms.DataGridViewImageColumn FlowRunUrl;
         private System.Windows.Forms.DataGridViewImageColumn FlowRunTriggerOutputs;
-        private System.Windows.Forms.CheckBox cbSelectAllFlows;
     }
 }

@@ -90,6 +90,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                     Id = fr.name,
                     Status = fr.properties.status,
                     StartDate = fr.properties.startTime.ToLocalTime(),
+                    EndDate = fr.properties.endTime.ToLocalTime(),
                     DurationInSeconds = (int)duration,
                     Url = runUrl,
                     Flow = flow,
