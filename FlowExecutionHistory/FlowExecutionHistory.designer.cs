@@ -176,6 +176,7 @@
             // cbBrowser
             // 
             this.cbBrowser.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBrowser.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cbBrowser.Name = "cbBrowser";
             this.cbBrowser.Size = new System.Drawing.Size(121, 34);
             this.cbBrowser.SelectedIndexChanged += new System.EventHandler(this.cbBrowser_SelectedIndexChanged);
@@ -190,6 +191,7 @@
             // 
             this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProfile.DropDownWidth = 150;
+            this.cbProfile.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cbProfile.Name = "cbProfile";
             this.cbProfile.Size = new System.Drawing.Size(200, 34);
             this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
@@ -236,6 +238,7 @@
             this.dgvFlowRuns.Location = new System.Drawing.Point(6, 73);
             this.dgvFlowRuns.Name = "dgvFlowRuns";
             this.dgvFlowRuns.ReadOnly = true;
+            this.dgvFlowRuns.RowHeadersVisible = false;
             this.dgvFlowRuns.RowHeadersWidth = 62;
             this.dgvFlowRuns.RowTemplate.Height = 28;
             this.dgvFlowRuns.Size = new System.Drawing.Size(1108, 688);

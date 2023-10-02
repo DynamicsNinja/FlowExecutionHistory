@@ -37,6 +37,10 @@
             this.dgvTriggerOutputsHeaders = new System.Windows.Forms.DataGridView();
             this.TriggerOutputsHeadersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TriggerOutputsHeadersValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbSearchHeaders = new System.Windows.Forms.TextBox();
+            this.tbSearchBody = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTriggerOutputsBody)).BeginInit();
@@ -66,6 +70,8 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.tbSearchBody);
+            this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.dgvTriggerOutputsBody);
             this.groupBox2.Location = new System.Drawing.Point(738, 3);
             this.groupBox2.Name = "groupBox2";
@@ -76,6 +82,8 @@
             // 
             // dgvTriggerOutputsBody
             // 
+            this.dgvTriggerOutputsBody.AllowUserToAddRows = false;
+            this.dgvTriggerOutputsBody.AllowUserToDeleteRows = false;
             this.dgvTriggerOutputsBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -84,11 +92,13 @@
             this.dgvTriggerOutputsBody.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TriggerOutputsBodyName,
             this.TriggerOutputsBodyValue});
-            this.dgvTriggerOutputsBody.Location = new System.Drawing.Point(6, 25);
+            this.dgvTriggerOutputsBody.Location = new System.Drawing.Point(6, 80);
             this.dgvTriggerOutputsBody.Name = "dgvTriggerOutputsBody";
+            this.dgvTriggerOutputsBody.ReadOnly = true;
+            this.dgvTriggerOutputsBody.RowHeadersVisible = false;
             this.dgvTriggerOutputsBody.RowHeadersWidth = 62;
             this.dgvTriggerOutputsBody.RowTemplate.Height = 28;
-            this.dgvTriggerOutputsBody.Size = new System.Drawing.Size(717, 389);
+            this.dgvTriggerOutputsBody.Size = new System.Drawing.Size(717, 334);
             this.dgvTriggerOutputsBody.TabIndex = 1;
             // 
             // TriggerOutputsBodyName
@@ -108,6 +118,8 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.tbSearchHeaders);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.dgvTriggerOutputsHeaders);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
@@ -118,6 +130,8 @@
             // 
             // dgvTriggerOutputsHeaders
             // 
+            this.dgvTriggerOutputsHeaders.AllowUserToAddRows = false;
+            this.dgvTriggerOutputsHeaders.AllowUserToDeleteRows = false;
             this.dgvTriggerOutputsHeaders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -126,11 +140,13 @@
             this.dgvTriggerOutputsHeaders.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TriggerOutputsHeadersName,
             this.TriggerOutputsHeadersValue});
-            this.dgvTriggerOutputsHeaders.Location = new System.Drawing.Point(6, 25);
+            this.dgvTriggerOutputsHeaders.Location = new System.Drawing.Point(6, 80);
             this.dgvTriggerOutputsHeaders.Name = "dgvTriggerOutputsHeaders";
+            this.dgvTriggerOutputsHeaders.ReadOnly = true;
+            this.dgvTriggerOutputsHeaders.RowHeadersVisible = false;
             this.dgvTriggerOutputsHeaders.RowHeadersWidth = 62;
             this.dgvTriggerOutputsHeaders.RowTemplate.Height = 28;
-            this.dgvTriggerOutputsHeaders.Size = new System.Drawing.Size(717, 389);
+            this.dgvTriggerOutputsHeaders.Size = new System.Drawing.Size(717, 334);
             this.dgvTriggerOutputsHeaders.TabIndex = 0;
             // 
             // TriggerOutputsHeadersName
@@ -145,6 +161,44 @@
             this.TriggerOutputsHeadersValue.MinimumWidth = 8;
             this.TriggerOutputsHeadersValue.Name = "TriggerOutputsHeadersValue";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 37);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(60, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Search";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 37);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 20);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Search";
+            // 
+            // tbSearchHeaders
+            // 
+            this.tbSearchHeaders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSearchHeaders.Location = new System.Drawing.Point(72, 34);
+            this.tbSearchHeaders.Name = "tbSearchHeaders";
+            this.tbSearchHeaders.Size = new System.Drawing.Size(651, 26);
+            this.tbSearchHeaders.TabIndex = 2;
+            this.tbSearchHeaders.TextChanged += new System.EventHandler(this.tbSearchHeaders_TextChanged);
+            // 
+            // tbSearchBody
+            // 
+            this.tbSearchBody.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSearchBody.Location = new System.Drawing.Point(72, 34);
+            this.tbSearchBody.Name = "tbSearchBody";
+            this.tbSearchBody.Size = new System.Drawing.Size(651, 26);
+            this.tbSearchBody.TabIndex = 3;
+            this.tbSearchBody.TextChanged += new System.EventHandler(this.tbSearchBody_TextChanged);
+            // 
             // TriggerOutputsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -156,8 +210,10 @@
             this.Text = "TriggerOutputsForm";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTriggerOutputsBody)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTriggerOutputsHeaders)).EndInit();
             this.ResumeLayout(false);
 
@@ -174,5 +230,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TriggerOutputsHeadersValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn TriggerOutputsBodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn TriggerOutputsBodyValue;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbSearchBody;
+        private System.Windows.Forms.TextBox tbSearchHeaders;
     }
 }

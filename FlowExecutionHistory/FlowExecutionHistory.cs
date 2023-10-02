@@ -149,6 +149,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     </fetch>";
 
                     var entities = Service.RetrieveMultiple(new FetchExpression(fetch)).Entities.ToList();
+
                     args.Result = entities.Select(f => new Flow
                     {
                         Id = ((Guid)f["workflowidunique"]).ToString("D"),
