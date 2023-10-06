@@ -30,17 +30,17 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tbSearchBody = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.dgvTriggerOutputsBody = new System.Windows.Forms.DataGridView();
             this.TriggerOutputsBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TriggerOutputsBodyValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbSearchHeaders = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.dgvTriggerOutputsHeaders = new System.Windows.Forms.DataGridView();
             this.TriggerOutputsHeadersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TriggerOutputsHeadersValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.tbSearchHeaders = new System.Windows.Forms.TextBox();
-            this.tbSearchBody = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTriggerOutputsBody)).BeginInit();
@@ -80,6 +80,25 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Body";
             // 
+            // tbSearchBody
+            // 
+            this.tbSearchBody.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSearchBody.Location = new System.Drawing.Point(72, 34);
+            this.tbSearchBody.Name = "tbSearchBody";
+            this.tbSearchBody.Size = new System.Drawing.Size(651, 26);
+            this.tbSearchBody.TabIndex = 3;
+            this.tbSearchBody.TextChanged += new System.EventHandler(this.tbSearchBody_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 37);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 20);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Search";
+            // 
             // dgvTriggerOutputsBody
             // 
             this.dgvTriggerOutputsBody.AllowUserToAddRows = false;
@@ -94,7 +113,6 @@
             this.TriggerOutputsBodyValue});
             this.dgvTriggerOutputsBody.Location = new System.Drawing.Point(6, 80);
             this.dgvTriggerOutputsBody.Name = "dgvTriggerOutputsBody";
-            this.dgvTriggerOutputsBody.ReadOnly = true;
             this.dgvTriggerOutputsBody.RowHeadersVisible = false;
             this.dgvTriggerOutputsBody.RowHeadersWidth = 62;
             this.dgvTriggerOutputsBody.RowTemplate.Height = 28;
@@ -128,6 +146,25 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Headers";
             // 
+            // tbSearchHeaders
+            // 
+            this.tbSearchHeaders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSearchHeaders.Location = new System.Drawing.Point(72, 34);
+            this.tbSearchHeaders.Name = "tbSearchHeaders";
+            this.tbSearchHeaders.Size = new System.Drawing.Size(651, 26);
+            this.tbSearchHeaders.TabIndex = 2;
+            this.tbSearchHeaders.TextChanged += new System.EventHandler(this.tbSearchHeaders_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 37);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(60, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Search";
+            // 
             // dgvTriggerOutputsHeaders
             // 
             this.dgvTriggerOutputsHeaders.AllowUserToAddRows = false;
@@ -154,50 +191,14 @@
             this.TriggerOutputsHeadersName.HeaderText = "Name";
             this.TriggerOutputsHeadersName.MinimumWidth = 8;
             this.TriggerOutputsHeadersName.Name = "TriggerOutputsHeadersName";
+            this.TriggerOutputsHeadersName.ReadOnly = true;
             // 
             // TriggerOutputsHeadersValue
             // 
             this.TriggerOutputsHeadersValue.HeaderText = "Value";
             this.TriggerOutputsHeadersValue.MinimumWidth = 8;
             this.TriggerOutputsHeadersValue.Name = "TriggerOutputsHeadersValue";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 37);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Search";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 37);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 20);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Search";
-            // 
-            // tbSearchHeaders
-            // 
-            this.tbSearchHeaders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSearchHeaders.Location = new System.Drawing.Point(72, 34);
-            this.tbSearchHeaders.Name = "tbSearchHeaders";
-            this.tbSearchHeaders.Size = new System.Drawing.Size(651, 26);
-            this.tbSearchHeaders.TabIndex = 2;
-            this.tbSearchHeaders.TextChanged += new System.EventHandler(this.tbSearchHeaders_TextChanged);
-            // 
-            // tbSearchBody
-            // 
-            this.tbSearchBody.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSearchBody.Location = new System.Drawing.Point(72, 34);
-            this.tbSearchBody.Name = "tbSearchBody";
-            this.tbSearchBody.Size = new System.Drawing.Size(651, 26);
-            this.tbSearchBody.TabIndex = 3;
-            this.tbSearchBody.TextChanged += new System.EventHandler(this.tbSearchBody_TextChanged);
+            this.TriggerOutputsHeadersValue.ReadOnly = true;
             // 
             // TriggerOutputsForm
             // 

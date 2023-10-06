@@ -19,6 +19,7 @@ namespace Fic.XTB.FlowExecutionHistory.Models
         public Flow Flow { get; set; }
         public FlowRunError Error { get; set; }
         public string TriggerOutputsUrl { get; set; }
+        public TriggerOutputsResponseDto TriggerOutputs { get; set; }
 
         public TriggerOutputsResponseDto GetTriggerOutputs()
         {
@@ -26,6 +27,8 @@ namespace Fic.XTB.FlowExecutionHistory.Models
             var response = client.GetAsync(TriggerOutputsUrl).Result;
             var responseJson = response.Content.ReadAsStringAsync().Result;
             var triggerOutputs = JsonConvert.DeserializeObject<TriggerOutputsResponseDto>(responseJson);
+
+            TriggerOutputs = triggerOutputs;
 
             return triggerOutputs;
         }

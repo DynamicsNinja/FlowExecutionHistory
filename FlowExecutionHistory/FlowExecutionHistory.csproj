@@ -312,6 +312,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\FlowRunStatus.cs" />
+    <Compile Include="Enums\OutputTriggerFilter.cs" />
     <Compile Include="Extensions\ConnectionDetailExtensions.cs" />
     <Compile Include="Forms\FlowRunErrorForm.cs">
       <SubType>Form</SubType>
@@ -324,6 +325,12 @@
     </Compile>
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TriggerOutputsFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TriggerOutputsFilterForm.Designer.cs">
+      <DependentUpon>TriggerOutputsFilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TriggerOutputsForm.cs">
       <SubType>Form</SubType>
@@ -340,6 +347,7 @@
     <Compile Include="Models\DTOs\FlowRunRemediationResponse.cs" />
     <Compile Include="Models\DTOs\FlowRunsResponseFlowRunsDto.cs" />
     <Compile Include="Models\DTOs\TriggerOutputsResponseDto.cs" />
+    <Compile Include="Models\FilterCondition.cs" />
     <Compile Include="Models\Flow.cs" />
     <Compile Include="Models\FlowRun.cs" />
     <Compile Include="Models\FlowRunError.cs" />
@@ -374,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TriggerOutputsFilterForm.resx">
+      <DependentUpon>TriggerOutputsFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TriggerOutputsForm.resx">
       <DependentUpon>TriggerOutputsForm.cs</DependentUpon>
