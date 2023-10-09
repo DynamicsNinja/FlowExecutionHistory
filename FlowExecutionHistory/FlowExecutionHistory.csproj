@@ -311,7 +311,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\FilterConditionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Enums\FlowRunStatus.cs" />
+    <Compile Include="Enums\GroupOperator.cs" />
     <Compile Include="Enums\OutputTriggerFilter.cs" />
     <Compile Include="Extensions\ConnectionDetailExtensions.cs" />
     <Compile Include="Forms\FlowRunErrorForm.cs">
@@ -344,6 +348,7 @@
     <Compile Include="Models\AccessTokenResponse.cs" />
     <Compile Include="Models\Browser.cs" />
     <Compile Include="Models\BrowserProfile.cs" />
+    <Compile Include="Models\ConditionGroup.cs" />
     <Compile Include="Models\DTOs\FlowRunRemediationResponse.cs" />
     <Compile Include="Models\DTOs\FlowRunsResponseFlowRunsDto.cs" />
     <Compile Include="Models\DTOs\TriggerOutputsResponseDto.cs" />
@@ -396,6 +401,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILMergeOrder.txt" />
+    <None Include="Resources\delete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

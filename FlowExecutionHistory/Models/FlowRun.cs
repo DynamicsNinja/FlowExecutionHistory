@@ -23,6 +23,8 @@ namespace Fic.XTB.FlowExecutionHistory.Models
 
         public TriggerOutputsResponseDto GetTriggerOutputs()
         {
+            if (string.IsNullOrWhiteSpace(TriggerOutputsUrl)) { return null; }
+
             var client = new HttpClient();
             var response = client.GetAsync(TriggerOutputsUrl).Result;
             var responseJson = response.Content.ReadAsStringAsync().Result;

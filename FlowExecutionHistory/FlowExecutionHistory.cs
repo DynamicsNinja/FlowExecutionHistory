@@ -870,7 +870,7 @@ namespace Fic.XTB.FlowExecutionHistory
             GetFlowRuns();
         }
 
-        public void FilterRunsByTriggerOutputs(FilterCondition filterCondition)
+        public void FilterRunsByTriggerOutputs(ConditionGroup conditionGroup)
         {
             WorkAsync(new WorkAsyncInfo
             {
@@ -904,15 +904,47 @@ namespace Fic.XTB.FlowExecutionHistory
                         { OutputTriggerFilter.EndsWith, (a, b) => a.EndsWith(b) }
                     };
 
+                    var attributes = conditionGroup.FilterConditions.Select(fc => fc.Attribute).Distinct().ToList();
+                    var groupOperator = conditionGroup.GroupOperator;
+
                     foreach (var fr in FlowRuns)
                     {
                         var outputs = fr.TriggerOutputs;
 
-                        if (!outputs.Body.ContainsKey(filterCondition.Attribute)) { continue; }
+                        if (!attributes.All(a => outputs.Body.ContainsKey(a))) { continue; }
 
-                        var outputTriggerValue = outputs.Body[filterCondition.Attribute].ToString().ToLowerInvariant();
+                        var isMatch = false;
 
-                        if (comparisonOperators.TryGetValue(filterCondition.Operator, out var comparisonFunction) && comparisonFunction(outputTriggerValue, filterCondition.Value))
+                        foreach (var filterCondition in conditionGroup.FilterConditions)
+                        {
+                            var outputTriggerValue = outputs.Body[filterCondition.Attribute].ToString().ToLowerInvariant();
+
+                            var comparisonFound = comparisonOperators.TryGetValue(filterCondition.Operator, out var comparisonFunction);
+
+                            if (!comparisonFound)
+                            {
+                                isMatch = false;
+                                break;
+                            }
+
+                            var conditionMatch = comparisonFunction(outputTriggerValue, filterCondition.Value);
+
+                            if (groupOperator == GroupOperator.And && !conditionMatch)
+                            {
+                                isMatch = false;
+                                break;
+                            }
+
+                            if (groupOperator == GroupOperator.Or && conditionMatch)
+                            {
+                                isMatch = true;
+                                break;
+                            }
+
+                            isMatch = conditionMatch;
+                        }
+
+                        if (isMatch)
                         {
                             list.Add(fr);
                         }
@@ -947,8 +979,15 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void tsbGetTriggerOutputs_Click(object sender, EventArgs e)
         {
-            _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
-            _triggerOutputsFilterForm.ShowDialog();
+            if(FlowRuns.FirstOrDefault().TriggerOutputsUrl == null)
+            {
+                MessageBox.Show("There are no trigger outputs to filter runs.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
+                _triggerOutputsFilterForm.ShowDialog();
+            }
         }
 
         private void btnResetFilters_Click(object sender, EventArgs e)
@@ -963,6 +1002,10 @@ namespace Fic.XTB.FlowExecutionHistory
             tsbGetTriggerOutputs.Visible = show;
             btnResetFilters.Visible = show;
             tssTriggerOutputs.Visible = show;
+
+            if (FlowRuns.FirstOrDefault()?.TriggerOutputsUrl == null || !show) { return; }
+
+            _triggerOutputsFilterForm = new TriggerOutputsFilterForm(this);
         }
     }
 }

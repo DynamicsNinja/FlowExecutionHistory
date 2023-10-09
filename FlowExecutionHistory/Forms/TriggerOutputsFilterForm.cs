@@ -1,6 +1,7 @@
 ﻿using Fic.XTB.FlowExecutionHistory.Enums;
 using Fic.XTB.FlowExecutionHistory.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -9,6 +10,10 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
     public partial class TriggerOutputsFilterForm : Form
     {
         private FlowExecutionHistory _frc;
+
+        private List<string> _attributes;
+        private List<OutputTriggerFilter> _operators;
+
         public TriggerOutputsFilterForm(FlowExecutionHistory frc)
         {
             InitializeComponent();
@@ -17,38 +22,89 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
 
             var triggerOutput = frc.FlowRuns.FirstOrDefault()?.GetTriggerOutputs();
 
-            foreach (var key in triggerOutput.Body.Keys.OrderBy(k => k))
-            {
-                cbBodyKeys.Items.Add(key);
-            }
+            _attributes = triggerOutput.Body.Keys.OrderBy(k => k).ToList();
+            _operators = Enum.GetValues(typeof(OutputTriggerFilter)).Cast<OutputTriggerFilter>().ToList();
 
-            cbOperator.DataSource = Enum.GetValues(typeof(OutputTriggerFilter));
+            cbGroupOperator.DataSource = Enum.GetValues(typeof(GroupOperator)).Cast<GroupOperator>().ToList();
 
-            cbBodyKeys.SelectedIndex = 0;
-            cbOperator.SelectedIndex = 0;
+            tableLayoutPanel2.RowStyles.Clear();
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+            AddFilterConditionControl();
         }
 
         private void btnFIlter_Click(object sender, EventArgs e)
         {
-            var filterAttribute = (string)cbBodyKeys.SelectedItem;
-            var filterOperator = (OutputTriggerFilter)cbOperator.SelectedItem;
-            var filterValue = tbValue.Text.ToLower();
+            var filterConditions = GetAllFilterConditions();
+            var groupOperator = (GroupOperator)cbGroupOperator.SelectedItem;
 
-            var filterCondition = new FilterCondition
+            var conditionGroup = new ConditionGroup
             {
-                Attribute = filterAttribute,
-                Operator = filterOperator,
-                Value = filterValue
+                GroupOperator = groupOperator,
+                FilterConditions = filterConditions
             };
 
-            _frc.FilterRunsByTriggerOutputs(filterCondition);
+            _frc.FilterRunsByTriggerOutputs(conditionGroup);
 
             Close();
+        }
+
+        private List<FilterCondition> GetAllFilterConditions()
+        {
+            var filterConditions = new List<FilterCondition>();
+
+            foreach (var control in tableLayoutPanel2.Controls)
+            {
+                if (control is FilterConditionControl filterConditionControl)
+                {
+                    filterConditions.Add(filterConditionControl.FilterCondition);
+                }
+            }
+
+            return filterConditions;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void AddFilterConditionControl()
+        {
+            var customControl = new FilterConditionControl(_attributes, _operators, Properties.Resources.delete);
+            customControl.RowIndex = 0;
+            customControl.RemoveButtonClicked += (sender, args) => OnRemoveButtonClicked((FilterConditionControl)sender);
+
+            tableLayoutPanel2.Controls.Add(customControl, 0, tableLayoutPanel2.RowCount);
+            tableLayoutPanel2.RowCount++;
+
+            UpdateControlRowIndices();
+        }
+
+        private void UpdateControlRowIndices()
+        {
+            for (int i = 0; i < tableLayoutPanel2.Controls.Count; i++)
+            {
+                (tableLayoutPanel2.Controls[i] as FilterConditionControl).RowIndex = i;
+            }
+        }
+
+        private void OnRemoveButtonClicked(FilterConditionControl control)
+        {
+            int row = control.RowIndex;
+
+            tableLayoutPanel2.Controls.RemoveAt(row);
+            tableLayoutPanel2.RowCount = tableLayoutPanel2.RowCount - 1;
+
+            tableLayoutPanel2.PerformLayout();
+
+
+            UpdateControlRowIndices();
+        }
+
+        private void btnAdd_Click_1(object sender, EventArgs e)
+        {
+            AddFilterConditionControl();
         }
     }
 }
