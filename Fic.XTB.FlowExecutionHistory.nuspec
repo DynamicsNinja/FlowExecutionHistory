@@ -12,6 +12,10 @@
     <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
     <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
     <releaseNotes>1.2023.9.35
+- Added filtering runs by trigger output values
+- Added end date field to flow run
+- Added search for trigger outputs form
+1.2023.9.35
 - Fixed issue when assigning colors to flows
 1.2023.9.34
 - Added select/unselect all flows option
