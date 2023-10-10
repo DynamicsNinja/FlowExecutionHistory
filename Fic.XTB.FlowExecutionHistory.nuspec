@@ -11,7 +11,9 @@
     <iconUrl>https://raw.githubusercontent.com/DynamicsNinja/FlowExecutionHistory/main/docs/img/feh-300.png</iconUrl>
     <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
     <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
-    <releaseNotes>1.2023.10.5
+    <releaseNotes>>1.2023.10.8
+- Fixed issue when comparing values in different case
+1.2023.10.5
 - Added filtering runs by trigger output values
 - Added end date field to flow run
 - Added search for trigger outputs form

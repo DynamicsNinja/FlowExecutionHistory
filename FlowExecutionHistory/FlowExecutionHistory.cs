@@ -927,7 +927,9 @@ namespace Fic.XTB.FlowExecutionHistory
                                 break;
                             }
 
-                            var conditionMatch = comparisonFunction(outputTriggerValue, filterCondition.Value);
+                            var filterValue = filterCondition.Value.ToLowerInvariant();
+
+                            var conditionMatch = comparisonFunction(outputTriggerValue, filterValue);
 
                             if (groupOperator == GroupOperator.And && !conditionMatch)
                             {
@@ -979,7 +981,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void tsbGetTriggerOutputs_Click(object sender, EventArgs e)
         {
-            if(FlowRuns.FirstOrDefault().TriggerOutputsUrl == null)
+            if (FlowRuns.FirstOrDefault().TriggerOutputsUrl == null)
             {
                 MessageBox.Show("There are no trigger outputs to filter runs.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
