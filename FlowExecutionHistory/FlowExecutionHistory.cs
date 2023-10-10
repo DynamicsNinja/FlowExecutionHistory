@@ -213,8 +213,6 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     var flowClient = new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
 
-                    var flowRuns = new List<FlowRun>();
-
                     var options = new ParallelOptions
                     {
                         MaxDegreeOfParallelism = Environment.ProcessorCount * 4
@@ -224,8 +222,10 @@ namespace Fic.XTB.FlowExecutionHistory
                     {
                         var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo);
                         fr = fr.Where(r => r.DurationInSeconds >= durationThreshold).ToList();
-                        flowRuns.AddRange(fr);
+                        f.FlowRuns = fr;
                     });
+
+                    var flowRuns = selectedFlows.SelectMany(f => f.FlowRuns).ToList();
 
                     args.Result = flowRuns;
                 },
@@ -894,18 +894,7 @@ namespace Fic.XTB.FlowExecutionHistory
                         fr.GetTriggerOutputs();
                     });
 
-                    var comparisonOperators = new Dictionary<OutputTriggerFilter, Func<string, string, bool>>
-                    {
-                        { OutputTriggerFilter.Equals, (a, b) => string.Equals(a, b, StringComparison.OrdinalIgnoreCase) },
-                        { OutputTriggerFilter.NotEquals, (a, b) => !string.Equals(a, b, StringComparison.OrdinalIgnoreCase) },
-                        { OutputTriggerFilter.Contains, (a, b) => a.Contains(b) },
-                        { OutputTriggerFilter.NotContains, (a, b) => !a.Contains(b) },
-                        { OutputTriggerFilter.StartsWith, (a, b) => a.StartsWith(b) },
-                        { OutputTriggerFilter.EndsWith, (a, b) => a.EndsWith(b) }
-                    };
-
                     var attributes = conditionGroup.FilterConditions.Select(fc => fc.Attribute).Distinct().ToList();
-                    var groupOperator = conditionGroup.GroupOperator;
 
                     foreach (var fr in FlowRuns)
                     {
@@ -913,38 +902,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         if (!attributes.All(a => outputs.Body.ContainsKey(a))) { continue; }
 
-                        var isMatch = false;
-
-                        foreach (var filterCondition in conditionGroup.FilterConditions)
-                        {
-                            var outputTriggerValue = outputs.Body[filterCondition.Attribute].ToString().ToLowerInvariant();
-
-                            var comparisonFound = comparisonOperators.TryGetValue(filterCondition.Operator, out var comparisonFunction);
-
-                            if (!comparisonFound)
-                            {
-                                isMatch = false;
-                                break;
-                            }
-
-                            var filterValue = filterCondition.Value.ToLowerInvariant();
-
-                            var conditionMatch = comparisonFunction(outputTriggerValue, filterValue);
-
-                            if (groupOperator == GroupOperator.And && !conditionMatch)
-                            {
-                                isMatch = false;
-                                break;
-                            }
-
-                            if (groupOperator == GroupOperator.Or && conditionMatch)
-                            {
-                                isMatch = true;
-                                break;
-                            }
-
-                            isMatch = conditionMatch;
-                        }
+                        var isMatch = conditionGroup.Evaluate(outputs.Body);
 
                         if (isMatch)
                         {
@@ -968,11 +926,6 @@ namespace Fic.XTB.FlowExecutionHistory
                         dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(filteredFlowRuns);
 
                         gbFlowRuns.Text = $@"Flow Runs ({filteredFlowRuns.Count})";
-
-                        //var miliseconds = (long)args.Result;
-                        //double executionTimeInSeconds = miliseconds / 1000.0;
-
-                        //MessageBox.Show($"{executionTimeInSeconds} s", "Time Elapsed");
                     }
                 }
             });

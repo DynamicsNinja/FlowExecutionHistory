@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace Fic.XTB.FlowExecutionHistory.Models
 {
@@ -9,6 +10,7 @@ namespace Fic.XTB.FlowExecutionHistory.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public string ClientDataJson { get; set; }
+        public List<FlowRun> FlowRuns { get; set; }
 
         public override string ToString()
         {
