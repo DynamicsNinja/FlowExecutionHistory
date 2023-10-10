@@ -22,6 +22,10 @@ Your support is greatly appreciated!
 
 You are able to filter flow runs against multiple flows at the same time, so you can see everything in one place.
 
+### Filter by Trigger Output Values
+
+You can filter flow runs based on trigger output values. This powerful feature enables you to narrow down the results to only those runs that meet specific trigger output criteria.
+
 ### Time filters
 
 Filter out flow runs for a period of time instead of constantly loading the next page like we are used to in run history on the Power Automate portal.
