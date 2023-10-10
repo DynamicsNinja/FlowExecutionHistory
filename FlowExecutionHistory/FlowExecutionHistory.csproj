@@ -315,6 +315,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Enums\FlowRunStatus.cs" />
+    <Compile Include="Enums\FlowStatus.cs" />
     <Compile Include="Enums\GroupOperator.cs" />
     <Compile Include="Enums\OutputTriggerFilter.cs" />
     <Compile Include="Extensions\ConnectionDetailExtensions.cs" />

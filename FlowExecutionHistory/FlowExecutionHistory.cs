@@ -141,15 +141,17 @@ namespace Fic.XTB.FlowExecutionHistory
                 {
                     var fetch = $@"
                     <fetch>
-	                    <entity name='workflow'>
-		                     <attribute name='workflowid' />
-		                     <attribute name='workflowidunique' />
-                             <attribute name='clientdata' />
-		                     <attribute name='name' />
-                             <filter type='and'>
-			                    <condition attribute='category' operator='eq' value='5' />
-		                    </filter>
-	                    </entity>
+                      <entity name='workflow'>
+                        <attribute name='workflowid' />
+                        <attribute name='workflowidunique' />
+                        <attribute name='clientdata' />
+                        <attribute name='name' />
+                        <attribute name='statecode' />
+                        <attribute name='statuscode' />
+                        <filter type='and'>
+                          <condition attribute='category' operator='eq' value='5' />
+                        </filter>
+                      </entity>
                     </fetch>";
 
                     var entities = Service.RetrieveMultiple(new FetchExpression(fetch)).Entities.ToList();
@@ -158,7 +160,8 @@ namespace Fic.XTB.FlowExecutionHistory
                     {
                         Id = ((Guid)f["workflowidunique"]).ToString("D"),
                         Name = (string)f["name"],
-                        ClientDataJson = (string)f["clientdata"]
+                        ClientDataJson = (string)f["clientdata"],
+                        Status = (FlowStatus)((OptionSetValue)f["statecode"]).Value
                     }).OrderBy(f => f.Name).ToList();
                 },
                 PostWorkCallBack = (args) =>
@@ -174,9 +177,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         _flows = flows;
 
-                        clbFlows.Items.AddRange(_flows.ToArray());
-
-                        gbFlow.Text = $"Flows ({_flows.Count})";
+                        FilterFlows();
                     }
 
                 }
@@ -280,17 +281,27 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void tbSearch_TextChanged(object sender, EventArgs e)
         {
-            var searchText = tbSearch.Text.ToLower();
+            FilterFlows();
+        }
 
-            if (string.IsNullOrWhiteSpace(searchText))
+        private void FilterFlows()
+        {
+            var searchText = tbSearch.Text.ToLower();
+            var activated = cbxFlowStatusActivated.Checked;
+            var dreft = cbxFlowStatusDraft.Checked;
+
+            var filteredFlows = _flows
+                .Where(f => f.Status == FlowStatus.Activated && activated || f.Status == FlowStatus.Draft && dreft)
+                .ToList();
+
+            if (!string.IsNullOrWhiteSpace(searchText))
             {
-                clbFlows.DataSource = _flows;
-            }
-            else
-            {
-                var filteredFlows = _flows.Where(f => f.Name.ToLower().Contains(searchText)).ToList();
-                clbFlows.DataSource = filteredFlows;
-            }
+                filteredFlows = filteredFlows.Where(f => f.Name.ToLower().Contains(searchText)).ToList();
+            };
+
+            gbFlow.Text = $"Flows ({filteredFlows.Count})";
+
+            clbFlows.DataSource = filteredFlows;
 
             clbFlows.ItemCheck -= clbFlows_ItemCheck;
 
@@ -961,6 +972,16 @@ namespace Fic.XTB.FlowExecutionHistory
             if (FlowRuns.FirstOrDefault()?.TriggerOutputsUrl == null || !show) { return; }
 
             _triggerOutputsFilterForm = new TriggerOutputsFilterForm(this);
+        }
+
+        private void cbxFlowStatusDraft_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterFlows();
+        }
+
+        private void cbxFlowStatusActivated_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterFlows();
         }
     }
 }
