@@ -34,18 +34,26 @@ public class FilterConditionControl : UserControl
         Margin = new Padding(0, 0, 0, 0);
         // Initialize controls
         tableLayoutPanel = new TableLayoutPanel();
-        attributeComboBox = new ComboBox();
-        operatorComboBox = new ComboBox();
+        attributeComboBox = new ComboBox
+        {
+            Anchor = AnchorStyles.Left | AnchorStyles.Right,
+        };
+        operatorComboBox = new ComboBox
+        {
+            Anchor = AnchorStyles.Left | AnchorStyles.Right,
+        };
         valueTextBox = new TextBox
         {
-            Dock = DockStyle.Fill,
+            Anchor = AnchorStyles.Left | AnchorStyles.Right,
         };
 
         removePictureBox = new PictureBox
         {
             Image = img,
-            Dock = DockStyle.Fill,
+            SizeMode = PictureBoxSizeMode.CenterImage,
+            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
             Size = new Size(26, 26),
+            AutoSize = true,
         };
 
         removePictureBox.Click += (sender, e) => removeButton_Click(sender, e);
@@ -66,10 +74,10 @@ public class FilterConditionControl : UserControl
         tableLayoutPanel.ColumnCount = 4;
 
 
-        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));
 
         // Add controls to the TableLayoutPanel
         tableLayoutPanel.Controls.Add(attributeComboBox, 0, 0);

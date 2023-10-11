@@ -72,6 +72,7 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
         private void AddFilterConditionControl()
         {
             var customControl = new FilterConditionControl(_attributes, _operators, Properties.Resources.delete);
+            customControl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             customControl.RowIndex = 0;
             customControl.RemoveButtonClicked += (sender, args) => OnRemoveButtonClicked((FilterConditionControl)sender);
 
@@ -105,6 +106,20 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
         private void btnAdd_Click_1(object sender, EventArgs e)
         {
             AddFilterConditionControl();
+        }
+
+        private void tableLayoutPanel2_Layout(object sender, LayoutEventArgs e)
+        {
+            if (tableLayoutPanel2.HorizontalScroll.Visible)
+            {
+                // Add padding to the right side equal to the width of the scrollbar
+                tableLayoutPanel2.Padding = new Padding(0, 0, SystemInformation.VerticalScrollBarWidth, 0);
+            }
+            else
+            {
+                // Reset padding if the scrollbar is not visible
+                tableLayoutPanel2.Padding = new Padding(0);
+            }
         }
     }
 }

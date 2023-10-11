@@ -38,7 +38,8 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(713, 511);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Location = new System.Drawing.Point(894, 511);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 30);
             this.btnCancel.TabIndex = 3;
@@ -48,7 +49,8 @@
             // 
             // btnFIlter
             // 
-            this.btnFIlter.Location = new System.Drawing.Point(632, 511);
+            this.btnFIlter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFIlter.Location = new System.Drawing.Point(813, 511);
             this.btnFIlter.Name = "btnFIlter";
             this.btnFIlter.Size = new System.Drawing.Size(75, 30);
             this.btnFIlter.TabIndex = 4;
@@ -58,6 +60,7 @@
             // 
             // btnAdd
             // 
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAdd.Location = new System.Drawing.Point(12, 511);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(141, 30);
@@ -77,38 +80,44 @@
             // 
             // cbGroupOperator
             // 
+            this.cbGroupOperator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbGroupOperator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGroupOperator.FormattingEnabled = true;
             this.cbGroupOperator.Location = new System.Drawing.Point(144, 6);
             this.cbGroupOperator.Name = "cbGroupOperator";
-            this.cbGroupOperator.Size = new System.Drawing.Size(644, 28);
+            this.cbGroupOperator.Size = new System.Drawing.Size(825, 28);
             this.cbGroupOperator.TabIndex = 10;
             // 
             // tableLayoutPanel2
             // 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.AutoScroll = true;
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 59);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 40);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(776, 446);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(957, 465);
             this.tableLayoutPanel2.TabIndex = 7;
+            this.tableLayoutPanel2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.tableLayoutPanel2_Scroll);
+            this.tableLayoutPanel2.Layout += new System.Windows.Forms.LayoutEventHandler(this.tableLayoutPanel2_Layout);
             // 
             // TriggerOutputsFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(800, 553);
+            this.ClientSize = new System.Drawing.Size(981, 553);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.cbGroupOperator);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnFIlter);
             this.Controls.Add(this.btnCancel);
-            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "TriggerOutputsFilterForm";
             this.ShowIcon = false;

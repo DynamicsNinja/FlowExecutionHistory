@@ -915,10 +915,9 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         var isMatch = conditionGroup.Evaluate(outputs.Body);
 
-                        if (isMatch)
-                        {
-                            list.Add(fr);
-                        }
+                        if (!isMatch) { continue; }
+
+                        list.Add(fr);
                     }
 
                     stopwatch.Stop();
