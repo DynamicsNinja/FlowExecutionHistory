@@ -103,7 +103,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(957, 465);
             this.tableLayoutPanel2.TabIndex = 7;
-            this.tableLayoutPanel2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.tableLayoutPanel2_Scroll);
             this.tableLayoutPanel2.Layout += new System.Windows.Forms.LayoutEventHandler(this.tableLayoutPanel2_Layout);
             // 
             // TriggerOutputsFilterForm
