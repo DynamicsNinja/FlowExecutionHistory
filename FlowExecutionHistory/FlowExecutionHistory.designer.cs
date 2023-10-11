@@ -30,11 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowExecutionHistory));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -69,6 +69,9 @@
             this.tbSearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
             this.gbFlow = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbxFlowStatusActivated = new System.Windows.Forms.CheckBox();
+            this.cbxFlowStatusDraft = new System.Windows.Forms.CheckBox();
             this.cbSelectAllFlows = new System.Windows.Forms.CheckBox();
             this.clbFlows = new System.Windows.Forms.CheckedListBox();
             this.gbFlowRuns = new System.Windows.Forms.GroupBox();
@@ -79,9 +82,6 @@
             this.dtpDateFrom = new System.Windows.Forms.DateTimePicker();
             this.lblDateFrom = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.cbxFlowStatusDraft = new System.Windows.Forms.CheckBox();
-            this.cbxFlowStatusActivated = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFlowRuns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlowRuns)).BeginInit();
@@ -271,15 +271,15 @@
             this.FlowRunUrl,
             this.FlowRunTriggerOutputs});
             this.dgvFlowRuns.DataSource = this.bsFlowRuns;
-            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle25.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle25.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle25.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle25.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle25.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFlowRuns.DefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFlowRuns.DefaultCellStyle = dataGridViewCellStyle10;
             this.dgvFlowRuns.Location = new System.Drawing.Point(6, 73);
             this.dgvFlowRuns.Name = "dgvFlowRuns";
             this.dgvFlowRuns.ReadOnly = true;
@@ -325,8 +325,8 @@
             // 
             this.FlowRunStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunStatus.DataPropertyName = "Status";
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.FlowRunStatus.DefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.FlowRunStatus.DefaultCellStyle = dataGridViewCellStyle6;
             this.FlowRunStatus.HeaderText = "Status";
             this.FlowRunStatus.MinimumWidth = 8;
             this.FlowRunStatus.Name = "FlowRunStatus";
@@ -337,10 +337,10 @@
             // 
             this.FlowRunStartDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunStartDate.DataPropertyName = "StartDate";
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle22.Format = "dd.MM.yyyy HH:mm:ss";
-            dataGridViewCellStyle22.NullValue = null;
-            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "dd.MM.yyyy HH:mm:ss";
+            dataGridViewCellStyle7.NullValue = null;
+            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle7;
             this.FlowRunStartDate.HeaderText = "Start Date";
             this.FlowRunStartDate.MinimumWidth = 8;
             this.FlowRunStartDate.Name = "FlowRunStartDate";
@@ -351,9 +351,9 @@
             // 
             this.FlowRunEndDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunEndDate.DataPropertyName = "EndDate";
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle23.Format = "dd.MM.yyyy HH:mm:ss";
-            this.FlowRunEndDate.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "dd.MM.yyyy HH:mm:ss";
+            this.FlowRunEndDate.DefaultCellStyle = dataGridViewCellStyle8;
             this.FlowRunEndDate.HeaderText = "End Date";
             this.FlowRunEndDate.MinimumWidth = 8;
             this.FlowRunEndDate.Name = "FlowRunEndDate";
@@ -364,8 +364,8 @@
             // 
             this.FlowRunDurationInSeconds.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunDurationInSeconds.DataPropertyName = "DurationInSeconds";
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle9;
             this.FlowRunDurationInSeconds.HeaderText = "Duration (s)";
             this.FlowRunDurationInSeconds.MinimumWidth = 8;
             this.FlowRunDurationInSeconds.Name = "FlowRunDurationInSeconds";
@@ -458,6 +458,41 @@
             this.gbFlow.TabStop = false;
             this.gbFlow.Text = "Flows";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(318, 74);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 20);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "Status";
+            // 
+            // cbxFlowStatusActivated
+            // 
+            this.cbxFlowStatusActivated.AutoSize = true;
+            this.cbxFlowStatusActivated.Checked = true;
+            this.cbxFlowStatusActivated.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxFlowStatusActivated.Location = new System.Drawing.Point(457, 73);
+            this.cbxFlowStatusActivated.Name = "cbxFlowStatusActivated";
+            this.cbxFlowStatusActivated.Size = new System.Drawing.Size(101, 24);
+            this.cbxFlowStatusActivated.TabIndex = 15;
+            this.cbxFlowStatusActivated.Text = "Activated";
+            this.cbxFlowStatusActivated.UseVisualStyleBackColor = true;
+            this.cbxFlowStatusActivated.CheckedChanged += new System.EventHandler(this.cbxFlowStatusActivated_CheckedChanged);
+            // 
+            // cbxFlowStatusDraft
+            // 
+            this.cbxFlowStatusDraft.AutoSize = true;
+            this.cbxFlowStatusDraft.Checked = true;
+            this.cbxFlowStatusDraft.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxFlowStatusDraft.Location = new System.Drawing.Point(380, 73);
+            this.cbxFlowStatusDraft.Name = "cbxFlowStatusDraft";
+            this.cbxFlowStatusDraft.Size = new System.Drawing.Size(71, 24);
+            this.cbxFlowStatusDraft.TabIndex = 14;
+            this.cbxFlowStatusDraft.Text = "Draft";
+            this.cbxFlowStatusDraft.UseVisualStyleBackColor = true;
+            this.cbxFlowStatusDraft.CheckedChanged += new System.EventHandler(this.cbxFlowStatusDraft_CheckedChanged);
+            // 
             // cbSelectAllFlows
             // 
             this.cbSelectAllFlows.AutoSize = true;
@@ -478,7 +513,7 @@
             this.clbFlows.FormattingEnabled = true;
             this.clbFlows.Location = new System.Drawing.Point(6, 109);
             this.clbFlows.Name = "clbFlows";
-            this.clbFlows.Size = new System.Drawing.Size(552, 625);
+            this.clbFlows.Size = new System.Drawing.Size(552, 648);
             this.clbFlows.TabIndex = 12;
             this.clbFlows.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbFlows_ItemCheck);
             // 
@@ -566,41 +601,6 @@
             this.lblDateFrom.Size = new System.Drawing.Size(85, 20);
             this.lblDateFrom.TabIndex = 9;
             this.lblDateFrom.Text = "Date From";
-            // 
-            // cbxFlowStatusDraft
-            // 
-            this.cbxFlowStatusDraft.AutoSize = true;
-            this.cbxFlowStatusDraft.Checked = true;
-            this.cbxFlowStatusDraft.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxFlowStatusDraft.Location = new System.Drawing.Point(380, 73);
-            this.cbxFlowStatusDraft.Name = "cbxFlowStatusDraft";
-            this.cbxFlowStatusDraft.Size = new System.Drawing.Size(71, 24);
-            this.cbxFlowStatusDraft.TabIndex = 14;
-            this.cbxFlowStatusDraft.Text = "Draft";
-            this.cbxFlowStatusDraft.UseVisualStyleBackColor = true;
-            this.cbxFlowStatusDraft.CheckedChanged += new System.EventHandler(this.cbxFlowStatusDraft_CheckedChanged);
-            // 
-            // cbxFlowStatusActivated
-            // 
-            this.cbxFlowStatusActivated.AutoSize = true;
-            this.cbxFlowStatusActivated.Checked = true;
-            this.cbxFlowStatusActivated.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxFlowStatusActivated.Location = new System.Drawing.Point(457, 73);
-            this.cbxFlowStatusActivated.Name = "cbxFlowStatusActivated";
-            this.cbxFlowStatusActivated.Size = new System.Drawing.Size(101, 24);
-            this.cbxFlowStatusActivated.TabIndex = 15;
-            this.cbxFlowStatusActivated.Text = "Activated";
-            this.cbxFlowStatusActivated.UseVisualStyleBackColor = true;
-            this.cbxFlowStatusActivated.CheckedChanged += new System.EventHandler(this.cbxFlowStatusActivated_CheckedChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(318, 74);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 20);
-            this.label2.TabIndex = 16;
-            this.label2.Text = "Status";
             // 
             // FlowExecutionHistory
             // 
