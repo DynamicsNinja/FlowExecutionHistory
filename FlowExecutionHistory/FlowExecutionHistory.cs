@@ -957,6 +957,8 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void btnResetFilters_Click(object sender, EventArgs e)
         {
+            _triggerOutputsFilterForm = new TriggerOutputsFilterForm(this);
+
             dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FlowRuns);
             gbFlowRuns.Text = $@"Flow Runs ({FlowRuns.Count})";
         }
