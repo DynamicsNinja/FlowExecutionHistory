@@ -987,5 +987,21 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             FilterFlows();
         }
+
+        private void clbFlows_MouseMove(object sender, MouseEventArgs e)
+        {
+            var index = clbFlows.IndexFromPoint(e.Location);
+
+            if (index < 0 || index >= clbFlows.Items.Count) {return;}
+
+            var itemText = clbFlows.Items[index].ToString();
+
+            var checkBoxWidth = 18; 
+            var textWidth = TextRenderer.MeasureText(itemText, clbFlows.Font).Width + checkBoxWidth;
+
+            var isTextOverflowing = textWidth > clbFlows.ClientSize.Width;
+
+            toolTip1.SetToolTip(clbFlows, isTextOverflowing ? itemText : "");
+        }
     }
 }

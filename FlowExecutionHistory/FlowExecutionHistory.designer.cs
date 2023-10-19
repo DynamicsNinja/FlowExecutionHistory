@@ -82,6 +82,7 @@
             this.dtpDateFrom = new System.Windows.Forms.DateTimePicker();
             this.lblDateFrom = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFlowRuns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlowRuns)).BeginInit();
@@ -516,6 +517,7 @@
             this.clbFlows.Size = new System.Drawing.Size(552, 648);
             this.clbFlows.TabIndex = 12;
             this.clbFlows.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbFlows_ItemCheck);
+            this.clbFlows.MouseMove += new System.Windows.Forms.MouseEventHandler(this.clbFlows_MouseMove);
             // 
             // gbFlowRuns
             // 
@@ -676,5 +678,6 @@
         private System.Windows.Forms.CheckBox cbxFlowStatusActivated;
         private System.Windows.Forms.CheckBox cbxFlowStatusDraft;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
