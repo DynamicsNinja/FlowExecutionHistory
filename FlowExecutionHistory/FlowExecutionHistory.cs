@@ -38,7 +38,7 @@ namespace Fic.XTB.FlowExecutionHistory
         private AccessTokenResponse _flowAccessToken;
 
         public List<FlowRun> FlowRuns = new List<FlowRun>();
-        private List<Flow> _flows = new List<Flow>();
+        public List<Flow> Flows = new List<Flow>();
         private List<Color> _colors = new List<Color>();
 
         public DataGridView FlowRunsGrid;
@@ -175,7 +175,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         if (!(args.Result is List<Flow> flows)) { return; }
 
-                        _flows = flows;
+                        Flows = flows;
 
                         FilterFlows();
                     }
@@ -186,7 +186,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void GetFlowRuns()
         {
-            var selectedFlows = _flows.Where(f => f.IsSelected).ToList();
+            var selectedFlows = Flows.Where(f => f.IsSelected).ToList();
 
             var dateFrom = (DateTimeOffset)dtpDateFrom.Value;
             var dateTo = (DateTimeOffset)dtpDateTo.Value;
@@ -198,6 +198,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
             if (!selectedFlows.Any())
             {
+                ShowHideTriggerOutputFilterButtons(false);
                 dgvFlowRuns.DataSource = null;
                 return;
             }
@@ -246,7 +247,9 @@ namespace Fic.XTB.FlowExecutionHistory
                         dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FlowRuns);
                         dgvFlowRuns.Sort(dgvFlowRuns.Columns["FlowRunStartDate"], ListSortDirection.Descending);
 
-                        ShowHideTriggerOutputFilterButtons(selectedFlows.Count == 1 && runs.Count > 0);
+                        ShowHideTriggerOutputFilterButtons(selectedFlows.Count >= 1 && runs.Count > 0);
+
+                        _triggerOutputsFilterForm = new TriggerOutputsFilterForm(this);
 
                         gbFlowRuns.Text = $@"Flow Runs ({FlowRuns.Count})";
                     }
@@ -290,7 +293,7 @@ namespace Fic.XTB.FlowExecutionHistory
             var activated = cbxFlowStatusActivated.Checked;
             var dreft = cbxFlowStatusDraft.Checked;
 
-            var filteredFlows = _flows
+            var filteredFlows = Flows
                 .Where(f => f.Status == FlowStatus.Activated && activated || f.Status == FlowStatus.Draft && dreft)
                 .ToList();
 
@@ -905,13 +908,11 @@ namespace Fic.XTB.FlowExecutionHistory
                         fr.GetTriggerOutputs();
                     });
 
-                    var attributes = conditionGroup.FilterConditions.Select(fc => fc.Attribute).Distinct().ToList();
-
                     foreach (var fr in FlowRuns)
                     {
                         var outputs = fr.TriggerOutputs;
 
-                        if (!attributes.All(a => outputs.Body.ContainsKey(a))) { continue; }
+                        if (outputs == null) { continue; }
 
                         var isMatch = conditionGroup.Evaluate(outputs.Body);
 
@@ -944,7 +945,9 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void tsbGetTriggerOutputs_Click(object sender, EventArgs e)
         {
-            if (FlowRuns.FirstOrDefault().TriggerOutputsUrl == null)
+            var anyOutputs = FlowRuns.Any(fr => !string.IsNullOrWhiteSpace(fr.TriggerOutputsUrl));
+
+            if (!anyOutputs)
             {
                 MessageBox.Show("There are no trigger outputs to filter runs.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

@@ -20,9 +20,20 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
 
             _frc = frc;
 
-            var triggerOutput = frc.FlowRuns.FirstOrDefault()?.GetTriggerOutputs();
+            var allAttributes = new List<string>();
 
-            _attributes = triggerOutput.Body.Keys.OrderBy(k => k).ToList();
+            foreach (var flow in frc.Flows.Where(f => f.IsSelected))
+            {
+                var triggerOutput = flow.FlowRuns.FirstOrDefault()?.GetTriggerOutputs();
+
+                if (triggerOutput == null) { continue; }
+
+                var attributes = triggerOutput.Body.Keys.ToList();
+
+                allAttributes.AddRange(attributes);
+            }
+
+            _attributes = allAttributes.Distinct().OrderBy(k => k).ToList();
             _operators = Enum.GetValues(typeof(OutputTriggerFilter)).Cast<OutputTriggerFilter>().ToList();
 
             cbGroupOperator.DataSource = Enum.GetValues(typeof(GroupOperator)).Cast<GroupOperator>().ToList();
