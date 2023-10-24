@@ -1093,6 +1093,7 @@ namespace Fic.XTB.FlowExecutionHistory
             tsbGetTriggerOutputs.Visible = show;
             btnResetFilters.Visible = show;
             tssTriggerOutputs.Visible = show;
+            btnShowColumns.Visible = show;
 
             if (FlowRuns.FirstOrDefault()?.TriggerOutputsUrl == null || !show) { return; }
 
