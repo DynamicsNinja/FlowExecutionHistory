@@ -7,7 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using Fic.XTB.FlowExecutionHistory.Enums;
 using Fic.XTB.FlowExecutionHistory.Extensions;
 using Fic.XTB.FlowExecutionHistory.Forms;
@@ -22,6 +24,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using Action = System.Action;
 using BrowserProfile = Fic.XTB.FlowExecutionHistory.Models.BrowserProfile;
 
 namespace Fic.XTB.FlowExecutionHistory
@@ -38,18 +41,30 @@ namespace Fic.XTB.FlowExecutionHistory
         private AccessTokenResponse _flowAccessToken;
 
         public List<FlowRun> FlowRuns = new List<FlowRun>();
+        public List<FlowRun> FilteredFlowRuns = null;
+
         public List<Flow> Flows = new List<Flow>();
+        public Dictionary<string, TriggerOutputsResponseDto> CachedTriggerOutputs = new Dictionary<string, TriggerOutputsResponseDto>();
+
         private List<Color> _colors = new List<Color>();
 
         public DataGridView FlowRunsGrid;
 
         private TriggerOutputsFilterForm _triggerOutputsFilterForm;
+        private TriggerOutputsColumnsSelectForm _triggerOutputsColumnsSelectForm;
+
+        private readonly List<DataGridViewColumn> _initialColumns = new List<DataGridViewColumn>();
 
         public FlowExecutionHistory()
         {
             InitializeComponent();
 
             FlowRunsGrid = dgvFlowRuns;
+
+            foreach (DataGridViewColumn column in dgvFlowRuns.Columns)
+            {
+                _initialColumns.Add(column.Clone() as DataGridViewColumn);
+            }
         }
 
         private void FlowExecutionHistory_Load(object sender, EventArgs e)
@@ -203,6 +218,8 @@ namespace Fic.XTB.FlowExecutionHistory
                 return;
             }
 
+            var includeTriggerOutputs = _triggerOutputsColumnsSelectForm?.SelectedColumns?.Count > 0;
+
             gbFlow.Enabled = false;
             gbFlowRuns.Enabled = false;
 
@@ -229,6 +246,21 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     var flowRuns = selectedFlows.SelectMany(f => f.FlowRuns).ToList();
 
+                    if (includeTriggerOutputs)
+                    {
+                        Parallel.ForEach(flowRuns, options,
+                            fr =>
+                            {
+                                fr.TriggerOutputs = fr.TriggerOutputs ?? GetTriggerOutputsForFlowRun(fr);
+
+                            });
+
+                        foreach (var fr in flowRuns)
+                        {
+                            CachedTriggerOutputs[fr.Flow.Id] = fr.TriggerOutputs;
+                        }
+                    }
+
                     args.Result = flowRuns;
                 },
                 PostWorkCallBack = (args) =>
@@ -244,16 +276,13 @@ namespace Fic.XTB.FlowExecutionHistory
                         FlowRuns = runs;
 
                         dgvFlowRuns.Columns["FlowRunFLow"].Visible = selectedFlows.Count > 1;
-                        dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FlowRuns);
-                        dgvFlowRuns.Sort(dgvFlowRuns.Columns["FlowRunStartDate"], ListSortDirection.Descending);
 
                         ShowHideTriggerOutputFilterButtons(selectedFlows.Count >= 1 && runs.Count > 0);
 
-                        _triggerOutputsFilterForm = new TriggerOutputsFilterForm(this);
+                        _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
 
-                        gbFlowRuns.Text = $@"Flow Runs ({FlowRuns.Count})";
+                        ApplyTriggerOutputsFilters();
                     }
-
 
                     gbFlow.Enabled = true;
                     gbFlowRuns.Enabled = true;
@@ -540,7 +569,10 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             var flowRun = (FlowRun)dgvFlowRuns.Rows[e.RowIndex].DataBoundItem;
 
-            switch (dgvFlowRuns.Columns[e.ColumnIndex].Name)
+            var column = dgvFlowRuns.Columns[e.ColumnIndex];
+            var columnName = column.Name;
+
+            switch (columnName)
             {
                 case "FlowRunStatus":
                     {
@@ -561,6 +593,17 @@ namespace Fic.XTB.FlowExecutionHistory
                     e.CellStyle.BackColor = (Color)flowRun.Flow.Color;
                     e.CellStyle.ForeColor = Color.Black;
                     break;
+            }
+
+            if (columnName.StartsWith("to_"))
+            {
+                var triggerOutputName = columnName.Replace("to_", "");
+                var triggerOutputs = flowRun.TriggerOutputs.Body;
+                var found = triggerOutputs.TryGetValue(triggerOutputName, out var triggerOutput) ? triggerOutput : null;
+
+                if (found == null) { return; }
+
+                e.Value = triggerOutput;
             }
         }
 
@@ -884,46 +927,69 @@ namespace Fic.XTB.FlowExecutionHistory
             GetFlowRuns();
         }
 
-        public void FilterRunsByTriggerOutputs(ConditionGroup conditionGroup)
+        public void ApplyTriggerOutputsFilters()
         {
             WorkAsync(new WorkAsyncInfo
             {
-                Message = "Getting trigger outputs",
+                Message = "Loading flow runs",
                 Work = (worker, args) =>
                 {
-                    var options = new ParallelOptions
+                    var conditionGroup = _triggerOutputsFilterForm?.ConditionGroup;
+                    var allAttributes = _triggerOutputsColumnsSelectForm?.SelectedColumns ?? new List<string>();
+
+                    if (conditionGroup != null || allAttributes.Count != 0)
                     {
-                        MaxDegreeOfParallelism = Environment.ProcessorCount * 4
-                    };
+                        var options = new ParallelOptions
+                        {
+                            MaxDegreeOfParallelism = Environment.ProcessorCount * 4
+                        };
 
-                    var list = new List<FlowRun>();
-
-                    var stopwatch = new Stopwatch();
-                    stopwatch.Start();
-
-                    Parallel.ForEach(FlowRuns, options, fr =>
-                    {
-                        if (fr.TriggerOutputs != null) { return; }
-
-                        fr.GetTriggerOutputs();
-                    });
-
-                    foreach (var fr in FlowRuns)
-                    {
-                        var outputs = fr.TriggerOutputs;
-
-                        if (outputs == null) { continue; }
-
-                        var isMatch = conditionGroup.Evaluate(outputs.Body);
-
-                        if (!isMatch) { continue; }
-
-                        list.Add(fr);
+                        Parallel.ForEach(FlowRuns, options, fr =>
+                        {
+                            fr.TriggerOutputs = fr.TriggerOutputs ?? fr.GetTriggerOutputs();
+                        });
                     }
 
-                    stopwatch.Stop();
+                    var filteredFlowRuns = new List<FlowRun>();
 
-                    args.Result = list;
+                    if (conditionGroup != null)
+                    {
+                        foreach (var fr in FlowRuns)
+                        {
+                            var outputs = fr.TriggerOutputs;
+
+                            if (outputs == null) { continue; }
+
+                            var isMatch = conditionGroup.Evaluate(outputs.Body);
+                            if (!isMatch) { continue; }
+
+                            filteredFlowRuns.Add(fr);
+                        }
+                    }
+
+                    FilteredFlowRuns = conditionGroup == null ? FlowRuns : filteredFlowRuns;
+
+                    dgvFlowRuns.Invoke(new Action(() =>
+                    {
+                        dgvFlowRuns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        ResetFlowRunsGridColumns();
+
+                        foreach (var field in allAttributes)
+                        {
+                            var newColumn = new DataGridViewTextBoxColumn();
+                            newColumn.Name = $"to_{field}";
+                            newColumn.HeaderText = field;
+
+                            dgvFlowRuns.Columns.Add(newColumn);
+                        }
+
+                        dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FilteredFlowRuns ?? FlowRuns);
+                        dgvFlowRuns.Sort(dgvFlowRuns.Columns["FlowRunStartDate"], ListSortDirection.Descending);
+
+                        var flowRunsCount = (FilteredFlowRuns ?? FlowRuns).Count;
+
+                        gbFlowRuns.Text = $@"Flow Runs ({flowRunsCount})";
+                    }));
                 },
                 PostWorkCallBack = (args) =>
                 {
@@ -931,17 +997,70 @@ namespace Fic.XTB.FlowExecutionHistory
                     {
                         ShowErrorDialog(args.Error.InnerException);
                     }
-                    else
-                    {
-                        var filteredFlowRuns = (List<FlowRun>)args.Result;
-                        dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(filteredFlowRuns);
-
-                        gbFlowRuns.Text = $@"Flow Runs ({filteredFlowRuns.Count})";
-                    }
                 }
             });
-
         }
+
+        //public void FilterRunsByTriggerOutputs(ConditionGroup conditionGroup)
+        //{
+        //    ResetFlowRunsGridColumns();
+
+        //    WorkAsync(new WorkAsyncInfo
+        //    {
+        //        Message = "Getting trigger outputs",
+        //        Work = (worker, args) =>
+        //        {
+        //            var options = new ParallelOptions
+        //            {
+        //                MaxDegreeOfParallelism = Environment.ProcessorCount * 4
+        //            };
+
+        //            var list = new List<FlowRun>();
+
+        //            var stopwatch = new Stopwatch();
+        //            stopwatch.Start();
+
+        //            Parallel.ForEach(FlowRuns, options, fr =>
+        //            {
+        //                fr.TriggerOutputs = fr.TriggerOutputs ?? fr.GetTriggerOutputs();
+        //            });
+
+        //            foreach (var fr in FlowRuns)
+        //            {
+        //                var outputs = fr.TriggerOutputs;
+
+        //                if (outputs == null) { continue; }
+
+        //                var isMatch = conditionGroup.Evaluate(outputs.Body);
+
+        //                if (!isMatch) { continue; }
+
+        //                list.Add(fr);
+        //            }
+
+        //            stopwatch.Stop();
+
+        //            args.Result = list;
+        //        },
+        //        PostWorkCallBack = (args) =>
+        //        {
+        //            if (args.Error != null)
+        //            {
+        //                ShowErrorDialog(args.Error.InnerException);
+        //            }
+        //            else
+        //            {
+        //                FilteredFlowRuns = (List<FlowRun>)args.Result;
+        //                //dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FilteredFlowRuns);
+
+        //                gbFlowRuns.Text = $@"Flow Runs ({FilteredFlowRuns.Count})";
+
+        //                PopulateTriggerOutputsFields();
+        //            }
+        //        }
+        //    });
+
+        //}
 
         private void tsbGetTriggerOutputs_Click(object sender, EventArgs e)
         {
@@ -962,7 +1081,9 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             _triggerOutputsFilterForm = new TriggerOutputsFilterForm(this);
 
+            FilteredFlowRuns = null;
             dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FlowRuns);
+            dgvFlowRuns.Sort(dgvFlowRuns.Columns["FlowRunStartDate"], ListSortDirection.Descending);
             gbFlowRuns.Text = $@"Flow Runs ({FlowRuns.Count})";
         }
 
@@ -975,7 +1096,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
             if (FlowRuns.FirstOrDefault()?.TriggerOutputsUrl == null || !show) { return; }
 
-            _triggerOutputsFilterForm = new TriggerOutputsFilterForm(this);
+            _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
         }
 
         private void cbxFlowStatusDraft_CheckedChanged(object sender, EventArgs e)
@@ -992,16 +1113,129 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             var index = clbFlows.IndexFromPoint(e.Location);
 
-            if (index < 0 || index >= clbFlows.Items.Count) {return;}
+            if (index < 0 || index >= clbFlows.Items.Count) { return; }
 
             var itemText = clbFlows.Items[index].ToString();
 
-            var checkBoxWidth = 18; 
+            var checkBoxWidth = 18;
             var textWidth = TextRenderer.MeasureText(itemText, clbFlows.Font).Width + checkBoxWidth;
 
             var isTextOverflowing = textWidth > clbFlows.ClientSize.Width;
 
             toolTip1.SetToolTip(clbFlows, isTextOverflowing ? itemText : "");
+        }
+
+        private void btnShowColumns_Click(object sender, EventArgs e)
+        {
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Showing trigger output columns",
+                Work = (worker, args) =>
+                {
+                    var options = new ParallelOptions
+                    {
+                        MaxDegreeOfParallelism = Environment.ProcessorCount * 4
+                    };
+
+                    Parallel.ForEach(Flows, options, f =>
+                    {
+                        var flowRun = f.FlowRuns?.FirstOrDefault();
+
+                        if (flowRun == null) { return; }
+
+                        flowRun.TriggerOutputs = flowRun.TriggerOutputs ?? GetTriggerOutputsForFlowRun(flowRun);
+                    });
+
+                    var allAttributes = FlowRuns
+                        .Where(fr => fr.TriggerOutputs != null)
+                        .SelectMany(fr => fr.TriggerOutputs.Body.Keys)
+                        .Distinct()
+                        .ToList();
+
+                    args.Result = allAttributes;
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        ShowErrorDialog(args.Error.InnerException);
+                    }
+                    else
+                    {
+                        var attributes = args.Result as List<string>;
+                        _triggerOutputsColumnsSelectForm = _triggerOutputsColumnsSelectForm ?? new TriggerOutputsColumnsSelectForm(this, attributes);
+                        _triggerOutputsColumnsSelectForm.UpdateAttributes(attributes);
+                        _triggerOutputsColumnsSelectForm.ShowDialog();
+                    }
+                }
+            });
+        }
+
+        //public void PopulateTriggerOutputsFields()
+        //{
+        //    var allAttributes = _triggerOutputsColumnsSelectForm.SelectedColumns;
+
+        //    WorkAsync(new WorkAsyncInfo
+        //    {
+        //        Message = "Showing trigger output columns",
+        //        Work = (worker, args) =>
+        //        {
+        //            var options = new ParallelOptions
+        //            {
+        //                MaxDegreeOfParallelism = Environment.ProcessorCount * 4
+        //            };
+
+        //            Parallel.ForEach(FlowRuns, options, fr =>
+        //            {
+        //                fr.TriggerOutputs = fr.TriggerOutputs ?? GetTriggerOutputsForFlowRun(fr);
+        //            });
+
+        //            dgvFlowRuns.Invoke(new Action(() =>
+        //            {
+        //                dgvFlowRuns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+        //                ResetFlowRunsGridColumns();
+
+        //                if (allAttributes.Count == 0) { return; }
+
+        //                foreach (var field in allAttributes)
+        //                {
+        //                    var newColumn = new DataGridViewTextBoxColumn();
+        //                    newColumn.Name = $"to_{field}";
+        //                    newColumn.HeaderText = field;
+
+        //                    dgvFlowRuns.Columns.Add(newColumn);
+        //                }
+
+        //                dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FilteredFlowRuns ?? FlowRuns);
+        //            }));
+        //        },
+        //        PostWorkCallBack = (args) =>
+        //        {
+        //            if (args.Error != null)
+        //            {
+        //                ShowErrorDialog(args.Error.InnerException);
+        //            }
+        //        }
+        //    });
+        //}
+
+        private TriggerOutputsResponseDto GetTriggerOutputsForFlowRun(FlowRun flowRun)
+        {
+            var triggerOutputs = CachedTriggerOutputs.TryGetValue(flowRun.Id, out var to) ? to : flowRun.GetTriggerOutputs();
+
+            return triggerOutputs;
+        }
+
+        private void ResetFlowRunsGridColumns()
+        {
+            dgvFlowRuns.Columns.Clear();
+            dgvFlowRuns.Columns.AddRange(_initialColumns.ToArray());
+        }
+
+        private void dgvFlowRuns_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            //ApplyTriggerOutputsFilters();
         }
     }
 }

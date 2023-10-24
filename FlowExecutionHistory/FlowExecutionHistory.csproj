@@ -331,6 +331,12 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TriggerOutputsColumnsSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TriggerOutputsColumnsSelectForm.Designer.cs">
+      <DependentUpon>TriggerOutputsColumnsSelectForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\TriggerOutputsFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -388,6 +394,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TriggerOutputsColumnsSelectForm.resx">
+      <DependentUpon>TriggerOutputsColumnsSelectForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TriggerOutputsFilterForm.resx">
       <DependentUpon>TriggerOutputsFilterForm.cs</DependentUpon>

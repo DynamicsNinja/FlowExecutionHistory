@@ -14,6 +14,8 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
         private List<string> _attributes;
         private List<OutputTriggerFilter> _operators;
 
+        public ConditionGroup ConditionGroup { get; set; }
+
         public TriggerOutputsFilterForm(FlowExecutionHistory frc)
         {
             InitializeComponent();
@@ -24,7 +26,7 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
 
             foreach (var flow in frc.Flows.Where(f => f.IsSelected))
             {
-                var triggerOutput = flow.FlowRuns.FirstOrDefault()?.GetTriggerOutputs();
+                var triggerOutput = flow.FlowRuns.FirstOrDefault()?.TriggerOutputs ?? flow.FlowRuns.FirstOrDefault()?.GetTriggerOutputs();
 
                 if (triggerOutput == null) { continue; }
 
@@ -55,7 +57,9 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
                 FilterConditions = filterConditions
             };
 
-            _frc.FilterRunsByTriggerOutputs(conditionGroup);
+            ConditionGroup = conditionGroup;
+
+            _frc.ApplyTriggerOutputsFilters();
 
             Close();
         }
