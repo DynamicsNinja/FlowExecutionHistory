@@ -275,8 +275,6 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         FlowRuns = runs;
 
-                        dgvFlowRuns.Columns["FlowRunFLow"].Visible = selectedFlows.Count > 1;
-
                         ShowHideTriggerOutputFilterButtons(selectedFlows.Count >= 1 && runs.Count > 0);
 
                         _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
@@ -597,6 +595,8 @@ namespace Fic.XTB.FlowExecutionHistory
 
             if (columnName.StartsWith("to_"))
             {
+                if (flowRun.TriggerOutputs == null) { return; }
+
                 var triggerOutputName = columnName.Replace("to_", "");
                 var triggerOutputs = flowRun.TriggerOutputs.Body;
                 var found = triggerOutputs.TryGetValue(triggerOutputName, out var triggerOutput) ? triggerOutput : null;
@@ -985,6 +985,10 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FilteredFlowRuns ?? FlowRuns);
                         dgvFlowRuns.Sort(dgvFlowRuns.Columns["FlowRunStartDate"], ListSortDirection.Descending);
+
+                        var showFlowNamesIfMultipleSelected = Flows.Count(f => f.IsSelected) > 1;
+
+                        dgvFlowRuns.Columns["FlowRunFLow"].Visible = showFlowNamesIfMultipleSelected;
 
                         var flowRunsCount = (FilteredFlowRuns ?? FlowRuns).Count;
 
