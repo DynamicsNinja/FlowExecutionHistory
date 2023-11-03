@@ -30,11 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowExecutionHistory));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -86,6 +86,13 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.cbAutomated = new System.Windows.Forms.CheckBox();
+            this.cbScheduled = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbInstant = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cbUnmanaged = new System.Windows.Forms.CheckBox();
+            this.cbManaged = new System.Windows.Forms.CheckBox();
             this.toolStripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFlowRuns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsFlowRuns)).BeginInit();
@@ -131,14 +138,14 @@
             // tssSeparator1
             // 
             this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 38);
+            this.tssSeparator1.Size = new System.Drawing.Size(6, 34);
             // 
             // tsbRefresh
             // 
             this.tsbRefresh.Image = ((System.Drawing.Image)(resources.GetObject("tsbRefresh.Image")));
             this.tsbRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRefresh.Name = "tsbRefresh";
-            this.tsbRefresh.Size = new System.Drawing.Size(98, 33);
+            this.tsbRefresh.Size = new System.Drawing.Size(98, 29);
             this.tsbRefresh.Text = "Refresh";
             this.tsbRefresh.Click += new System.EventHandler(this.tsbRefresh_Click);
             // 
@@ -150,7 +157,7 @@
             this.tsbExport.Image = ((System.Drawing.Image)(resources.GetObject("tsbExport.Image")));
             this.tsbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExport.Name = "tsbExport";
-            this.tsbExport.Size = new System.Drawing.Size(108, 33);
+            this.tsbExport.Size = new System.Drawing.Size(108, 29);
             this.tsbExport.Text = "Export";
             this.tsbExport.ButtonClick += new System.EventHandler(this.tsbExport_ButtonClick);
             // 
@@ -175,43 +182,41 @@
             this.tsbConnectFlowApi.Image = ((System.Drawing.Image)(resources.GetObject("tsbConnectFlowApi.Image")));
             this.tsbConnectFlowApi.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbConnectFlowApi.Name = "tsbConnectFlowApi";
-            this.tsbConnectFlowApi.Size = new System.Drawing.Size(296, 33);
+            this.tsbConnectFlowApi.Size = new System.Drawing.Size(296, 29);
             this.tsbConnectFlowApi.Text = "Connect to Power Automate API";
             this.tsbConnectFlowApi.Click += new System.EventHandler(this.tsbConnectPowerAutomateApi_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 34);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(75, 33);
+            this.toolStripLabel1.Size = new System.Drawing.Size(75, 29);
             this.toolStripLabel1.Text = "Browser";
             this.toolStripLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cbBrowser
             // 
             this.cbBrowser.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbBrowser.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cbBrowser.Name = "cbBrowser";
-            this.cbBrowser.Size = new System.Drawing.Size(121, 38);
+            this.cbBrowser.Size = new System.Drawing.Size(121, 34);
             this.cbBrowser.SelectedIndexChanged += new System.EventHandler(this.cbBrowser_SelectedIndexChanged);
             // 
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(130, 33);
+            this.toolStripLabel2.Size = new System.Drawing.Size(130, 29);
             this.toolStripLabel2.Text = "Browser Profile";
             // 
             // cbProfile
             // 
             this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProfile.DropDownWidth = 150;
-            this.cbProfile.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cbProfile.Name = "cbProfile";
-            this.cbProfile.Size = new System.Drawing.Size(200, 38);
+            this.cbProfile.Size = new System.Drawing.Size(200, 34);
             this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
             // 
             // tsbSettings
@@ -219,7 +224,7 @@
             this.tsbSettings.Image = ((System.Drawing.Image)(resources.GetObject("tsbSettings.Image")));
             this.tsbSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSettings.Name = "tsbSettings";
-            this.tsbSettings.Size = new System.Drawing.Size(104, 33);
+            this.tsbSettings.Size = new System.Drawing.Size(104, 29);
             this.tsbSettings.Text = "Settings";
             this.tsbSettings.Click += new System.EventHandler(this.tsbSettings_Click);
             // 
@@ -288,15 +293,15 @@
             this.FlowRunUrl,
             this.FlowRunTriggerOutputs});
             this.dgvFlowRuns.DataSource = this.bsFlowRuns;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFlowRuns.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle15.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFlowRuns.DefaultCellStyle = dataGridViewCellStyle15;
             this.dgvFlowRuns.Location = new System.Drawing.Point(6, 73);
             this.dgvFlowRuns.Name = "dgvFlowRuns";
             this.dgvFlowRuns.ReadOnly = true;
@@ -345,8 +350,8 @@
             // 
             this.FlowRunStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunStatus.DataPropertyName = "Status";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.FlowRunStatus.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.FlowRunStatus.DefaultCellStyle = dataGridViewCellStyle11;
             this.FlowRunStatus.HeaderText = "Status";
             this.FlowRunStatus.MinimumWidth = 8;
             this.FlowRunStatus.Name = "FlowRunStatus";
@@ -357,10 +362,10 @@
             // 
             this.FlowRunStartDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunStartDate.DataPropertyName = "StartDate";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.Format = "dd.MM.yyyy HH:mm:ss";
-            dataGridViewCellStyle7.NullValue = null;
-            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle12.Format = "dd.MM.yyyy HH:mm:ss";
+            dataGridViewCellStyle12.NullValue = null;
+            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle12;
             this.FlowRunStartDate.HeaderText = "Start Date";
             this.FlowRunStartDate.MinimumWidth = 8;
             this.FlowRunStartDate.Name = "FlowRunStartDate";
@@ -371,9 +376,9 @@
             // 
             this.FlowRunEndDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunEndDate.DataPropertyName = "EndDate";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.Format = "dd.MM.yyyy HH:mm:ss";
-            this.FlowRunEndDate.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle13.Format = "dd.MM.yyyy HH:mm:ss";
+            this.FlowRunEndDate.DefaultCellStyle = dataGridViewCellStyle13;
             this.FlowRunEndDate.HeaderText = "End Date";
             this.FlowRunEndDate.MinimumWidth = 8;
             this.FlowRunEndDate.Name = "FlowRunEndDate";
@@ -384,8 +389,8 @@
             // 
             this.FlowRunDurationInSeconds.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunDurationInSeconds.DataPropertyName = "DurationInSeconds";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle14;
             this.FlowRunDurationInSeconds.HeaderText = "Duration (s)";
             this.FlowRunDurationInSeconds.MinimumWidth = 8;
             this.FlowRunDurationInSeconds.Name = "FlowRunDurationInSeconds";
@@ -463,6 +468,13 @@
             // 
             this.gbFlow.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbFlow.Controls.Add(this.label4);
+            this.gbFlow.Controls.Add(this.cbUnmanaged);
+            this.gbFlow.Controls.Add(this.cbManaged);
+            this.gbFlow.Controls.Add(this.cbInstant);
+            this.gbFlow.Controls.Add(this.label3);
+            this.gbFlow.Controls.Add(this.cbScheduled);
+            this.gbFlow.Controls.Add(this.cbAutomated);
             this.gbFlow.Controls.Add(this.label2);
             this.gbFlow.Controls.Add(this.cbxFlowStatusActivated);
             this.gbFlow.Controls.Add(this.cbxFlowStatusDraft);
@@ -481,7 +493,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(318, 74);
+            this.label2.Location = new System.Drawing.Point(154, 74);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 20);
             this.label2.TabIndex = 16;
@@ -492,7 +504,7 @@
             this.cbxFlowStatusActivated.AutoSize = true;
             this.cbxFlowStatusActivated.Checked = true;
             this.cbxFlowStatusActivated.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxFlowStatusActivated.Location = new System.Drawing.Point(457, 73);
+            this.cbxFlowStatusActivated.Location = new System.Drawing.Point(356, 73);
             this.cbxFlowStatusActivated.Name = "cbxFlowStatusActivated";
             this.cbxFlowStatusActivated.Size = new System.Drawing.Size(101, 24);
             this.cbxFlowStatusActivated.TabIndex = 15;
@@ -505,7 +517,7 @@
             this.cbxFlowStatusDraft.AutoSize = true;
             this.cbxFlowStatusDraft.Checked = true;
             this.cbxFlowStatusDraft.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxFlowStatusDraft.Location = new System.Drawing.Point(380, 73);
+            this.cbxFlowStatusDraft.Location = new System.Drawing.Point(236, 73);
             this.cbxFlowStatusDraft.Name = "cbxFlowStatusDraft";
             this.cbxFlowStatusDraft.Size = new System.Drawing.Size(71, 24);
             this.cbxFlowStatusDraft.TabIndex = 14;
@@ -531,9 +543,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.clbFlows.CheckOnClick = true;
             this.clbFlows.FormattingEnabled = true;
-            this.clbFlows.Location = new System.Drawing.Point(6, 109);
+            this.clbFlows.Location = new System.Drawing.Point(10, 176);
             this.clbFlows.Name = "clbFlows";
-            this.clbFlows.Size = new System.Drawing.Size(552, 648);
+            this.clbFlows.Size = new System.Drawing.Size(552, 579);
             this.clbFlows.TabIndex = 12;
             this.clbFlows.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbFlows_ItemCheck);
             this.clbFlows.MouseMove += new System.Windows.Forms.MouseEventHandler(this.clbFlows_MouseMove);
@@ -645,6 +657,89 @@
             this.dataGridViewImageColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.dataGridViewImageColumn2.Width = 150;
             // 
+            // cbAutomated
+            // 
+            this.cbAutomated.AutoSize = true;
+            this.cbAutomated.Checked = true;
+            this.cbAutomated.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbAutomated.Location = new System.Drawing.Point(236, 133);
+            this.cbAutomated.Name = "cbAutomated";
+            this.cbAutomated.Size = new System.Drawing.Size(114, 24);
+            this.cbAutomated.TabIndex = 17;
+            this.cbAutomated.Text = "Automated";
+            this.cbAutomated.UseVisualStyleBackColor = true;
+            this.cbAutomated.CheckedChanged += new System.EventHandler(this.cbAutomated_CheckedChanged);
+            // 
+            // cbScheduled
+            // 
+            this.cbScheduled.AutoSize = true;
+            this.cbScheduled.Checked = true;
+            this.cbScheduled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbScheduled.Location = new System.Drawing.Point(356, 133);
+            this.cbScheduled.Name = "cbScheduled";
+            this.cbScheduled.Size = new System.Drawing.Size(111, 24);
+            this.cbScheduled.TabIndex = 18;
+            this.cbScheduled.Text = "Scheduled";
+            this.cbScheduled.UseVisualStyleBackColor = true;
+            this.cbScheduled.CheckedChanged += new System.EventHandler(this.cbScheduled_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(154, 134);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(43, 20);
+            this.label3.TabIndex = 19;
+            this.label3.Text = "Type";
+            // 
+            // cbInstant
+            // 
+            this.cbInstant.AutoSize = true;
+            this.cbInstant.Checked = true;
+            this.cbInstant.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbInstant.Location = new System.Drawing.Point(473, 133);
+            this.cbInstant.Name = "cbInstant";
+            this.cbInstant.Size = new System.Drawing.Size(85, 24);
+            this.cbInstant.TabIndex = 20;
+            this.cbInstant.Text = "Instant";
+            this.cbInstant.UseVisualStyleBackColor = true;
+            this.cbInstant.CheckedChanged += new System.EventHandler(this.cbInstant_CheckedChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(154, 104);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(76, 20);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Managed";
+            // 
+            // cbUnmanaged
+            // 
+            this.cbUnmanaged.AutoSize = true;
+            this.cbUnmanaged.Checked = true;
+            this.cbUnmanaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbUnmanaged.Location = new System.Drawing.Point(356, 103);
+            this.cbUnmanaged.Name = "cbUnmanaged";
+            this.cbUnmanaged.Size = new System.Drawing.Size(55, 24);
+            this.cbUnmanaged.TabIndex = 22;
+            this.cbUnmanaged.Text = "No";
+            this.cbUnmanaged.UseVisualStyleBackColor = true;
+            this.cbUnmanaged.CheckedChanged += new System.EventHandler(this.cbUnmanaged_CheckedChanged);
+            // 
+            // cbManaged
+            // 
+            this.cbManaged.AutoSize = true;
+            this.cbManaged.Checked = true;
+            this.cbManaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbManaged.Location = new System.Drawing.Point(236, 103);
+            this.cbManaged.Name = "cbManaged";
+            this.cbManaged.Size = new System.Drawing.Size(63, 24);
+            this.cbManaged.TabIndex = 21;
+            this.cbManaged.Text = "Yes";
+            this.cbManaged.UseVisualStyleBackColor = true;
+            this.cbManaged.CheckedChanged += new System.EventHandler(this.cbManaged_CheckedChanged);
+            // 
             // FlowExecutionHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -723,5 +818,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn FlowRunDurationInSeconds;
         private System.Windows.Forms.DataGridViewImageColumn FlowRunUrl;
         private System.Windows.Forms.DataGridViewImageColumn FlowRunTriggerOutputs;
+        private System.Windows.Forms.CheckBox cbAutomated;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox cbScheduled;
+        private System.Windows.Forms.CheckBox cbInstant;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox cbUnmanaged;
+        private System.Windows.Forms.CheckBox cbManaged;
     }
 }

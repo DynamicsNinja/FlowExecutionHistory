@@ -7,9 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 using Fic.XTB.FlowExecutionHistory.Enums;
 using Fic.XTB.FlowExecutionHistory.Extensions;
 using Fic.XTB.FlowExecutionHistory.Forms;
@@ -22,6 +20,7 @@ using Microsoft.Identity.Client;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using Newtonsoft.Json;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using Action = System.Action;
@@ -163,6 +162,7 @@ namespace Fic.XTB.FlowExecutionHistory
                         <attribute name='name' />
                         <attribute name='statecode' />
                         <attribute name='statuscode' />
+                        <attribute name='ismanaged' />
                         <filter type='and'>
                           <condition attribute='category' operator='eq' value='5' />
                         </filter>
@@ -171,13 +171,34 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     var entities = Service.RetrieveMultiple(new FetchExpression(fetch)).Entities.ToList();
 
-                    args.Result = entities.Select(f => new Flow
+                    var fetchedFlows = new List<Flow>();
+
+                    foreach (var f in entities)
                     {
-                        Id = ((Guid)f["workflowidunique"]).ToString("D"),
-                        Name = (string)f["name"],
-                        ClientDataJson = (string)f["clientdata"],
-                        Status = (FlowStatus)((OptionSetValue)f["statecode"]).Value
-                    }).OrderBy(f => f.Name).ToList();
+                        var flowId = ((Guid)f["workflowidunique"]).ToString("D");
+                        var flowName = (string)f["name"];
+                        var flowStatus = (FlowStatus)((OptionSetValue)f["statecode"]).Value;
+                        var clentDataJson = (string)f["clientdata"];
+                        var isManaged = (bool)f["ismanaged"];
+
+                        var clientData = JsonConvert.DeserializeObject<FlowClientData>(clentDataJson);
+
+                        var triggerType = clientData?.properties?.definition?.triggers?.FirstOrDefault().Value?.type;
+
+                        var flow = new Flow
+                        {
+                            Id = flowId,
+                            Name = flowName,
+                            ClientData = clientData,
+                            Status = flowStatus,
+                            TriggerType = triggerType,
+                            IsManaged = isManaged
+                        };
+
+                        fetchedFlows.Add(flow);
+                    }
+
+                    args.Result = fetchedFlows.OrderBy(f => f.Name).ToList();
                 },
                 PostWorkCallBack = (args) =>
                 {
@@ -320,8 +341,24 @@ namespace Fic.XTB.FlowExecutionHistory
             var activated = cbxFlowStatusActivated.Checked;
             var dreft = cbxFlowStatusDraft.Checked;
 
+            var showAutomated = cbAutomated.Checked;
+            var showScheduled = cbScheduled.Checked;
+            var showInstant = cbInstant.Checked;
+
+            var showManaged = cbManaged.Checked;
+            var showUmmanaged = cbUnmanaged.Checked;
+
             var filteredFlows = Flows
-                .Where(f => f.Status == FlowStatus.Activated && activated || f.Status == FlowStatus.Draft && dreft)
+                .Where(f =>
+                    f.Status == FlowStatus.Activated && activated
+                    || f.Status == FlowStatus.Draft && dreft)
+                .Where(f =>
+                    f.TriggerType == FlowTriggerType.Automated && showAutomated
+                    || f.TriggerType == FlowTriggerType.Scheduled && showScheduled
+                    || f.TriggerType == FlowTriggerType.Instant && showInstant)
+                .Where(f =>
+                    f.IsManaged && showManaged
+                    || !f.IsManaged && showUmmanaged)
                 .ToList();
 
             if (!string.IsNullOrWhiteSpace(searchText))
@@ -722,6 +759,8 @@ namespace Fic.XTB.FlowExecutionHistory
 
                 gbFlowRuns.Enabled = true;
                 gbFlow.Enabled = true;
+
+                HideNotification();
             }
             catch (MsalUiRequiredException)
             {
@@ -741,6 +780,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     gbFlowRuns.Enabled = true;
                     gbFlow.Enabled = true;
 
+                    HideNotification();
                 }
                 catch (MsalClientException ex)
                 {
@@ -1241,6 +1281,32 @@ namespace Fic.XTB.FlowExecutionHistory
         private void dgvFlowRuns_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             //ApplyTriggerOutputsFilters();
+        }
+
+        private void cbScheduled_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterFlows();
+
+        }
+
+        private void cbAutomated_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterFlows();
+        }
+
+        private void cbInstant_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterFlows();
+        }
+
+        private void cbManaged_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterFlows();
+        }
+
+        private void cbUnmanaged_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterFlows();
         }
     }
 }
