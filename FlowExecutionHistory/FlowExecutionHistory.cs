@@ -261,7 +261,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     Parallel.ForEach(selectedFlows, options, f =>
                     {
                         var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo);
-                        fr = fr.Where(r => r.DurationInSeconds >= durationThreshold).ToList();
+                        fr = fr.Where(r => r.DurationInMilliseconds / 1000 >= durationThreshold).ToList();
                         f.FlowRuns = fr;
                     });
 
@@ -628,6 +628,10 @@ namespace Fic.XTB.FlowExecutionHistory
                     e.CellStyle.BackColor = (Color)flowRun.Flow.Color;
                     e.CellStyle.ForeColor = Color.Black;
                     break;
+
+                case "FlowRunDurationInSeconds":
+                    e.Value = TimeFormatter.MillisecondsTimeString(flowRun.DurationInMilliseconds);
+                    break;
             }
 
             if (columnName.StartsWith("to_"))
@@ -812,7 +816,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     foreach (var flowRun in FlowRuns)
                     {
-                        sw.WriteLine($"{flowRun.Id};{flowRun.Flow.Name};{flowRun.Status};{flowRun.StartDate};{flowRun.DurationInSeconds};{flowRun.Url}");
+                        sw.WriteLine($"{flowRun.Id};{flowRun.Flow.Name};{flowRun.Status};{flowRun.StartDate};{flowRun.DurationInMilliseconds / 1000};{flowRun.Url}");
                     }
 
                     sw.Close();
@@ -823,15 +827,17 @@ namespace Fic.XTB.FlowExecutionHistory
                     {
                         ShowErrorDialog(args.Error);
                     }
+                    else
+                    {
+                        var result = MessageBox.Show(
+                            "Do you you want to open exported CSV file?",
+                            "Export Completed",
+                            MessageBoxButtons.YesNo);
 
-                    var result = MessageBox.Show(
-                        "Do you you want to open exported CSV file?",
-                        "Export Completed",
-                        MessageBoxButtons.YesNo);
+                        if (result == DialogResult.No) { return; }
 
-                    if (result == DialogResult.No) { return; }
-
-                    Process.Start(saveFileDialog.FileName);
+                        Process.Start(saveFileDialog.FileName);
+                    }
                 }
             });
         }
@@ -873,7 +879,7 @@ namespace Fic.XTB.FlowExecutionHistory
                        sh.Cells[index + 2, "B"] = row.Flow.Name;
                        sh.Cells[index + 2, "C"] = row.Status;
                        sh.Cells[index + 2, "D"] = row.StartDate;
-                       sh.Cells[index + 2, "E"] = (int)row.DurationInSeconds;
+                       sh.Cells[index + 2, "E"] = row.DurationInMilliseconds / 1000;
 
                        // Add hyperlink to the cell containing the URL
                        var cell = (Range)sh.Cells[index + 2, "F"];
@@ -916,15 +922,17 @@ namespace Fic.XTB.FlowExecutionHistory
                     {
                         MessageBox.Show(completedargs.Error.Message);
                     }
+                    else
+                    {
+                        var result = MessageBox.Show(
+                            "Do you you want to open exported Excel file?",
+                            "Export Completed",
+                            MessageBoxButtons.YesNo);
 
-                    var result = MessageBox.Show(
-                        "Do you you want to open exported Excel file?",
-                        "Export Completed",
-                        MessageBoxButtons.YesNo);
+                        if (result == DialogResult.No) { return; }
 
-                    if (result == DialogResult.No) { return; }
-
-                    Process.Start(saveFileDialog.FileName);
+                        Process.Start(saveFileDialog.FileName);
+                    }
                 }
             });
         }

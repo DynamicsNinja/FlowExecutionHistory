@@ -353,6 +353,7 @@
     <Compile Include="Helpers\BrowserHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\SortableBindingList.cs" />
+    <Compile Include="Helpers\TimeFormatter.cs" />
     <Compile Include="Models\AccessTokenResponse.cs" />
     <Compile Include="Models\Browser.cs" />
     <Compile Include="Models\BrowserProfile.cs" />
