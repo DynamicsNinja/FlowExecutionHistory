@@ -72,7 +72,10 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                     throw new Exception($"{flowRunsResponse?.error.code}: {flowRunsResponse?.error.message}");
                 }
 
-                if (flowRunsResponse?.value != null) { flowRunDtos.AddRange(flowRunsResponse.value); }
+                if (flowRunsResponse?.value != null)
+                {
+                    flowRunDtos.AddRange(flowRunsResponse.value);
+                }
 
                 url = flowRunsResponse?.nextLink;
             }
@@ -86,6 +89,8 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                 var duration = (fr.properties.endTime - fr.properties.startTime).TotalMilliseconds;
                 var runUrl = $"https://make.powerautomate.com/environments/{_envId}/flows/{flow.Id}/runs/{fr.name}";
 
+                var corrId = fr.properties.correlation.clientTrackingId;
+
                 var flowRun = new FlowRun
                 {
                     Id = fr.name,
@@ -95,7 +100,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                     DurationInMilliseconds = (int)duration,
                     Url = runUrl,
                     Flow = flow,
-                    CorrelationId = fr.properties.correlation.clientTrackingId,
+                    CorrelationId = corrId,
                     TriggerOutputsUrl = fr.properties.trigger.outputsLink?.uri
                 };
 

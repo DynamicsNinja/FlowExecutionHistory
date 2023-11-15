@@ -9,6 +9,7 @@ namespace Fic.XTB.FlowExecutionHistory.Models
     {
         public string Id { get; set; }
         public string CorrelationId { get; set; }
+        public string FriendlyCorrelationId { get; set; }
         public string Status { get; set; }
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }

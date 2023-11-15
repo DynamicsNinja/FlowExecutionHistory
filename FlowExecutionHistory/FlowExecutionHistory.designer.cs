@@ -30,11 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowExecutionHistory));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -122,7 +122,7 @@
             this.btnShowColumns});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(1694, 38);
+            this.toolStripMenu.Size = new System.Drawing.Size(2541, 57);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -131,21 +131,21 @@
             this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(34, 33);
+            this.tsbClose.Size = new System.Drawing.Size(34, 52);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
             // tssSeparator1
             // 
             this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 38);
+            this.tssSeparator1.Size = new System.Drawing.Size(6, 34);
             // 
             // tsbRefresh
             // 
             this.tsbRefresh.Image = ((System.Drawing.Image)(resources.GetObject("tsbRefresh.Image")));
             this.tsbRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRefresh.Name = "tsbRefresh";
-            this.tsbRefresh.Size = new System.Drawing.Size(98, 33);
+            this.tsbRefresh.Size = new System.Drawing.Size(98, 29);
             this.tsbRefresh.Text = "Refresh";
             this.tsbRefresh.Click += new System.EventHandler(this.tsbRefresh_Click);
             // 
@@ -157,7 +157,7 @@
             this.tsbExport.Image = ((System.Drawing.Image)(resources.GetObject("tsbExport.Image")));
             this.tsbExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExport.Name = "tsbExport";
-            this.tsbExport.Size = new System.Drawing.Size(108, 33);
+            this.tsbExport.Size = new System.Drawing.Size(108, 29);
             this.tsbExport.Text = "Export";
             this.tsbExport.ButtonClick += new System.EventHandler(this.tsbExport_ButtonClick);
             // 
@@ -182,41 +182,43 @@
             this.tsbConnectFlowApi.Image = ((System.Drawing.Image)(resources.GetObject("tsbConnectFlowApi.Image")));
             this.tsbConnectFlowApi.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbConnectFlowApi.Name = "tsbConnectFlowApi";
-            this.tsbConnectFlowApi.Size = new System.Drawing.Size(296, 33);
+            this.tsbConnectFlowApi.Size = new System.Drawing.Size(296, 29);
             this.tsbConnectFlowApi.Text = "Connect to Power Automate API";
             this.tsbConnectFlowApi.Click += new System.EventHandler(this.tsbConnectPowerAutomateApi_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 34);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(75, 33);
+            this.toolStripLabel1.Size = new System.Drawing.Size(75, 29);
             this.toolStripLabel1.Text = "Browser";
             this.toolStripLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cbBrowser
             // 
             this.cbBrowser.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBrowser.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cbBrowser.Name = "cbBrowser";
-            this.cbBrowser.Size = new System.Drawing.Size(121, 38);
+            this.cbBrowser.Size = new System.Drawing.Size(121, 34);
             this.cbBrowser.SelectedIndexChanged += new System.EventHandler(this.cbBrowser_SelectedIndexChanged);
             // 
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(130, 33);
+            this.toolStripLabel2.Size = new System.Drawing.Size(130, 29);
             this.toolStripLabel2.Text = "Browser Profile";
             // 
             // cbProfile
             // 
             this.cbProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProfile.DropDownWidth = 150;
+            this.cbProfile.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cbProfile.Name = "cbProfile";
-            this.cbProfile.Size = new System.Drawing.Size(200, 38);
+            this.cbProfile.Size = new System.Drawing.Size(200, 34);
             this.cbProfile.SelectedIndexChanged += new System.EventHandler(this.cbProfile_SelectedIndexChanged);
             // 
             // tsbSettings
@@ -224,7 +226,7 @@
             this.tsbSettings.Image = ((System.Drawing.Image)(resources.GetObject("tsbSettings.Image")));
             this.tsbSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSettings.Name = "tsbSettings";
-            this.tsbSettings.Size = new System.Drawing.Size(104, 33);
+            this.tsbSettings.Size = new System.Drawing.Size(104, 29);
             this.tsbSettings.Text = "Settings";
             this.tsbSettings.Click += new System.EventHandler(this.tsbSettings_Click);
             // 
@@ -293,15 +295,15 @@
             this.FlowRunUrl,
             this.FlowRunTriggerOutputs});
             this.dgvFlowRuns.DataSource = this.bsFlowRuns;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFlowRuns.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFlowRuns.DefaultCellStyle = dataGridViewCellStyle10;
             this.dgvFlowRuns.Location = new System.Drawing.Point(6, 73);
             this.dgvFlowRuns.Name = "dgvFlowRuns";
             this.dgvFlowRuns.ReadOnly = true;
@@ -647,12 +649,12 @@
             // FlowRunCorrelationId
             // 
             this.FlowRunCorrelationId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.FlowRunCorrelationId.DataPropertyName = "CorrelationId";
-            this.FlowRunCorrelationId.HeaderText = "Correlation Id";
+            this.FlowRunCorrelationId.DataPropertyName = "FriendlyCorrelationId";
+            this.FlowRunCorrelationId.HeaderText = "Correlation";
             this.FlowRunCorrelationId.MinimumWidth = 8;
             this.FlowRunCorrelationId.Name = "FlowRunCorrelationId";
             this.FlowRunCorrelationId.ReadOnly = true;
-            this.FlowRunCorrelationId.Width = 150;
+            this.FlowRunCorrelationId.Width = 132;
             // 
             // FlowRunFlow
             // 
@@ -669,8 +671,8 @@
             // 
             this.FlowRunStatus.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunStatus.DataPropertyName = "Status";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.FlowRunStatus.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.FlowRunStatus.DefaultCellStyle = dataGridViewCellStyle6;
             this.FlowRunStatus.HeaderText = "Status";
             this.FlowRunStatus.MinimumWidth = 8;
             this.FlowRunStatus.Name = "FlowRunStatus";
@@ -681,10 +683,10 @@
             // 
             this.FlowRunStartDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunStartDate.DataPropertyName = "StartDate";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "dd.MM.yyyy HH:mm:ss";
-            dataGridViewCellStyle2.NullValue = null;
-            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "dd.MM.yyyy HH:mm:ss";
+            dataGridViewCellStyle7.NullValue = null;
+            this.FlowRunStartDate.DefaultCellStyle = dataGridViewCellStyle7;
             this.FlowRunStartDate.HeaderText = "Start Date";
             this.FlowRunStartDate.MinimumWidth = 8;
             this.FlowRunStartDate.Name = "FlowRunStartDate";
@@ -695,9 +697,9 @@
             // 
             this.FlowRunEndDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunEndDate.DataPropertyName = "EndDate";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "dd.MM.yyyy HH:mm:ss";
-            this.FlowRunEndDate.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "dd.MM.yyyy HH:mm:ss";
+            this.FlowRunEndDate.DefaultCellStyle = dataGridViewCellStyle8;
             this.FlowRunEndDate.HeaderText = "End Date";
             this.FlowRunEndDate.MinimumWidth = 8;
             this.FlowRunEndDate.Name = "FlowRunEndDate";
@@ -708,8 +710,8 @@
             // 
             this.FlowRunDurationInSeconds.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.FlowRunDurationInSeconds.DataPropertyName = "DurationInMilliseconds";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.FlowRunDurationInSeconds.DefaultCellStyle = dataGridViewCellStyle9;
             this.FlowRunDurationInSeconds.HeaderText = "Duration";
             this.FlowRunDurationInSeconds.MinimumWidth = 8;
             this.FlowRunDurationInSeconds.Name = "FlowRunDurationInSeconds";

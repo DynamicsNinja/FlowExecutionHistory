@@ -13,11 +13,14 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
             InitializeComponent();
 
             cbFlowColors.Checked = _fec.Settings.UseFlowColors;
+            cbShowFreindlyCorrIds.Checked = _fec.Settings.ShowFriendlyCorrelationIds;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             _fec.Settings.UseFlowColors = cbFlowColors.Checked;
+            _fec.Settings.ShowFriendlyCorrelationIds = cbShowFreindlyCorrIds.Checked;
+
             _fec.SaveSettings();
 
             _fec.FlowRunsGrid.Invalidate();

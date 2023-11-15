@@ -29,32 +29,27 @@
         private void InitializeComponent()
         {
             this.gbStyle = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.cbFlowColors = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbShowFreindlyCorrIds = new System.Windows.Forms.CheckBox();
             this.gbStyle.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbStyle
             // 
+            this.gbStyle.Controls.Add(this.cbShowFreindlyCorrIds);
+            this.gbStyle.Controls.Add(this.label2);
             this.gbStyle.Controls.Add(this.cbFlowColors);
             this.gbStyle.Controls.Add(this.label1);
             this.gbStyle.Location = new System.Drawing.Point(12, 12);
             this.gbStyle.Name = "gbStyle";
-            this.gbStyle.Size = new System.Drawing.Size(369, 104);
+            this.gbStyle.Size = new System.Drawing.Size(369, 126);
             this.gbStyle.TabIndex = 0;
             this.gbStyle.TabStop = false;
             this.gbStyle.Text = "Style";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 46);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(321, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Use color coded flow names in flow runs grid";
             // 
             // cbFlowColors
             // 
@@ -65,9 +60,18 @@
             this.cbFlowColors.TabIndex = 2;
             this.cbFlowColors.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 46);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(321, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Use color coded flow names in flow runs grid";
+            // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(306, 122);
+            this.btnCancel.Location = new System.Drawing.Point(305, 144);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 30);
             this.btnCancel.TabIndex = 1;
@@ -77,7 +81,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(225, 122);
+            this.btnSave.Location = new System.Drawing.Point(224, 144);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 30);
             this.btnSave.TabIndex = 2;
@@ -85,11 +89,29 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 82);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(207, 20);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Show frendly correlation IDs";
+            // 
+            // cbShowFreindlyCorrIds
+            // 
+            this.cbShowFreindlyCorrIds.AutoSize = true;
+            this.cbShowFreindlyCorrIds.Location = new System.Drawing.Point(333, 83);
+            this.cbShowFreindlyCorrIds.Name = "cbShowFreindlyCorrIds";
+            this.cbShowFreindlyCorrIds.Size = new System.Drawing.Size(22, 21);
+            this.cbShowFreindlyCorrIds.TabIndex = 4;
+            this.cbShowFreindlyCorrIds.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(392, 177);
+            this.ClientSize = new System.Drawing.Size(392, 190);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.gbStyle);
@@ -112,5 +134,7 @@
         private System.Windows.Forms.CheckBox cbFlowColors;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.CheckBox cbShowFreindlyCorrIds;
+        private System.Windows.Forms.Label label2;
     }
 }

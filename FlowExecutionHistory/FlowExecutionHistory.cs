@@ -282,6 +282,8 @@ namespace Fic.XTB.FlowExecutionHistory
                         }
                     }
 
+                    flowRuns = FriendlyfyCorrelationIds(flowRuns);
+
                     args.Result = flowRuns;
                 },
                 PostWorkCallBack = (args) =>
@@ -462,8 +464,9 @@ namespace Fic.XTB.FlowExecutionHistory
                     foreach (DataGridViewRow row in dgvFlowRuns.Rows)
                     {
                         var cell = row.Cells[e.ColumnIndex];
+                        var cellValue = cell.Value.ToString();
 
-                        if (flowRun.CorrelationId == cell.Value.ToString())
+                        if (flowRun.CorrelationId == cellValue || flowRun.FriendlyCorrelationId == cellValue)
                         {
                             cell.Style.BackColor = Color.Red;
                             cell.Style.ForeColor = Color.White;
@@ -631,6 +634,9 @@ namespace Fic.XTB.FlowExecutionHistory
 
                 case "FlowRunDurationInSeconds":
                     e.Value = TimeFormatter.MillisecondsTimeString(flowRun.DurationInMilliseconds);
+                    break;
+                case "FlowRunCorrelationId":
+                    e.Value = Settings.ShowFriendlyCorrelationIds ? flowRun.FriendlyCorrelationId : flowRun.CorrelationId;
                     break;
             }
 
@@ -1315,6 +1321,48 @@ namespace Fic.XTB.FlowExecutionHistory
         private void cbUnmanaged_CheckedChanged(object sender, EventArgs e)
         {
             FilterFlows();
+        }
+
+        public static string GenerateFriendlyId(int n)
+        {
+            const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string id = string.Empty;
+
+            while (n > 0)
+            {
+                n--; // adjust zero index based
+                int remainder = n % 26;
+                id = alphabet[remainder] + id;
+                n /= 26;
+            }
+
+            return id;
+        }
+
+        private List<FlowRun> FriendlyfyCorrelationIds(List<FlowRun> flowRuns)
+        {
+            var friendlyIds = new Dictionary<string, string>();
+
+            foreach (var flowRun in flowRuns.OrderByDescending(fr => fr.StartDate))
+            {
+                var corrId = flowRun.CorrelationId;
+
+                string friendlyId;
+
+                if (friendlyIds.TryGetValue(corrId, out var id))
+                {
+                    friendlyId = id;
+                }
+                else
+                {
+                    var newFriendlyId = GenerateFriendlyId(friendlyIds.Keys.Count + 1);
+                    friendlyId = newFriendlyId;
+                    friendlyIds.Add(corrId, newFriendlyId);
+                }
+
+                flowRun.FriendlyCorrelationId = friendlyId;
+            }
+            return flowRuns;
         }
     }
 }
