@@ -355,7 +355,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     f.Status == FlowStatus.Activated && activated
                     || f.Status == FlowStatus.Draft && dreft)
                 .Where(f =>
-                    f.TriggerType == FlowTriggerType.Automated && showAutomated
+                    f.TriggerType.StartsWith(FlowTriggerType.Automated) && showAutomated
                     || f.TriggerType == FlowTriggerType.Scheduled && showScheduled
                     || f.TriggerType == FlowTriggerType.Instant && showInstant)
                 .Where(f =>

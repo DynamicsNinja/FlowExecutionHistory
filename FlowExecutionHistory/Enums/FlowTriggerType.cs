@@ -2,7 +2,7 @@
 {
     public static class FlowTriggerType
     {
-        public const string Automated = "OpenApiConnectionWebhook";
+        public const string Automated = "OpenApi";
         public const string Scheduled = "Recurrence";
         public const string Instant = "Request";
     }
