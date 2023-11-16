@@ -341,7 +341,7 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             var searchText = tbSearch.Text.ToLower();
             var activated = cbxFlowStatusActivated.Checked;
-            var dreft = cbxFlowStatusDraft.Checked;
+            var draft = cbxFlowStatusDraft.Checked;
 
             var showAutomated = cbAutomated.Checked;
             var showScheduled = cbScheduled.Checked;
@@ -353,7 +353,7 @@ namespace Fic.XTB.FlowExecutionHistory
             var filteredFlows = Flows
                 .Where(f =>
                     f.Status == FlowStatus.Activated && activated
-                    || f.Status == FlowStatus.Draft && dreft)
+                    || f.Status == FlowStatus.Draft && draft)
                 .Where(f =>
                     f.TriggerType.StartsWith(FlowTriggerType.Automated) && showAutomated
                     || f.TriggerType == FlowTriggerType.Scheduled && showScheduled
@@ -361,12 +361,10 @@ namespace Fic.XTB.FlowExecutionHistory
                 .Where(f =>
                     f.IsManaged && showManaged
                     || !f.IsManaged && showUmmanaged)
+                .Where(f =>
+                    string.IsNullOrWhiteSpace(searchText) ||
+                    f.Name.ToLowerInvariant().Contains(searchText.ToLowerInvariant()))
                 .ToList();
-
-            if (!string.IsNullOrWhiteSpace(searchText))
-            {
-                filteredFlows = filteredFlows.Where(f => f.Name.ToLower().Contains(searchText)).ToList();
-            };
 
             gbFlow.Text = $"Flows ({filteredFlows.Count})";
 
