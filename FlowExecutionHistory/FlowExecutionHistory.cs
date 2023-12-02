@@ -805,9 +805,11 @@ namespace Fic.XTB.FlowExecutionHistory
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
             saveFileDialog.Title = "Export to CSV";
-            saveFileDialog.ShowDialog();
 
-            if (saveFileDialog.FileName == "") { return; }
+            var filenName = $"runs-history-{DateTime.Now:yyyyMMddHHmmss}.csv";
+            saveFileDialog.FileName = filenName;
+
+            if (saveFileDialog.ShowDialog() != DialogResult.OK) { return; }
 
             WorkAsync(new WorkAsyncInfo
             {
@@ -816,11 +818,11 @@ namespace Fic.XTB.FlowExecutionHistory
                 {
                     var sw = new StreamWriter(saveFileDialog.FileName, false, Encoding.UTF8);
 
-                    sw.WriteLine("Id;Flow Name;Status;Start Date;Duration In Seconds;Url");
+                    sw.WriteLine("Id;Flow Name;Status;Start Date;Duration;Url");
 
-                    foreach (var flowRun in FlowRuns)
+                    foreach (var flowRun in FilteredFlowRuns)
                     {
-                        sw.WriteLine($"{flowRun.Id};{flowRun.Flow.Name};{flowRun.Status};{flowRun.StartDate};{flowRun.DurationInMilliseconds / 1000};{flowRun.Url}");
+                        sw.WriteLine($"{flowRun.Id};{flowRun.Flow.Name};{flowRun.Status};{flowRun.StartDate};{flowRun.DurationInMilliseconds};{flowRun.Url}");
                     }
 
                     sw.Close();
@@ -858,6 +860,9 @@ namespace Fic.XTB.FlowExecutionHistory
             saveFileDialog.Filter = filter;
             saveFileDialog.Title = @"Export as Excel file";
 
+            var filenName = $"runs-history-{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+            saveFileDialog.FileName = filenName;
+
             if (saveFileDialog.ShowDialog() != DialogResult.OK) { return; }
 
             WorkAsync(new WorkAsyncInfo("Creating Excel file...",
@@ -872,7 +877,7 @@ namespace Fic.XTB.FlowExecutionHistory
                    sh.Cells[1, 2] = "Flow Name";
                    sh.Cells[1, 3] = "Status";
                    sh.Cells[1, 4] = "Start Date";
-                   sh.Cells[1, 5] = "Duration in seconds";
+                   sh.Cells[1, 5] = "Duration in milliseconds";
                    sh.Cells[1, 6] = "Url";
 
                    for (var index = 0; index < FlowRuns.Count; index++)
@@ -882,8 +887,8 @@ namespace Fic.XTB.FlowExecutionHistory
                        sh.Cells[index + 2, "A"] = row.Id;
                        sh.Cells[index + 2, "B"] = row.Flow.Name;
                        sh.Cells[index + 2, "C"] = row.Status;
-                       sh.Cells[index + 2, "D"] = row.StartDate;
-                       sh.Cells[index + 2, "E"] = row.DurationInMilliseconds / 1000;
+                       sh.Cells[index + 2, "D"] = row.StartDate.DateTime;
+                       sh.Cells[index + 2, "E"] = row.DurationInMilliseconds;
 
                        // Add hyperlink to the cell containing the URL
                        var cell = (Range)sh.Cells[index + 2, "F"];
