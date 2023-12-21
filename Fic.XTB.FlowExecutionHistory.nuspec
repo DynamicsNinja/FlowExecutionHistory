@@ -11,7 +11,11 @@
     <iconUrl>https://raw.githubusercontent.com/DynamicsNinja/FlowExecutionHistory/main/docs/img/feh-300.png</iconUrl>
     <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
     <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
-    <releaseNotes>1.2023.11.7
+    <releaseNotes>1.2023.12.4
+- Added filtering flows by solution
+- Added caching for flow runs
+- Fixed export to Excel/CSV
+1.2023.11.7
 - Fixed showing automated flows that are not Dataverse triggerd
 1.2023.11.5
 - Changed duration display string
