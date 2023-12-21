@@ -365,6 +365,7 @@
     <Compile Include="Models\Flow.cs" />
     <Compile Include="Models\FlowClientData.cs" />
     <Compile Include="Models\FlowRun.cs" />
+    <Compile Include="Models\FlowRunsCache.cs" />
     <Compile Include="Models\FlowRunError.cs" />
     <Compile Include="PluginDescription.cs" />
     <Compile Include="FlowExecutionHistory.cs">
@@ -379,6 +380,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\DataverseClient.cs" />
     <Compile Include="Services\FlowClient.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>

@@ -12,6 +12,9 @@ public class FilterConditionControl : UserControl
     private ComboBox operatorComboBox;
     private TextBox valueTextBox;
     private PictureBox removePictureBox;
+
+    private string FilterAttribute { get; set; }
+
     public int RowIndex { get; set; }
 
     public event EventHandler<EventArgs> RemoveButtonClicked;
@@ -28,6 +31,22 @@ public class FilterConditionControl : UserControl
         }
     }
 
+    public void RefreshAttributes(List<string> attributes)
+    {
+        var initialFilterAttribute = FilterAttribute;
+
+        attributeComboBox.DataSource = new List<string>(attributes);
+
+        if (attributes.Contains(initialFilterAttribute))
+        {
+            attributeComboBox.SelectedItem = initialFilterAttribute;
+        }
+        else
+        {
+            attributeComboBox.SelectedIndex = 0;
+        }
+    }
+
     public FilterConditionControl(List<string> attributes, List<OutputTriggerFilter> operators, Image img)
     {
         Padding = new Padding(0, 0, 0, 0);
@@ -36,7 +55,7 @@ public class FilterConditionControl : UserControl
         tableLayoutPanel = new TableLayoutPanel();
         attributeComboBox = new ComboBox
         {
-            Anchor = AnchorStyles.Left | AnchorStyles.Right,
+            Anchor = AnchorStyles.Left | AnchorStyles.Right,           
         };
         operatorComboBox = new ComboBox
         {
@@ -63,6 +82,10 @@ public class FilterConditionControl : UserControl
         // Set up attributeComboBox
         attributeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         attributeComboBox.DataSource = new List<string>(attributes);
+        attributeComboBox.SelectedIndexChanged += (sender, e) =>
+        {
+            FilterAttribute = (string)attributeComboBox.SelectedItem;
+        };
 
         // Set up operatorComboBox
         operatorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;

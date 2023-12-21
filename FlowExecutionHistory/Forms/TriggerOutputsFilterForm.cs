@@ -46,6 +46,32 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
             AddFilterConditionControl();
         }
 
+        public void UpdateAttributes()
+        {
+            var allAttributes = new List<string>();
+
+            foreach (var flow in _frc.Flows.Where(f => f.IsSelected))
+            {
+                var triggerOutput = flow.FlowRuns.FirstOrDefault()?.TriggerOutputs ?? flow.FlowRuns.FirstOrDefault()?.GetTriggerOutputs();
+
+                if (triggerOutput == null) { continue; }
+
+                var attributes = triggerOutput.Body.Keys.ToList();
+
+                allAttributes.AddRange(attributes);
+            }
+
+            _attributes = allAttributes.Distinct().OrderBy(k => k).ToList();
+
+            foreach (var control in tableLayoutPanel2.Controls)
+            {
+                if (control is FilterConditionControl filterConditionControl)
+                {
+                    filterConditionControl.RefreshAttributes(_attributes);
+                }
+            }
+        }
+
         private void btnFIlter_Click(object sender, EventArgs e)
         {
             var filterConditions = GetAllFilterConditions();

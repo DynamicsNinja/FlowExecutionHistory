@@ -43,7 +43,6 @@ namespace Fic.XTB.FlowExecutionHistory
         public List<FlowRun> FilteredFlowRuns = null;
 
         public List<Flow> Flows = new List<Flow>();
-        public Dictionary<string, TriggerOutputsResponseDto> CachedTriggerOutputs = new Dictionary<string, TriggerOutputsResponseDto>();
 
         private List<Color> _colors = new List<Color>();
 
@@ -53,6 +52,9 @@ namespace Fic.XTB.FlowExecutionHistory
         private TriggerOutputsColumnsSelectForm _triggerOutputsColumnsSelectForm;
 
         private readonly List<DataGridViewColumn> _initialColumns = new List<DataGridViewColumn>();
+
+        private FlowClient flowClient;
+        private DataverseClient dataverseClient;
 
         public FlowExecutionHistory()
         {
@@ -152,25 +154,9 @@ namespace Fic.XTB.FlowExecutionHistory
             {
                 Message = "Getting flows",
                 Work = (worker, args) =>
-                {
-                    var fetch = $@"
-                    <fetch>
-                      <entity name='workflow'>
-                        <attribute name='workflowid' />
-                        <attribute name='workflowidunique' />
-                        <attribute name='clientdata' />
-                        <attribute name='name' />
-                        <attribute name='statecode' />
-                        <attribute name='statuscode' />
-                        <attribute name='ismanaged' />
-                        <filter type='and'>
-                          <condition attribute='category' operator='eq' value='5' />
-                        </filter>
-                      </entity>
-                    </fetch>";
-
-                    var entities = Service.RetrieveMultiple(new FetchExpression(fetch)).Entities.ToList();
-
+                 {
+                     var entities = dataverseClient.GetFlows();
+            
                     var fetchedFlows = new List<Flow>();
 
                     foreach (var f in entities)
@@ -244,6 +230,41 @@ namespace Fic.XTB.FlowExecutionHistory
             gbFlow.Enabled = false;
             gbFlowRuns.Enabled = false;
 
+            //// check if runs are cached
+            //var cachedFlowRuns = new List<FlowRun>();
+            //var allCached = true;
+            //foreach (var flowRun in selectedFlows)
+            //{
+            //    _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken();
+            //    flowClient = flowClient ?? new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
+            //    var cachedRuns = flowClient.GetFlowRunsFromCache(flowRun.Id, status, dateFrom);
+
+            //    if (cachedRuns == null)
+            //    {
+            //        allCached = false;
+            //        break;
+            //    }
+
+            //    cachedFlowRuns.AddRange(cachedRuns);
+            //}
+
+            //if (allCached)
+            //{
+            //    FlowRuns = cachedFlowRuns;
+
+            //    ShowHideTriggerOutputFilterButtons(selectedFlows.Count >= 1 && cachedFlowRuns.Count > 0);
+
+            //    _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
+            //    _triggerOutputsFilterForm.UpdateAttributes();
+
+            //    ApplyTriggerOutputsFilters();
+
+            //    gbFlow.Enabled = true;
+            //    gbFlowRuns.Enabled = true;
+
+            //    return;
+            //}
+
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Getting flow runs",
@@ -251,7 +272,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 {
                     _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken();
 
-                    var flowClient = new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
+                    flowClient = flowClient ?? new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
 
                     var options = new ParallelOptions
                     {
@@ -260,29 +281,11 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     Parallel.ForEach(selectedFlows, options, f =>
                     {
-                        var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo);
-                        fr = fr.Where(r => r.DurationInMilliseconds / 1000 >= durationThreshold).ToList();
+                        var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo, durationThreshold, includeTriggerOutputs);
                         f.FlowRuns = fr;
                     });
 
                     var flowRuns = selectedFlows.SelectMany(f => f.FlowRuns).ToList();
-
-                    if (includeTriggerOutputs)
-                    {
-                        Parallel.ForEach(flowRuns, options,
-                            fr =>
-                            {
-                                fr.TriggerOutputs = fr.TriggerOutputs ?? GetTriggerOutputsForFlowRun(fr);
-
-                            });
-
-                        foreach (var fr in flowRuns)
-                        {
-                            CachedTriggerOutputs[fr.Flow.Id] = fr.TriggerOutputs;
-                        }
-                    }
-
-                    flowRuns = FriendlyfyCorrelationIds(flowRuns);
 
                     args.Result = flowRuns;
                 },
@@ -301,6 +304,7 @@ namespace Fic.XTB.FlowExecutionHistory
                         ShowHideTriggerOutputFilterButtons(selectedFlows.Count >= 1 && runs.Count > 0);
 
                         _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
+                        _triggerOutputsFilterForm.UpdateAttributes();
 
                         ApplyTriggerOutputsFilters();
                     }
@@ -315,6 +319,8 @@ namespace Fic.XTB.FlowExecutionHistory
             string actionName, object parameter)
         {
             base.UpdateConnection(newService, detail, actionName, parameter);
+
+            dataverseClient = new DataverseClient(newService);
 
             _colors = ColorHelper.GetAllColors(1000);
             ExecuteMethod(GetFlows);
@@ -518,7 +524,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 {
                     _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken();
 
-                    var flowClient = new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
+                    flowClient = flowClient ?? new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
                     var errorDetails = flowClient.GetFlowRunErrorDetails(flowRun);
 
                     flowRun.Error = new FlowRunError
@@ -1134,6 +1140,8 @@ namespace Fic.XTB.FlowExecutionHistory
             else
             {
                 _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
+                _triggerOutputsFilterForm.UpdateAttributes();
+
                 _triggerOutputsFilterForm.ShowDialog();
             }
         }
@@ -1159,6 +1167,7 @@ namespace Fic.XTB.FlowExecutionHistory
             if (FlowRuns.FirstOrDefault()?.TriggerOutputsUrl == null || !show) { return; }
 
             _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
+            _triggerOutputsFilterForm.UpdateAttributes();
         }
 
         private void cbxFlowStatusDraft_CheckedChanged(object sender, EventArgs e)
@@ -1205,7 +1214,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         if (flowRun == null) { return; }
 
-                        flowRun.TriggerOutputs = flowRun.TriggerOutputs ?? GetTriggerOutputsForFlowRun(flowRun);
+                        flowRun.TriggerOutputs = flowRun.TriggerOutputs ?? flowClient.GetTriggerOutputsForFlowRun(flowRun);
                     });
 
                     var allAttributes = FlowRuns
@@ -1282,13 +1291,6 @@ namespace Fic.XTB.FlowExecutionHistory
         //    });
         //}
 
-        private TriggerOutputsResponseDto GetTriggerOutputsForFlowRun(FlowRun flowRun)
-        {
-            var triggerOutputs = CachedTriggerOutputs.TryGetValue(flowRun.Id, out var to) ? to : flowRun.GetTriggerOutputs();
-
-            return triggerOutputs;
-        }
-
         private void ResetFlowRunsGridColumns()
         {
             dgvFlowRuns.Columns.Clear();
@@ -1324,48 +1326,6 @@ namespace Fic.XTB.FlowExecutionHistory
         private void cbUnmanaged_CheckedChanged(object sender, EventArgs e)
         {
             FilterFlows();
-        }
-
-        public static string GenerateFriendlyId(int n)
-        {
-            const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string id = string.Empty;
-
-            while (n > 0)
-            {
-                n--; // adjust zero index based
-                int remainder = n % 26;
-                id = alphabet[remainder] + id;
-                n /= 26;
-            }
-
-            return id;
-        }
-
-        private List<FlowRun> FriendlyfyCorrelationIds(List<FlowRun> flowRuns)
-        {
-            var friendlyIds = new Dictionary<string, string>();
-
-            foreach (var flowRun in flowRuns.OrderByDescending(fr => fr.StartDate))
-            {
-                var corrId = flowRun.CorrelationId;
-
-                string friendlyId;
-
-                if (friendlyIds.TryGetValue(corrId, out var id))
-                {
-                    friendlyId = id;
-                }
-                else
-                {
-                    var newFriendlyId = GenerateFriendlyId(friendlyIds.Keys.Count + 1);
-                    friendlyId = newFriendlyId;
-                    friendlyIds.Add(corrId, newFriendlyId);
-                }
-
-                flowRun.FriendlyCorrelationId = friendlyId;
-            }
-            return flowRuns;
         }
     }
 }
