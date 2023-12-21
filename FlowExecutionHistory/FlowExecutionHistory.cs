@@ -19,7 +19,6 @@ using McTools.Xrm.Connection;
 using Microsoft.Identity.Client;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 using Newtonsoft.Json;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -43,6 +42,7 @@ namespace Fic.XTB.FlowExecutionHistory
         public List<FlowRun> FilteredFlowRuns = null;
 
         public List<Flow> Flows = new List<Flow>();
+        public List<Solution> Solutions = new List<Solution>();
 
         private List<Color> _colors = new List<Color>();
 
@@ -156,36 +156,37 @@ namespace Fic.XTB.FlowExecutionHistory
                 Work = (worker, args) =>
                  {
                      var entities = dataverseClient.GetFlows();
-            
-                    var fetchedFlows = new List<Flow>();
 
-                    foreach (var f in entities)
-                    {
-                        var flowId = ((Guid)f["workflowidunique"]).ToString("D");
-                        var flowName = (string)f["name"];
-                        var flowStatus = (FlowStatus)((OptionSetValue)f["statecode"]).Value;
-                        var clentDataJson = (string)f["clientdata"];
-                        var isManaged = (bool)f["ismanaged"];
+                     var fetchedFlows = new List<Flow>();
 
-                        var clientData = JsonConvert.DeserializeObject<FlowClientData>(clentDataJson);
+                     foreach (var f in entities)
+                     {
+                         var flowId = ((Guid)f["workflowidunique"]).ToString("D");
+                         var flowName = (string)f["name"];
+                         var flowStatus = (FlowStatus)((OptionSetValue)f["statecode"]).Value;
+                         var clentDataJson = (string)f["clientdata"];
+                         var isManaged = (bool)f["ismanaged"];
 
-                        var triggerType = clientData?.properties?.definition?.triggers?.FirstOrDefault().Value?.type;
+                         var clientData = JsonConvert.DeserializeObject<FlowClientData>(clentDataJson);
 
-                        var flow = new Flow
-                        {
-                            Id = flowId,
-                            Name = flowName,
-                            ClientData = clientData,
-                            Status = flowStatus,
-                            TriggerType = triggerType,
-                            IsManaged = isManaged
-                        };
+                         var triggerType = clientData?.properties?.definition?.triggers?.FirstOrDefault().Value?.type;
 
-                        fetchedFlows.Add(flow);
-                    }
+                         var flow = new Flow
+                         {
+                             Id = flowId,
+                             Name = flowName,
+                             ClientData = clientData,
+                             Status = flowStatus,
+                             TriggerType = triggerType,
+                             IsManaged = isManaged,
+                             WorkflowId = f.Id
+                         };
 
-                    args.Result = fetchedFlows.OrderBy(f => f.Name).ToList();
-                },
+                         fetchedFlows.Add(flow);
+                     }
+
+                     args.Result = fetchedFlows.OrderBy(f => f.Name).ToList();
+                 },
                 PostWorkCallBack = (args) =>
                 {
                     if (args.Error != null)
@@ -324,6 +325,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
             _colors = ColorHelper.GetAllColors(1000);
             ExecuteMethod(GetFlows);
+            ExecuteMethod(GetSolutions);
 
             if (Settings == null || detail == null)
             {
@@ -331,6 +333,49 @@ namespace Fic.XTB.FlowExecutionHistory
             }
 
             LogInfo("Connection has changed to: {0}", detail.WebApplicationUrl);
+        }
+
+        private void GetSolutions()
+        {
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Getting solutions",
+                Work = (worker, args) =>
+                {
+                    var solutions = dataverseClient.GetSolutions();
+
+                    args.Result = solutions;
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        ShowErrorDialog(args.Error.InnerException);
+                    }
+                    else
+                    {
+                        if (!(args.Result is List<Solution> solutions)) { return; }
+
+                        var allSolutions = new Solution
+                        {
+                            Id = Guid.Empty,
+                            Name = "<All Solutions>"
+                        };
+
+                        // add all solutions to the list
+                        solutions.Insert(0, allSolutions);
+
+                        cbSolutions.Items.Clear();
+                        cbSolutions.DataSource = solutions;
+
+
+                        //cbSolutions.Items.Clear();
+                        //cbSolutions.Items.Add(allSolutions);
+                        //cbSolutions.Items.AddRange(solutions.ToArray());
+                        //cbSolutions.SelectedIndex = 0;
+                    }
+                }
+            });
         }
 
         private void cbxStatus_SelectedIndexChanged(object sender, EventArgs e)
@@ -356,6 +401,8 @@ namespace Fic.XTB.FlowExecutionHistory
             var showManaged = cbManaged.Checked;
             var showUmmanaged = cbUnmanaged.Checked;
 
+            var selectedSolution = (Solution)cbSolutions.SelectedItem;
+
             var filteredFlows = Flows
                 .Where(f =>
                     f.Status == FlowStatus.Activated && activated
@@ -372,6 +419,13 @@ namespace Fic.XTB.FlowExecutionHistory
                     f.Name.ToLowerInvariant().Contains(searchText.ToLowerInvariant()))
                 .ToList();
 
+            if (selectedSolution != null && selectedSolution.Id != Guid.Empty)
+            {
+                filteredFlows = filteredFlows
+                    .Where(f => selectedSolution.FlowIds.Contains(f.WorkflowId))
+                    .ToList();
+            }
+
             gbFlow.Text = $"Flows ({filteredFlows.Count})";
 
             clbFlows.DataSource = filteredFlows;
@@ -386,6 +440,8 @@ namespace Fic.XTB.FlowExecutionHistory
             }
 
             clbFlows.ItemCheck += clbFlows_ItemCheck;
+
+            gbFlow.Enabled = true;
         }
 
         private void dtpDate_ValueChanged(object sender, EventArgs e)
@@ -1325,6 +1381,23 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void cbUnmanaged_CheckedChanged(object sender, EventArgs e)
         {
+            FilterFlows();
+        }
+
+        private void cbSolutions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            gbFlow.Enabled = false;
+
+            if (cbSolutions.SelectedIndex == -1) { return; }
+
+            var selectedSolution = (Solution)cbSolutions.SelectedItem;
+
+            if (selectedSolution.FlowIds == null)
+            {
+                var flowIds = dataverseClient.GetSolutionComponents(selectedSolution.Id);
+                selectedSolution.FlowIds = flowIds;
+            }
+
             FilterFlows();
         }
     }

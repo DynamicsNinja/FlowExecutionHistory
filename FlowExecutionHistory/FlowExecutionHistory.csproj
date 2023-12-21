@@ -367,6 +367,7 @@
     <Compile Include="Models\FlowRun.cs" />
     <Compile Include="Models\FlowRunsCache.cs" />
     <Compile Include="Models\FlowRunError.cs" />
+    <Compile Include="Models\Solution.cs" />
     <Compile Include="PluginDescription.cs" />
     <Compile Include="FlowExecutionHistory.cs">
       <SubType>UserControl</SubType>

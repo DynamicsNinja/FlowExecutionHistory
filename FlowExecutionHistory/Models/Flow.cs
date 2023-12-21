@@ -1,4 +1,5 @@
 ﻿using Fic.XTB.FlowExecutionHistory.Enums;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -15,6 +16,7 @@ namespace Fic.XTB.FlowExecutionHistory.Models
         public List<FlowRun> FlowRuns { get; set; }
         public string TriggerType { get; set; }
         public bool IsManaged { get; set; }
+        public Guid WorkflowId { get; set; }
         public override string ToString()
         {
             return Name;
