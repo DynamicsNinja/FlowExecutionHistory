@@ -43,6 +43,8 @@ public class FilterConditionControl : UserControl
         }
         else
         {
+            if (attributeComboBox.Items.Count == 0) { return; }
+
             attributeComboBox.SelectedIndex = 0;
         }
     }
@@ -55,7 +57,7 @@ public class FilterConditionControl : UserControl
         tableLayoutPanel = new TableLayoutPanel();
         attributeComboBox = new ComboBox
         {
-            Anchor = AnchorStyles.Left | AnchorStyles.Right,           
+            Anchor = AnchorStyles.Left | AnchorStyles.Right,
         };
         operatorComboBox = new ComboBox
         {
