@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -38,7 +37,7 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
             _frc = fec;
 
 
-            foreach (var column in columns)
+            foreach (var column in columns.OrderBy(c => c))
             {
                 clbColumns.Items.Add(column);
             }
@@ -52,7 +51,7 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
 
             clbColumns.Items.Clear();
 
-            foreach (var column in columns)
+            foreach (var column in columns.OrderBy(c => c))
             {
                 clbColumns.Items.Add(column);
 
