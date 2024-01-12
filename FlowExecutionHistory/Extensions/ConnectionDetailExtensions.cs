@@ -6,6 +6,8 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using Fic.XTB.FlowExecutionHistory.Enums;
+using Fic.XTB.FlowExecutionHistory.Helpers;
 using Fic.XTB.FlowExecutionHistory.Models;
 using McTools.Xrm.Connection;
 using Newtonsoft.Json;
@@ -20,7 +22,30 @@ namespace Fic.XTB.FlowExecutionHistory.Extensions
         private const string IV = "ahC3@bCa2Didfc3d";
         private const int KEY_SIZE = 256;
         private const int ITERATIONS = 2;
-        public static AccessTokenResponse GetPowerAutomateAccessToken(this ConnectionDetail connection)
+
+        public static OrganizationGeo GetGeo(this ConnectionDetail connection)
+        {
+            var webUrl = connection.WebApplicationUrl;
+
+            if (webUrl.Contains("crm9.dynamics.com"))
+            {
+                return OrganizationGeo.GCC;
+            }
+            else if (webUrl.Contains("crm.microsoftdynamics.us"))
+            {
+                return OrganizationGeo.GCCH;
+            }
+            else if (webUrl.Contains("crm.appsplatform.us"))
+            {
+                return OrganizationGeo.DOD;
+            }
+            else
+            {
+                return OrganizationGeo.Public;
+            }
+        }
+
+        public static AccessTokenResponse GetPowerAutomateAccessToken(this ConnectionDetail connection, OrganizationGeo geo)
         {
             if (connection?.S2SClientSecret == null)
             {
@@ -29,12 +54,15 @@ namespace Fic.XTB.FlowExecutionHistory.Extensions
 
             var secret = Decrypt(connection.S2SClientSecret);
 
-            var url = $"https://login.microsoftonline.com/{connection.TenantId}/oauth2/v2.0/token";
+            var authorityUrl = FlowEndpointHelper.GetAuthorityUrl(geo);
+            var audienceUrl = FlowEndpointHelper.GetAudienceUrl(geo);
+
+            var url = $"{authorityUrl}/{connection.TenantId}/oauth2/v2.0/token";
             var data = new Dictionary<string, string>
             {
                 ["client_id"] = connection.AzureAdAppId.ToString(),
                 ["client_secret"] = secret,
-                ["scope"] = $"https://service.flow.microsoft.com/.default",
+                ["scope"] = $"{audienceUrl}/.default",
                 ["grant_type"] = "client_credentials",
             };
 

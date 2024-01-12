@@ -318,6 +318,7 @@
     <Compile Include="Enums\FlowStatus.cs" />
     <Compile Include="Enums\FlowTriggerType.cs" />
     <Compile Include="Enums\GroupOperator.cs" />
+    <Compile Include="Enums\OrganizationGeo.cs" />
     <Compile Include="Enums\OutputTriggerFilter.cs" />
     <Compile Include="Extensions\ConnectionDetailExtensions.cs" />
     <Compile Include="Forms\FlowRunErrorForm.cs">
@@ -352,6 +353,7 @@
     </Compile>
     <Compile Include="Helpers\BrowserHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
+    <Compile Include="Helpers\FlowEndpointHelper.cs" />
     <Compile Include="Helpers\SortableBindingList.cs" />
     <Compile Include="Helpers\TimeFormatter.cs" />
     <Compile Include="Models\AccessTokenResponse.cs" />

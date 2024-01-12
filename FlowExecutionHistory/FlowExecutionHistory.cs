@@ -56,6 +56,8 @@ namespace Fic.XTB.FlowExecutionHistory
         private FlowClient flowClient;
         private DataverseClient dataverseClient;
 
+        private OrganizationGeo Geo;
+
         public FlowExecutionHistory()
         {
             InitializeComponent();
@@ -231,49 +233,14 @@ namespace Fic.XTB.FlowExecutionHistory
             gbFlow.Enabled = false;
             gbFlowRuns.Enabled = false;
 
-            //// check if runs are cached
-            //var cachedFlowRuns = new List<FlowRun>();
-            //var allCached = true;
-            //foreach (var flowRun in selectedFlows)
-            //{
-            //    _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken();
-            //    flowClient = flowClient ?? new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
-            //    var cachedRuns = flowClient.GetFlowRunsFromCache(flowRun.Id, status, dateFrom);
-
-            //    if (cachedRuns == null)
-            //    {
-            //        allCached = false;
-            //        break;
-            //    }
-
-            //    cachedFlowRuns.AddRange(cachedRuns);
-            //}
-
-            //if (allCached)
-            //{
-            //    FlowRuns = cachedFlowRuns;
-
-            //    ShowHideTriggerOutputFilterButtons(selectedFlows.Count >= 1 && cachedFlowRuns.Count > 0);
-
-            //    _triggerOutputsFilterForm = _triggerOutputsFilterForm ?? new TriggerOutputsFilterForm(this);
-            //    _triggerOutputsFilterForm.UpdateAttributes();
-
-            //    ApplyTriggerOutputsFilters();
-
-            //    gbFlow.Enabled = true;
-            //    gbFlowRuns.Enabled = true;
-
-            //    return;
-            //}
-
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Getting flow runs",
                 Work = (worker, args) =>
                 {
-                    _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken();
+                    _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken(Geo);
 
-                    flowClient = flowClient ?? new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
+                    flowClient = flowClient ?? new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token, Geo);
 
                     var options = new ParallelOptions
                     {
@@ -321,6 +288,7 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             base.UpdateConnection(newService, detail, actionName, parameter);
 
+            Geo = detail.GetGeo();
             dataverseClient = new DataverseClient(newService);
 
             _colors = ColorHelper.GetAllColors(1000);
@@ -367,12 +335,6 @@ namespace Fic.XTB.FlowExecutionHistory
 
                         cbSolutions.Items.Clear();
                         cbSolutions.DataSource = solutions;
-
-
-                        //cbSolutions.Items.Clear();
-                        //cbSolutions.Items.Add(allSolutions);
-                        //cbSolutions.Items.AddRange(solutions.ToArray());
-                        //cbSolutions.SelectedIndex = 0;
                     }
                 }
             });
@@ -578,9 +540,9 @@ namespace Fic.XTB.FlowExecutionHistory
                 Message = "Getting error details",
                 Work = (worker, args) =>
                 {
-                    _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken();
+                    _flowAccessToken = _flowAccessToken ?? ConnectionDetail.GetPowerAutomateAccessToken(Geo);
 
-                    flowClient = flowClient ?? new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token);
+                    flowClient = flowClient ?? new FlowClient(ConnectionDetail.EnvironmentId, _flowAccessToken.access_token, Geo);
                     var errorDetails = flowClient.GetFlowRunErrorDetails(flowRun);
 
                     flowRun.Error = new FlowRunError
@@ -792,7 +754,8 @@ namespace Fic.XTB.FlowExecutionHistory
         {
             var clientId = "51f81489-12ee-4a9e-aaae-a2591f45987d";
             var redirectUri = "app://58145B91-0C36-4500-8554-080854F2AC97";
-            var scopes = new[] { "https://service.flow.microsoft.com/.default" };
+            var audienceUrl = FlowEndpointHelper.GetAudienceUrl(Geo);
+            var scopes = new[] { $"{audienceUrl}/.default" };
 
             if (ConnectionDetail.TenantId == Guid.Empty)
             {

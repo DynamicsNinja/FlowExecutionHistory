@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Fic.XTB.FlowExecutionHistory.Enums;
+using Fic.XTB.FlowExecutionHistory.Helpers;
 using Fic.XTB.FlowExecutionHistory.Models;
 using Fic.XTB.FlowExecutionHistory.Models.DTOs;
 using Newtonsoft.Json;
@@ -19,10 +21,13 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 
         public List<FlowRunsCache> FlowRunsCache { get; set; }
 
-        private const string BaseUrl = "https://api.flow.microsoft.com";
+        private string BaseUrl { get; set; }
+        private string MakePowerAutomateUrl { get; set; }
 
-        public FlowClient(string envId, string accessToken)
+        public FlowClient(string envId, string accessToken, OrganizationGeo geo)
         {
+            BaseUrl = FlowEndpointHelper.GetFlowApiBaseUrl(geo);
+            MakePowerAutomateUrl = FlowEndpointHelper.GetMakerUrl(geo);
             FlowRunsCache = new List<FlowRunsCache>();
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization =
@@ -88,7 +93,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             foreach (var fr in flowRunDtos)
             {
                 var duration = (fr.properties.endTime - fr.properties.startTime).TotalMilliseconds;
-                var runUrl = $"https://make.powerautomate.com/environments/{_envId}/flows/{flow.Id}/runs/{fr.name}";
+                var runUrl = $"{MakePowerAutomateUrl}/environments/{_envId}/flows/{flow.Id}/runs/{fr.name}";
 
                 var corrId = fr.properties.correlation.clientTrackingId;
 
