@@ -11,7 +11,9 @@
     <iconUrl>https://raw.githubusercontent.com/DynamicsNinja/FlowExecutionHistory/main/docs/img/feh-300.png</iconUrl>
     <description>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</description>
     <summary>XrmToolBox tool that allows you to browse Power Automate flow runs by applying multiple filters including multiple flows at the same time.</summary>
-    <releaseNotes>1.2024.1.4
+    <releaseNotes>1.2024.2.2
+- Added possibility to toggle error column in the grid
+1.2024.1.4
 - Added support for GCC
 1.2024.1.2
 - Fixed sorting when picking columns
