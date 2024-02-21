@@ -14,14 +14,18 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
 
             cbFlowColors.Checked = _fec.Settings.UseFlowColors;
             cbShowFreindlyCorrIds.Checked = _fec.Settings.ShowFriendlyCorrelationIds;
+            cbShowErrorColumn.Checked = _fec.Settings.ShowErrorColumn;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             _fec.Settings.UseFlowColors = cbFlowColors.Checked;
             _fec.Settings.ShowFriendlyCorrelationIds = cbShowFreindlyCorrIds.Checked;
+            _fec.Settings.ShowErrorColumn = cbShowErrorColumn.Checked;
 
             _fec.SaveSettings();
+
+            _fec.ShowHideErrorColumn(cbShowErrorColumn.Checked);
 
             _fec.FlowRunsGrid.Invalidate();
 

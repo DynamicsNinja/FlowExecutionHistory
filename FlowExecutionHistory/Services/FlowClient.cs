@@ -119,6 +119,23 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             };
 
 
+            Parallel.ForEach(flowRuns, options,
+                fr =>
+                {
+                    if (fr.Status != FlowRunStatus.Failed) { return; }
+
+                    var errorDetails = GetFlowRunErrorDetails(fr);
+
+                    fr.Error = new FlowRunError
+                    {
+                        Message = errorDetails.errorSubject,
+                        Details = errorDetails.errorDescription
+                              ?? errorDetails?.operationOutputs?.body?.ToString()
+                    };
+                }
+            );
+
+
             if (includeTriggerOutputs)
             {
                 Parallel.ForEach(flowRuns, options,

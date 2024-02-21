@@ -209,7 +209,7 @@ namespace Fic.XTB.FlowExecutionHistory
             });
         }
 
-        private void GetFlowRuns()
+        public void GetFlowRuns()
         {
             var selectedFlows = Flows.Where(f => f.IsSelected).ToList();
 
@@ -674,6 +674,13 @@ namespace Fic.XTB.FlowExecutionHistory
 
                 e.Value = triggerOutput;
             }
+
+            if (columnName == "FlowRunError")
+            {
+                if (flowRun.Status != Enums.FlowRunStatus.Failed) { return; }
+
+                e.Value = flowRun.Error?.Details;
+            }
         }
 
         private void tsbRefresh_Click(object sender, EventArgs e)
@@ -1056,6 +1063,15 @@ namespace Fic.XTB.FlowExecutionHistory
                         dgvFlowRuns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                         ResetFlowRunsGridColumns();
 
+                        if (Settings.ShowErrorColumn && cbxStatus.Text != Enums.FlowRunStatus.Succeeded)
+                        {
+                            var errorColumn = new DataGridViewTextBoxColumn();
+                            errorColumn.Name = "FlowRunError";
+                            errorColumn.HeaderText = "Error";
+
+                            dgvFlowRuns.Columns.Add(errorColumn);
+                        }
+
                         foreach (var field in allAttributes)
                         {
                             var newColumn = new DataGridViewTextBoxColumn();
@@ -1362,6 +1378,44 @@ namespace Fic.XTB.FlowExecutionHistory
             }
 
             FilterFlows();
+        }
+
+        public void ShowHideErrorColumn(bool show)
+        {
+            dgvFlowRuns.Invoke(new Action(() =>
+            {
+                var errorColumn = dgvFlowRuns.Columns["FlowRunError"];
+                var status = cbxStatus.Text;
+
+                if (show)
+                {
+                    if (errorColumn != null)
+                    {
+                        if (status == Enums.FlowRunStatus.Succeeded)
+                        {
+                            dgvFlowRuns.Columns.Remove(errorColumn);
+                        }
+                    }
+                    else
+                    {
+                        if (status != Enums.FlowRunStatus.Succeeded)
+                        {
+                            errorColumn = new DataGridViewTextBoxColumn();
+                            errorColumn.Name = "FlowRunError";
+                            errorColumn.HeaderText = "Error";
+
+                            dgvFlowRuns.Columns.Add(errorColumn);
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (errorColumn == null) { return; }
+
+                    dgvFlowRuns.Columns.Remove(errorColumn);
+                }
+            }));
         }
     }
 }

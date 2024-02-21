@@ -8,5 +8,6 @@ namespace Fic.XTB.FlowExecutionHistory
         public BrowserProfile BrowserProfile { get; set; }
         public bool UseFlowColors { get; set; } = true;
         public bool ShowFriendlyCorrelationIds { get; set; } = true;
+        public bool ShowErrorColumn { get; set; } = false;
     }
 }
