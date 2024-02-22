@@ -1056,16 +1056,7 @@ namespace Fic.XTB.FlowExecutionHistory
                         dgvFlowRuns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                         ResetFlowRunsGridColumns();
 
-                        var errorColumn = dgvFlowRuns.Columns["FlowRunError"];
-
-                        if (Settings.ShowErrorColumn && cbxStatus.Text != Enums.FlowRunStatus.Succeeded)
-                        {
-                            errorColumn.Visible = true;
-                        }
-                        else
-                        {
-                            errorColumn.Visible = false;
-                        }
+                        ShowHideErrorColumn(Settings.ShowErrorColumn);
 
                         foreach (var field in allAttributes)
                         {
@@ -1382,7 +1373,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 var errorColumn = dgvFlowRuns.Columns["FlowRunError"];
                 var status = cbxStatus.Text;
 
-                errorColumn.Visible = show && (status == Enums.FlowRunStatus.Succeeded ? false : true);
+                errorColumn.Visible = show && status != Enums.FlowRunStatus.Succeeded;
             }));
         }
     }
