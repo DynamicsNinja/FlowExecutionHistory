@@ -19,6 +19,7 @@ namespace Fic.XTB.FlowExecutionHistory.Models
         public string Url { get; set; }
         public Flow Flow { get; set; }
         public FlowRunError Error { get; set; }
+        public string ErrorDetails { get => Error?.Details; }
         public string TriggerOutputsUrl { get; set; }
         public TriggerOutputsResponseDto TriggerOutputs { get; set; }
 

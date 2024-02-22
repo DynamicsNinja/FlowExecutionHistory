@@ -674,13 +674,6 @@ namespace Fic.XTB.FlowExecutionHistory
 
                 e.Value = triggerOutput;
             }
-
-            if (columnName == "FlowRunError")
-            {
-                if (flowRun.Status != Enums.FlowRunStatus.Failed) { return; }
-
-                e.Value = flowRun.Error?.Details;
-            }
         }
 
         private void tsbRefresh_Click(object sender, EventArgs e)
@@ -1063,13 +1056,15 @@ namespace Fic.XTB.FlowExecutionHistory
                         dgvFlowRuns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                         ResetFlowRunsGridColumns();
 
+                        var errorColumn = dgvFlowRuns.Columns["FlowRunError"];
+
                         if (Settings.ShowErrorColumn && cbxStatus.Text != Enums.FlowRunStatus.Succeeded)
                         {
-                            var errorColumn = new DataGridViewTextBoxColumn();
-                            errorColumn.Name = "FlowRunError";
-                            errorColumn.HeaderText = "Error";
-
-                            dgvFlowRuns.Columns.Add(errorColumn);
+                            errorColumn.Visible = true;
+                        }
+                        else
+                        {
+                            errorColumn.Visible = false;
                         }
 
                         foreach (var field in allAttributes)
@@ -1387,34 +1382,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 var errorColumn = dgvFlowRuns.Columns["FlowRunError"];
                 var status = cbxStatus.Text;
 
-                if (show)
-                {
-                    if (errorColumn != null)
-                    {
-                        if (status == Enums.FlowRunStatus.Succeeded)
-                        {
-                            dgvFlowRuns.Columns.Remove(errorColumn);
-                        }
-                    }
-                    else
-                    {
-                        if (status != Enums.FlowRunStatus.Succeeded)
-                        {
-                            errorColumn = new DataGridViewTextBoxColumn();
-                            errorColumn.Name = "FlowRunError";
-                            errorColumn.HeaderText = "Error";
-
-                            dgvFlowRuns.Columns.Add(errorColumn);
-                        }
-                    }
-
-                }
-                else
-                {
-                    if (errorColumn == null) { return; }
-
-                    dgvFlowRuns.Columns.Remove(errorColumn);
-                }
+                errorColumn.Visible = show && (status == Enums.FlowRunStatus.Succeeded ? false : true);
             }));
         }
     }
