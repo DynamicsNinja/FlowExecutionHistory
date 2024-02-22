@@ -1089,67 +1089,6 @@ namespace Fic.XTB.FlowExecutionHistory
             });
         }
 
-        //public void FilterRunsByTriggerOutputs(ConditionGroup conditionGroup)
-        //{
-        //    ResetFlowRunsGridColumns();
-
-        //    WorkAsync(new WorkAsyncInfo
-        //    {
-        //        Message = "Getting trigger outputs",
-        //        Work = (worker, args) =>
-        //        {
-        //            var options = new ParallelOptions
-        //            {
-        //                MaxDegreeOfParallelism = Environment.ProcessorCount * 4
-        //            };
-
-        //            var list = new List<FlowRun>();
-
-        //            var stopwatch = new Stopwatch();
-        //            stopwatch.Start();
-
-        //            Parallel.ForEach(FlowRuns, options, fr =>
-        //            {
-        //                fr.TriggerOutputs = fr.TriggerOutputs ?? fr.GetTriggerOutputs();
-        //            });
-
-        //            foreach (var fr in FlowRuns)
-        //            {
-        //                var outputs = fr.TriggerOutputs;
-
-        //                if (outputs == null) { continue; }
-
-        //                var isMatch = conditionGroup.Evaluate(outputs.Body);
-
-        //                if (!isMatch) { continue; }
-
-        //                list.Add(fr);
-        //            }
-
-        //            stopwatch.Stop();
-
-        //            args.Result = list;
-        //        },
-        //        PostWorkCallBack = (args) =>
-        //        {
-        //            if (args.Error != null)
-        //            {
-        //                ShowErrorDialog(args.Error.InnerException);
-        //            }
-        //            else
-        //            {
-        //                FilteredFlowRuns = (List<FlowRun>)args.Result;
-        //                //dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FilteredFlowRuns);
-
-        //                gbFlowRuns.Text = $@"Flow Runs ({FilteredFlowRuns.Count})";
-
-        //                PopulateTriggerOutputsFields();
-        //            }
-        //        }
-        //    });
-
-        //}
-
         private void tsbGetTriggerOutputs_Click(object sender, EventArgs e)
         {
             var anyOutputs = FlowRuns.Any(fr => !string.IsNullOrWhiteSpace(fr.TriggerOutputsUrl));
@@ -1262,55 +1201,6 @@ namespace Fic.XTB.FlowExecutionHistory
                 }
             });
         }
-
-        //public void PopulateTriggerOutputsFields()
-        //{
-        //    var allAttributes = _triggerOutputsColumnsSelectForm.SelectedColumns;
-
-        //    WorkAsync(new WorkAsyncInfo
-        //    {
-        //        Message = "Showing trigger output columns",
-        //        Work = (worker, args) =>
-        //        {
-        //            var options = new ParallelOptions
-        //            {
-        //                MaxDegreeOfParallelism = Environment.ProcessorCount * 4
-        //            };
-
-        //            Parallel.ForEach(FlowRuns, options, fr =>
-        //            {
-        //                fr.TriggerOutputs = fr.TriggerOutputs ?? GetTriggerOutputsForFlowRun(fr);
-        //            });
-
-        //            dgvFlowRuns.Invoke(new Action(() =>
-        //            {
-        //                dgvFlowRuns.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
-        //                ResetFlowRunsGridColumns();
-
-        //                if (allAttributes.Count == 0) { return; }
-
-        //                foreach (var field in allAttributes)
-        //                {
-        //                    var newColumn = new DataGridViewTextBoxColumn();
-        //                    newColumn.Name = $"to_{field}";
-        //                    newColumn.HeaderText = field;
-
-        //                    dgvFlowRuns.Columns.Add(newColumn);
-        //                }
-
-        //                dgvFlowRuns.DataSource = new SortableBindingList<FlowRun>(FilteredFlowRuns ?? FlowRuns);
-        //            }));
-        //        },
-        //        PostWorkCallBack = (args) =>
-        //        {
-        //            if (args.Error != null)
-        //            {
-        //                ShowErrorDialog(args.Error.InnerException);
-        //            }
-        //        }
-        //    });
-        //}
 
         private void ResetFlowRunsGridColumns()
         {
