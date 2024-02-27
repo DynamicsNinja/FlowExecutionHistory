@@ -51,7 +51,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             return flowRunRemediationResponse;
         }
 
-        public List<FlowRun> GetFlowRunsFromApi(Flow flow, string status, DateTimeOffset dateFrom, bool includeTriggerOutputs)
+        public List<FlowRun> GetFlowRunsFromApi(Flow flow, string status, DateTimeOffset dateFrom, DateTimeOffset dateTo, bool includeTriggerOutputs)
         {
             var flowRuns = new List<FlowRun>();
             var flowRunDtos = new List<FlowRunDto>();
@@ -85,6 +85,10 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                 if (flowRunsResponse?.value != null)
                 {
                     flowRunDtos.AddRange(flowRunsResponse.value);
+
+                    var lastRun = flowRunsResponse.value?.LastOrDefault();
+
+                    if (lastRun?.properties?.startTime > dateTo) { break; }
                 }
 
                 url = flowRunsResponse?.nextLink;
@@ -172,7 +176,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 
         public List<FlowRun> GetFlowRuns(Flow flow, string status, DateTimeOffset dateFrom, DateTimeOffset dateTo, int durationThreshold, bool includeTriggerOutputs)
         {
-            var flowRuns = GetFlowRunsFromCache(flow.Id, status, dateFrom) ?? GetFlowRunsFromApi(flow, status, dateFrom, includeTriggerOutputs);
+            var flowRuns = GetFlowRunsFromCache(flow.Id, status, dateFrom) ?? GetFlowRunsFromApi(flow, status, dateFrom, dateTo, includeTriggerOutputs);
 
             flowRuns = flowRuns
                 .Where(x => x.StartDate >= dateFrom && x.StartDate <= dateTo)
