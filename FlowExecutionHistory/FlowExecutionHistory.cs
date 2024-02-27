@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Fic.XTB.FlowExecutionHistory.Enums;
@@ -17,7 +15,6 @@ using Fic.XTB.FlowExecutionHistory.Models.DTOs;
 using Fic.XTB.FlowExecutionHistory.Services;
 using McTools.Xrm.Connection;
 using Microsoft.Identity.Client;
-using Microsoft.Office.Interop.Excel;
 using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json;
 using XrmToolBox.Extensibility;
@@ -841,16 +838,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 Message = "Exporting CSV",
                 Work = (worker, args) =>
                 {
-                    var sw = new StreamWriter(saveFileDialog.FileName, false, Encoding.UTF8);
-
-                    sw.WriteLine("Id;Flow Name;Status;Start Date;Duration;Url");
-
-                    foreach (var flowRun in FilteredFlowRuns)
-                    {
-                        sw.WriteLine($"{flowRun.Id};{flowRun.Flow.Name};{flowRun.Status};{flowRun.StartDate};{flowRun.DurationInMilliseconds};{flowRun.Url}");
-                    }
-
-                    sw.Close();
+                    CsvService.ExportToCsv(FilteredFlowRuns, saveFileDialog.FileName);
                 },
                 PostWorkCallBack = (args) =>
                 {
@@ -893,61 +881,7 @@ namespace Fic.XTB.FlowExecutionHistory
             WorkAsync(new WorkAsyncInfo("Creating Excel file...",
                (eventargs) =>
                {
-                   var excel = new Microsoft.Office.Interop.Excel.Application();
-                   var wb = excel.Workbooks.Add();
-                   var sh = (Worksheet)wb.Sheets.Add();
-                   sh.Name = "Flow Runs";
-
-                   sh.Cells[1, 1] = "Id";
-                   sh.Cells[1, 2] = "Flow Name";
-                   sh.Cells[1, 3] = "Status";
-                   sh.Cells[1, 4] = "Start Date";
-                   sh.Cells[1, 5] = "Duration in milliseconds";
-                   sh.Cells[1, 6] = "Url";
-
-                   for (var index = 0; index < FlowRuns.Count; index++)
-                   {
-                       var row = (FlowRun)FlowRuns[index];
-
-                       sh.Cells[index + 2, "A"] = row.Id;
-                       sh.Cells[index + 2, "B"] = row.Flow.Name;
-                       sh.Cells[index + 2, "C"] = row.Status;
-                       sh.Cells[index + 2, "D"] = row.StartDate.DateTime;
-                       sh.Cells[index + 2, "E"] = row.DurationInMilliseconds;
-
-                       // Add hyperlink to the cell containing the URL
-                       var cell = (Range)sh.Cells[index + 2, "F"];
-                       sh.Hyperlinks.Add(cell, row.Url);
-                   }
-
-                   var statusColumn = sh.Range["C2:C" + (FlowRuns.Count + 1)];
-                   var successCondition = (FormatCondition)statusColumn.FormatConditions.Add(
-                       XlFormatConditionType.xlExpression,
-                       XlFormatConditionOperator.xlEqual,
-                       $"=$C2=\"{Enums.FlowRunStatus.Succeeded}\""
-                   );
-
-                   successCondition.Interior.Color = ColorTranslator.ToOle(Color.Green);
-                   successCondition.Font.Bold = true;
-
-                   var failureCondition = (FormatCondition)statusColumn.FormatConditions.Add(
-                       XlFormatConditionType.xlExpression,
-                       XlFormatConditionOperator.xlEqual,
-                       $"=$C2=\"{Enums.FlowRunStatus.Failed}\""
-                   );
-
-                   failureCondition.Interior.Color = ColorTranslator.ToOle(Color.Red);
-                   failureCondition.Font.Bold = true;
-
-                   var range = sh.Range["A1", $"F{FlowRuns.Count + 1}"];
-                   FormatAsTable(range, "Table1", "TableStyleMedium15");
-
-                   range.Columns.AutoFit();
-
-                   excel.DisplayAlerts = false;
-                   wb.SaveAs(saveFileDialog.FileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-                   wb.Close(true);
-                   excel.Quit();
+                   ExcelService.ExportToExcel(FilteredFlowRuns, saveFileDialog.FileName);
                })
             {
                 PostWorkCallBack = (completedargs) =>
@@ -969,14 +903,6 @@ namespace Fic.XTB.FlowExecutionHistory
                     }
                 }
             });
-        }
-        public void FormatAsTable(Range sourceRange, string tableName, string tableStyleName)
-        {
-            sourceRange.Worksheet.ListObjects.Add(XlListObjectSourceType.xlSrcRange,
-                    sourceRange, Type.Missing, XlYesNoGuess.xlYes, Type.Missing).Name =
-                tableName;
-            sourceRange.Select();
-            sourceRange.Worksheet.ListObjects[tableName].TableStyle = tableStyleName;
         }
 
         private void tsbExport_ButtonClick(object sender, EventArgs e)

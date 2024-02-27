@@ -383,7 +383,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\CsvService.cs" />
     <Compile Include="Services\DataverseClient.cs" />
+    <Compile Include="Services\ExcelService.cs" />
     <Compile Include="Services\FlowClient.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
