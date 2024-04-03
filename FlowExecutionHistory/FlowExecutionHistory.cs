@@ -247,6 +247,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     Parallel.ForEach(selectedFlows, options, f =>
                     {
                         var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo, durationThreshold, includeTriggerOutputs);
+
                         f.FlowRuns = fr;
                     });
 

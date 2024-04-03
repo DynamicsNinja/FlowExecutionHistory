@@ -164,6 +164,8 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 
         public List<FlowRun> GetFlowRunsFromCache(string flowId, string status, DateTimeOffset dateFrom)
         {
+            if (FlowRunsCache == null) { return null; }
+
             var flowRunsCache = FlowRunsCache.FirstOrDefault(x => x.FlowId == flowId && x.StatusFilter == "All" && x.QueryDateTIme <= dateFrom)
                 ?? FlowRunsCache.FirstOrDefault(x => x.FlowId == flowId && x.StatusFilter == status && x.QueryDateTIme <= dateFrom);
 
