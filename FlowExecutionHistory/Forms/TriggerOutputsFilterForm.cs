@@ -30,7 +30,9 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
 
                 if (triggerOutput == null) { continue; }
 
-                var attributes = triggerOutput.Body.Keys.ToList();
+                var attributes = triggerOutput.Body?.Keys.ToList();
+
+                if (attributes == null) { continue; }
 
                 allAttributes.AddRange(attributes);
             }
@@ -56,7 +58,9 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
 
                 if (triggerOutput == null) { continue; }
 
-                var attributes = triggerOutput.Body.Keys.ToList();
+                var attributes = triggerOutput.Body?.Keys.ToList();
+
+                if (attributes == null) { continue; }   
 
                 allAttributes.AddRange(attributes);
             }
