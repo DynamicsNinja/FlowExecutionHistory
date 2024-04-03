@@ -3,12 +3,12 @@
 
     public class FlowRunRemediationResponse
     {
-        public string remediationType { get; set; }
+        //public string remediationType { get; set; }
         public string errorSubject { get; set; }
         public string errorDescription { get; set; }
-        public Operationoutputs operationOutputs { get; set; }
-        public string searchText { get; set; }
-        public Documentationlink documentationLink { get; set; }
+        //public string operationOutputs { get; set; }
+        //public string searchText { get; set; }
+        //public Documentationlink documentationLink { get; set; }
     }
 
     public class Operationoutputs

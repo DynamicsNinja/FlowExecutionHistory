@@ -547,7 +547,6 @@ namespace Fic.XTB.FlowExecutionHistory
                     {
                         Message = errorDetails.errorSubject,
                         Details = errorDetails.errorDescription
-                                  ?? errorDetails?.operationOutputs?.body?.ToString()
                     };
 
                     args.Result = flowRun.Error;

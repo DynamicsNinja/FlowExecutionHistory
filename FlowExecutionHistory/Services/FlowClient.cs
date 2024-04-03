@@ -130,7 +130,6 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                         {
                             Message = errorDetails.errorSubject,
                             Details = errorDetails.errorDescription
-                                  ?? errorDetails?.operationOutputs?.body?.ToString()
                         };
                     }
 
