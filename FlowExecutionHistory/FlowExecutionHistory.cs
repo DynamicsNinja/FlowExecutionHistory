@@ -1105,6 +1105,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
                     var allAttributes = FlowRuns
                         .Where(fr => fr.TriggerOutputs != null)
+                        .Where(fr => fr.TriggerOutputs.Body != null)
                         .SelectMany(fr => fr.TriggerOutputs.Body.Keys)
                         .Distinct()
                         .ToList();
