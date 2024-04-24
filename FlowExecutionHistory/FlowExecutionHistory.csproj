@@ -357,6 +357,7 @@
     <Compile Include="Helpers\SortableBindingList.cs" />
     <Compile Include="Helpers\TimeFormatter.cs" />
     <Compile Include="Models\AccessTokenResponse.cs" />
+    <Compile Include="Models\AppInsights\EventData.cs" />
     <Compile Include="Models\Browser.cs" />
     <Compile Include="Models\BrowserProfile.cs" />
     <Compile Include="Models\ConditionGroup.cs" />
@@ -383,6 +384,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\ApplicationInsights.cs" />
     <Compile Include="Services\CsvService.cs" />
     <Compile Include="Services\DataverseClient.cs" />
     <Compile Include="Services\ExcelService.cs" />
@@ -423,6 +425,7 @@
     <Content Include="ILMergeOrder.txt" />
     <None Include="Resources\delete.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF $(ConfigurationName) == Debug (

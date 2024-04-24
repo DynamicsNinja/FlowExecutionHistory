@@ -55,8 +55,12 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private OrganizationGeo Geo;
 
+        private ApplicationInsights ApplicationInsights;
+
         public FlowExecutionHistory()
         {
+            ApplicationInsights = new ApplicationInsights();
+
             InitializeComponent();
 
             FlowRunsGrid = dgvFlowRuns;
@@ -69,6 +73,8 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void FlowExecutionHistory_Load(object sender, EventArgs e)
         {
+            ApplicationInsights.LogEvent("Load");
+
             // Loads or creates the settings for the plugin
             if (!SettingsManager.Instance.TryLoad(GetType(), out Settings, ConnectionDetail.ConnectionId.ToString()))
             {
@@ -224,6 +230,8 @@ namespace Fic.XTB.FlowExecutionHistory
                 dgvFlowRuns.DataSource = null;
                 return;
             }
+
+            ApplicationInsights.LogEvent("GetFlowRuns");
 
             var includeTriggerOutputs = _triggerOutputsColumnsSelectForm?.SelectedColumns?.Count > 0;
 
@@ -833,6 +841,8 @@ namespace Fic.XTB.FlowExecutionHistory
 
             if (saveFileDialog.ShowDialog() != DialogResult.OK) { return; }
 
+            ApplicationInsights.LogEvent("ExportToCsv");
+
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Exporting CSV",
@@ -877,6 +887,8 @@ namespace Fic.XTB.FlowExecutionHistory
             saveFileDialog.FileName = filenName;
 
             if (saveFileDialog.ShowDialog() != DialogResult.OK) { return; }
+
+            ApplicationInsights.LogEvent("ExportToExcel");
 
             WorkAsync(new WorkAsyncInfo("Creating Excel file...",
                (eventargs) =>
