@@ -1205,5 +1205,12 @@ namespace Fic.XTB.FlowExecutionHistory
                 errorColumn.Visible = show && status != Enums.FlowRunStatus.Succeeded;
             }));
         }
+
+        private void tsbDonate_Click(object sender, EventArgs e)
+        {
+            var url = "https://www.buymeacoffee.com/dynamicsninja";
+
+            Process.Start(url);
+        }
     }
 }

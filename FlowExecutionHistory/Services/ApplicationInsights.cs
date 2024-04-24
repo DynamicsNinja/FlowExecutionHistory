@@ -53,7 +53,10 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(ed);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
+#if !DEBUG
             client.PostAsync(_url, content);
+#endif
+
         }
     }
 }
