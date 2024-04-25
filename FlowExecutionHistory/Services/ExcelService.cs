@@ -1,4 +1,5 @@
-﻿using Fic.XTB.FlowExecutionHistory.Models;
+﻿using Fic.XTB.FlowExecutionHistory.Forms;
+using Fic.XTB.FlowExecutionHistory.Models;
 using Microsoft.Office.Interop.Excel;
 using OfficeOpenXml;
 using OfficeOpenXml.ConditionalFormatting;
@@ -6,6 +7,8 @@ using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace Fic.XTB.FlowExecutionHistory.Services
 {
@@ -27,6 +30,8 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                 sheet.Cells[1, 6].Value = "Url";
                 sheet.Cells[1, 7].Value = "Error";
 
+                var triggerOuputColumns = new List<string>();
+
                 for (var index = 0; index < flowRuns.Count; index++)
                 {
                     var row = flowRuns[index];
@@ -34,10 +39,35 @@ namespace Fic.XTB.FlowExecutionHistory.Services
                     sheet.Cells[index + 2, 1].Value = row.Id;
                     sheet.Cells[index + 2, 2].Value = row.Flow.Name;
                     sheet.Cells[index + 2, 3].Value = row.Status;
+
                     sheet.Cells[index + 2, 4].Value = row.StartDate.DateTime;
+                    sheet.Cells[index + 2, 4].Style.Numberformat.Format = DateTimeFormatInfo.CurrentInfo.FullDateTimePattern;
+
                     sheet.Cells[index + 2, 5].Value = row.DurationInMilliseconds;
                     sheet.Cells[index + 2, 6].Hyperlink = new Uri(row.Url);
                     sheet.Cells[index + 2, 7].Value = row.Error?.Details;
+
+                    if (row.TriggerOutputs == null || row.TriggerOutputs.Body == null) { continue; }
+
+                    var triggerOutputs = row.TriggerOutputs.Body;
+
+                    foreach (var key in triggerOutputs.Keys)
+                    {
+                        var columnIndex = triggerOuputColumns.IndexOf(key);
+
+                        if (columnIndex == -1)
+                        {
+                            triggerOuputColumns.Add(key);
+                            columnIndex = triggerOuputColumns.Count - 1;
+                        }
+
+                        sheet.Cells[index + 2, columnIndex + 8].Value = triggerOutputs[key];
+                    }
+                }
+
+                for (var toColumnIndex = 0; toColumnIndex < triggerOuputColumns.Count; toColumnIndex++)
+                {
+                    sheet.Cells[1, toColumnIndex + 8].Value = "TO: " + triggerOuputColumns[toColumnIndex];
                 }
 
                 var range = sheet.Cells[1, 1, sheet.Dimension.End.Row, sheet.Dimension.End.Column];
