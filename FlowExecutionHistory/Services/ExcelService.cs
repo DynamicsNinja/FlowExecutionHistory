@@ -1,5 +1,8 @@
 ﻿using Fic.XTB.FlowExecutionHistory.Models;
 using Microsoft.Office.Interop.Excel;
+using OfficeOpenXml;
+using OfficeOpenXml.ConditionalFormatting;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,6 +11,52 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 {
     public static class ExcelService
     {
+        public static void ExportToExcelNew(List<FlowRun> flowRuns, string filePath)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage(filePath))
+            {
+                var sheet = package.Workbook.Worksheets.Add("Flow Runs");
+
+                sheet.Cells[1, 1].Value = "Id";
+                sheet.Cells[1, 2].Value = "Flow Name";
+                sheet.Cells[1, 3].Value = "Status";
+                sheet.Cells[1, 4].Value = "Start Date";
+                sheet.Cells[1, 5].Value = "Duration in milliseconds";
+                sheet.Cells[1, 6].Value = "Url";
+                sheet.Cells[1, 7].Value = "Error";
+
+                for (var index = 0; index < flowRuns.Count; index++)
+                {
+                    var row = flowRuns[index];
+
+                    sheet.Cells[index + 2, 1].Value = row.Id;
+                    sheet.Cells[index + 2, 2].Value = row.Flow.Name;
+                    sheet.Cells[index + 2, 3].Value = row.Status;
+                    sheet.Cells[index + 2, 4].Value = row.StartDate.DateTime;
+                    sheet.Cells[index + 2, 5].Value = row.DurationInMilliseconds;
+                    sheet.Cells[index + 2, 6].Hyperlink = new Uri(row.Url);
+                    sheet.Cells[index + 2, 7].Value = row.Error?.Details;
+                }
+
+                var range = sheet.Cells[1, 1, sheet.Dimension.End.Row, sheet.Dimension.End.Column];
+                var tab = sheet.Tables.Add(range, "Table1");
+                tab.TableStyle = OfficeOpenXml.Table.TableStyles.Medium2;
+
+                var successConditionalFormatting = sheet.ConditionalFormatting.AddEqual(sheet.Cells["C2:C" + (flowRuns.Count + 1)]);
+                successConditionalFormatting.Formula = $"\"{Enums.FlowRunStatus.Succeeded}\"";
+                successConditionalFormatting.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                successConditionalFormatting.Style.Fill.BackgroundColor.Color = Color.Green;
+
+                var failureConditionalFormatting = sheet.ConditionalFormatting.AddEqual(sheet.Cells["C2:C" + (flowRuns.Count + 1)]);
+                failureConditionalFormatting.Formula = $"\"{Enums.FlowRunStatus.Failed}\"";
+                failureConditionalFormatting.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                failureConditionalFormatting.Style.Fill.BackgroundColor.Color = Color.Red;
+
+                package.Save();
+            }
+        }
         public static void ExportToExcel(List<FlowRun> flowRuns, string filePath)
         {
             var excel = new Application();
@@ -59,7 +108,7 @@ namespace Fic.XTB.FlowExecutionHistory.Services
             failureCondition.Interior.Color = ColorTranslator.ToOle(Color.Red);
             failureCondition.Font.Bold = true;
 
-            var range = sh.Range["A1", $"G{flowRuns.Count + 1}"];
+            var range = sh.Range["A1", $"F{flowRuns.Count + 1}"];
             FormatAsTable(range, "Table1", "TableStyleMedium15");
 
             range.Columns.AutoFit();

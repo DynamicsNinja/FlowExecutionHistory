@@ -893,7 +893,7 @@ namespace Fic.XTB.FlowExecutionHistory
             WorkAsync(new WorkAsyncInfo("Creating Excel file...",
                (eventargs) =>
                {
-                   ExcelService.ExportToExcel(FilteredFlowRuns, saveFileDialog.FileName);
+                   ExcelService.ExportToExcelNew(FilteredFlowRuns, saveFileDialog.FileName);
                })
             {
                 PostWorkCallBack = (completedargs) =>
