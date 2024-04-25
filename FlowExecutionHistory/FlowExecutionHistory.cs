@@ -55,7 +55,7 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private OrganizationGeo Geo;
 
-        private ApplicationInsights ApplicationInsights;
+        public ApplicationInsights ApplicationInsights;
 
         public FlowExecutionHistory()
         {
@@ -1208,6 +1208,8 @@ namespace Fic.XTB.FlowExecutionHistory
 
         private void tsbDonate_Click(object sender, EventArgs e)
         {
+            ApplicationInsights.LogEvent("Donate");
+
             var url = "https://www.buymeacoffee.com/dynamicsninja";
 
             Process.Start(url);

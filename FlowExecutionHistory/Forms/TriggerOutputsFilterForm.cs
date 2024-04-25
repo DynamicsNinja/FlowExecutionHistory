@@ -78,6 +78,8 @@ namespace Fic.XTB.FlowExecutionHistory.Forms
 
         private void btnFIlter_Click(object sender, EventArgs e)
         {
+            _frc.ApplicationInsights.LogEvent("TriggerOutputsFilter");
+
             var filterConditions = GetAllFilterConditions();
             var groupOperator = (GroupOperator)cbGroupOperator.SelectedItem;
 
