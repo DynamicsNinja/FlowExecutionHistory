@@ -252,12 +252,12 @@ namespace Fic.XTB.FlowExecutionHistory
                         MaxDegreeOfParallelism = Environment.ProcessorCount * 4
                     };
 
-                    Parallel.ForEach(selectedFlows, options, f =>
+                    foreach (var f in selectedFlows)
                     {
                         var fr = flowClient.GetFlowRuns(f, status, dateFrom, dateTo, durationThreshold, includeTriggerOutputs);
 
                         f.FlowRuns = fr;
-                    });
+                    }
 
                     var flowRuns = selectedFlows.SelectMany(f => f.FlowRuns).ToList();
 
