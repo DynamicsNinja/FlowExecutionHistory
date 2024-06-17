@@ -95,7 +95,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 }
                 else
                 {
-                    cbBrowser.SelectedIndex = 0;
+                    cbBrowser.SelectedIndex = cbBrowser.Items.Count > 0 ? 0 : -1;
                 }
 
                 if (ConnectionDetail.BrowserProfile != null)
@@ -113,7 +113,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 }
                 else
                 {
-                    cbProfile.SelectedIndex = 0;
+                    cbProfile.SelectedIndex = cbProfile.Items.Count > 0 ? 0 : -1;
                 }
             }
             else
@@ -135,7 +135,7 @@ namespace Fic.XTB.FlowExecutionHistory
                 }
                 else
                 {
-                    cbBrowser.SelectedIndex = 0;
+                    cbBrowser.SelectedIndex = cbBrowser.Items.Count > 0 ? 0 : -1;
                 }
             }
 
