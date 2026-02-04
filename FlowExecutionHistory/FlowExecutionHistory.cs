@@ -807,6 +807,7 @@ namespace Fic.XTB.FlowExecutionHistory
                     authResult = await app
                         .AcquireTokenInteractive(scopes)
                         .WithTenantId(tenantId)
+                        .WithUseEmbeddedWebView(false)
                         .ExecuteAsync();
 
                     _flowAccessToken = new AccessTokenResponse
