@@ -70,25 +70,41 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 
         public List<Entity> GetFlows()
         {
-            var fetch = $@"
-            <fetch>
-                <entity name='workflow'>
-                <attribute name='workflowid' />
-                <attribute name='workflowidunique' />
-                <attribute name='clientdata' />
-                <attribute name='name' />
-                <attribute name='statecode' />
-                <attribute name='statuscode' />
-                <attribute name='ismanaged' />
-                <filter type='and'>
-                    <condition attribute='category' operator='eq' value='5' />
-                </filter>
-                </entity>
-            </fetch>";
+            var allFlows = new List<Entity>();
+            string pagingCookie = null;
+            int page = 1;
+            bool moreRecords = true;
 
-            var flows = _service.RetrieveMultiple(new FetchExpression(fetch)).Entities.ToList();
+            while (moreRecords)
+            {
+                var fetch = $@"
+                <fetch page='{page}' {(pagingCookie != null ? $"paging-cookie='{System.Security.SecurityElement.Escape(pagingCookie)}'" : string.Empty)}>
+                    <entity name='workflow'>
+                    <attribute name='workflowid' />
+                    <attribute name='workflowidunique' />
+                    <attribute name='clientdata' />
+                    <attribute name='name' />
+                    <attribute name='statecode' />
+                    <attribute name='statuscode' />
+                    <attribute name='ismanaged' />
+                    <filter type='and'>
+                        <condition attribute='category' operator='eq' value='5' />
+                    </filter>
+                    </entity>
+                </fetch>";
 
-            return flows;
+                var response = _service.RetrieveMultiple(new FetchExpression(fetch));
+                allFlows.AddRange(response.Entities);
+
+                moreRecords = response.MoreRecords;
+                if (moreRecords)
+                {
+                    pagingCookie = response.PagingCookie;
+                    page++;
+                }
+            }
+
+            return allFlows;
         }
     }
 }
