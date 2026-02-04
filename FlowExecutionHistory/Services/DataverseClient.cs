@@ -77,8 +77,14 @@ namespace Fic.XTB.FlowExecutionHistory.Services
 
             while (moreRecords)
             {
+                var pagingAttribute = string.Empty;
+                if (pagingCookie != null)
+                {
+                    pagingAttribute = $"paging-cookie='{System.Security.SecurityElement.Escape(pagingCookie)}'";
+                }
+
                 var fetch = $@"
-                <fetch page='{page}' {(pagingCookie != null ? $"paging-cookie='{System.Security.SecurityElement.Escape(pagingCookie)}'" : string.Empty)}>
+                <fetch page='{page}' {pagingAttribute}>
                     <entity name='workflow'>
                     <attribute name='workflowid' />
                     <attribute name='workflowidunique' />
